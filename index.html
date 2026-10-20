@@ -121,7 +121,11 @@ input,textarea{font:inherit;color:inherit}
 .t .nm{font-weight:600}
 .t tbody tr{cursor:pointer}
 #st-chart{height:220px}
-#st-donut{height:236px}
+#st-donut{height:200px}
+.dlegend{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;padding:10px 4px 0;font-size:11px;color:var(--muted)}
+.dlegend .dl{display:flex;align-items:center;gap:5px;min-width:0}
+.dlegend .dl i{width:8px;height:8px;border-radius:3px;flex:none}
+.dlegend .dl em{font-style:normal;color:var(--faint)}
 /* ---- 分段控件 ---- */
 .seg{display:flex;background:var(--card2);border-radius:11px;padding:3px;gap:2px}
 .seg button{flex:1;border:0;background:transparent;border-radius:8px;padding:7px 4px;font-size:13px;color:var(--muted)}
@@ -571,6 +575,15 @@ function fmtAmt(v, cur, sign) {
   const str = Math.abs(v).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   return (v < 0 ? '-' : (sign ? '+' : '')) + s + str;
 }
+/* 大金额紧凑显示: ≥1亿用亿、≥10万用万, 防止统计块与表格在窄屏溢出 */
+function fmtAmtC(v, cur, sign) {
+  const s = SYM[cur] || cur + ' ';
+  const a = Math.abs(v);
+  const sg = v < 0 ? '-' : (sign ? '+' : '');
+  if (a >= 1e8) return sg + s + (a / 1e8).toFixed(2) + '亿';
+  if (a >= 1e5) return sg + s + (a / 1e4).toFixed(2) + '万';
+  return sg + s + a.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
 function fmtPx(v) {
   if (!isFinite(v)) return '--';
   const d = Math.abs(v) >= 1 ? 2 : 4;
@@ -860,11 +873,11 @@ function renderStats() {
   const rangeLabel = statPeriod === 'week' ? '本周（' + fmtDate(Core.weekStartStr()) + ' 起）' : statPeriod === 'month' ? '本月' : statPeriod === 'year' ? '本年' : '全部';
   const stocksHtml = st.stocks.map(sk => {
     const b = cvt(sk.buy), s = cvt(sk.sell), n = b - s;
-    return `<tr data-tc="${esc(sk.tc)}"><td class="nm">${esc(sk.name)}</td><td class="num">${fmtAmt(b, S.base)}</td><td class="num">${fmtAmt(s, S.base)}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${fmtAmt(n, S.base, true)}</td></tr>`;
+    return `<tr data-tc="${esc(sk.tc)}"><td class="nm">${esc(sk.name)}</td><td class="num">${fmtAmtC(b, S.base)}</td><td class="num">${fmtAmtC(s, S.base)}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${fmtAmtC(n, S.base, true)}</td></tr>`;
   }).join('');
   const brokersHtml = st.brokers.map(br => {
     const b = cvt(br.buy), s = cvt(br.sell), n = b - s;
-    return `<tr><td class="nm">${esc(br.broker)}</td><td class="num">${fmtAmt(b, S.base)}</td><td class="num">${fmtAmt(s, S.base)}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${fmtAmt(n, S.base, true)}</td></tr>`;
+    return `<tr><td class="nm">${esc(br.broker)}</td><td class="num">${fmtAmtC(b, S.base)}</td><td class="num">${fmtAmtC(s, S.base)}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${fmtAmtC(n, S.base, true)}</td></tr>`;
   }).join('');
   const donutMode = st.buy.n > 0 ? 'buy' : (st.sell.n > 0 ? 'sell' : null);
   el.innerHTML = `
@@ -877,41 +890,53 @@ function renderStats() {
      <button data-p="all" class="${statPeriod === 'all' ? 'on' : ''}">全部</button>
    </div>
    <div class="tile-row">
-     <div class="tile"><div class="lbl">买入金额</div><div class="v num">${fmtAmt(buyB, S.base)}</div><div class="s">${st.buy.n} 笔</div></div>
-     <div class="tile"><div class="lbl">卖出金额</div><div class="v num">${fmtAmt(sellB, S.base)}</div><div class="s">${st.sell.n} 笔</div></div>
+     <div class="tile"><div class="lbl">买入金额</div><div class="v num">${fmtAmtC(buyB, S.base)}</div><div class="s">${st.buy.n} 笔</div></div>
+     <div class="tile"><div class="lbl">卖出金额</div><div class="v num">${fmtAmtC(sellB, S.base)}</div><div class="s">${st.sell.n} 笔</div></div>
    </div>
    <div class="tile-row">
-     <div class="tile"><div class="lbl">净买入</div><div class="v num ${netB >= 0 ? 'up' : 'down'}">${fmtAmt(netB, S.base, true)}</div><div class="s">买入 − 卖出</div></div>
-     <div class="tile"><div class="lbl">已实现盈亏（累计）</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${fmtAmt(realB, S.base, true)}</div><div class="s">含历史全部卖出</div></div>
+     <div class="tile"><div class="lbl">净买入</div><div class="v num ${netB >= 0 ? 'up' : 'down'}">${fmtAmtC(netB, S.base, true)}</div><div class="s">买入 − 卖出</div></div>
+     <div class="tile"><div class="lbl">已实现盈亏（累计）</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${fmtAmtC(realB, S.base, true)}</div><div class="s">含历史全部卖出</div></div>
    </div>
-   ${donutMode ? `<div class="card"><div class="chart-head"><h2 style="font-size:15px;margin:0">本期${donutMode === 'buy' ? '买入' : '卖出'}构成</h2></div><div id="st-donut"></div></div>` : ''}
+   ${donutMode ? `<div class="card"><div class="chart-head"><h2 style="font-size:15px;margin:0">本期${donutMode === 'buy' ? '买入' : '卖出'}构成</h2></div><div id="st-donut"></div><div class="dlegend" id="st-dlegend"></div></div>` : ''}
    ${statPeriod === 'year' ? `<div class="card"><div class="chart-head"><h2 style="font-size:15px;margin:0">月度买卖（本年）</h2></div><div id="st-chart"></div></div>` : ''}
    ${st.stocks.length ? `<div class="card"><div class="pos-h" style="padding:0 0 8px"><h2>按股票</h2><span>${st.stocks.length} 只</span></div>
      <div class="twrap"><table class="t" id="st-stocks"><thead><tr><th>股票</th><th>买入</th><th>卖出</th><th>净额</th></tr></thead><tbody>${stocksHtml}</tbody></table></div></div>` : ''}
    ${st.brokers.length ? `<div class="card"><div class="pos-h" style="padding:0 0 8px"><h2>按券商</h2><span>${st.brokers.length} 家</span></div>
      <div class="twrap"><table class="t"><thead><tr><th>券商</th><th>买入</th><th>卖出</th><th>净额</th></tr></thead><tbody>${brokersHtml}</tbody></table></div></div>` : ''}
-   <p class="footnote">外币金额按当前汇率折算${F.approx ? '（备用汇率，仅供参考）' : ''} · 点击股票行可查看K线与交易记录</p>`;
+   <p class="footnote">外币金额按当前汇率折算${F.approx ? '（备用汇率，仅供参考）' : ''} · 金额满10万以「万」计 · 点击股票行可查看K线与交易记录</p>`;
   bindSeg('#st-period', v => { statPeriod = v; renderStats(); }, 'p');
   el.querySelectorAll('#st-stocks tbody tr').forEach(tr => tr.onclick = () => openSheet(tr.dataset.tc));
   if (donutMode) renderStatsDonut(st, donutMode);
   if (statPeriod === 'year') renderStatsChart(st);
 }
-/* 环形图: 本期买入(或卖出)金额按股票构成, 前6只 + 其他 */
+/* 环形图: 本期买入(或卖出)金额按股票构成, 前6只 + 其他。
+   图例用 HTML 放在画布下方(数量任意自动换行, 不与饼图争canvas空间) */
 function renderStatsDonut(st, mode) {
   const elm = $('#st-donut'); if (!elm) return;
-  if (!window.echarts) { elm.innerHTML = '<div class="kerr" style="padding:24px 8px">图表组件加载失败（需联网）</div>'; return; }
+  const lg = $('#st-dlegend');
+  if (!window.echarts) { elm.innerHTML = '<div class="kerr" style="padding:24px 8px">图表组件加载失败（需联网）</div>'; if (lg) lg.innerHTML = ''; return; }
   const F = fxInfo();
   const items = st.stocks.map(sk => ({
     name: sk.name,
     v: ['CNY', 'USD', 'HKD'].reduce((a, c) => a + Core.toBase((mode === 'buy' ? sk.buy : sk.sell)[c] || 0, c, S.base, F), 0)
   })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
-  if (!items.length) { elm.innerHTML = '<div class="kerr" style="padding:24px 8px">本期无' + (mode === 'buy' ? '买入' : '卖出') + '</div>'; return; }
+  if (!items.length) {
+    elm.innerHTML = '<div class="kerr" style="padding:24px 8px">本期无' + (mode === 'buy' ? '买入' : '卖出') + '</div>';
+    if (lg) lg.innerHTML = '';
+    return;
+  }
   const pal = CAT[isDark() ? 'dark' : 'light'];
   const data = items.slice(0, 6).map((x, i) => ({ name: x.name, value: Math.round(x.v * 100) / 100, itemStyle: { color: pal[i] } }));
   const rest = items.slice(6);
   if (rest.length) data.push({ name: '其他', value: Math.round(rest.reduce((a, x) => a + x.v, 0) * 100) / 100, itemStyle: { color: '#898781' } });
   const total = items.reduce((a, x) => a + x.v, 0);
   const label = mode === 'buy' ? '买入' : '卖出';
+  if (lg) {
+    lg.innerHTML = data.map(d => {
+      const pct = total > 0 ? (d.value / total * 100).toFixed(0) + '%' : '0%';
+      return `<span class="dl"><i style="background:${d.itemStyle.color}"></i>${esc(d.name)} <em>${pct}</em></span>`;
+    }).join('');
+  }
   stDonut = echarts.init(elm);
   stDonut.setOption({
     animation: false,
@@ -919,17 +944,16 @@ function renderStatsDonut(st, mode) {
       trigger: 'item', backgroundColor: cssVar('--card'), borderColor: cssVar('--line'), textStyle: { color: cssVar('--fg'), fontSize: 12 },
       formatter: p => esc(p.name) + '<br/>' + fmtAmt(p.value, S.base) + ' · ' + p.percent.toFixed(1) + '%'
     },
-    legend: { bottom: 0, left: 'center', itemWidth: 10, itemHeight: 10, itemGap: 10, textStyle: { color: cssVar('--muted'), fontSize: 11 } },
     series: [{
-      type: 'pie', radius: ['55%', '78%'], center: ['50%', '42%'],
+      type: 'pie', radius: ['50%', '72%'], center: ['50%', '50%'],
       avoidLabelOverlap: true,
       itemStyle: { borderColor: cssVar('--card'), borderWidth: 2, borderRadius: 4 },
       label: { show: false }, emphasis: { scale: false },
       data
     }],
     graphic: [
-      { type: 'text', left: 'center', top: '34%', style: { text: fmtAmt(total, S.base), textAlign: 'center', fill: cssVar('--fg'), fontSize: 15, fontWeight: 700 } },
-      { type: 'text', left: 'center', top: '45%', style: { text: label, textAlign: 'center', fill: cssVar('--muted'), fontSize: 11 } }
+      { type: 'text', left: 'center', top: '40%', style: { text: fmtAmtC(total, S.base), textAlign: 'center', fill: cssVar('--fg'), fontSize: 15, fontWeight: 700 } },
+      { type: 'text', left: 'center', top: '53%', style: { text: label, textAlign: 'center', fill: cssVar('--muted'), fontSize: 11 } }
     ]
   });
 }
@@ -1277,13 +1301,21 @@ function renderKline(r) {
     byd.set(kk, g);
     (tradesByDate[kd] = tradesByDate[kd] || []).push(t);
   }
-  const marks = [...byd.values()].map(g => ({
-    coord: [g.date, +(g.px / g.qty).toFixed(2)],
-    symbol: 'circle', symbolSize: g.n > 1 ? 30 : 26,
-    value: (g.side === 'B' ? 'B' : 'S') + (g.n > 1 ? '×' + g.n : ''),
-    itemStyle: { color: g.side === 'B' ? up : dn, borderColor: card, borderWidth: 2 },
-    label: { show: true, formatter: pr => pr.value, color: '#fff', fontSize: 11, fontWeight: 700 }
-  }));
+  /* 同花顺风格小标记: 5px 价格锚点 + 10px B/S 字母(带底色描边保证可读), 标签自动避让重叠 */
+  const bsData = [...byd.values()].map(g => {
+    const isB = g.side === 'B';
+    const txt = (isB ? 'B' : 'S') + (g.n > 1 ? g.n : '');
+    return {
+      value: [g.date, +(g.px / g.qty).toFixed(2)],
+      symbolSize: 5,
+      itemStyle: { color: isB ? up : dn, borderColor: card, borderWidth: 1 },
+      label: {
+        show: true, position: isB ? 'bottom' : 'top', distance: 2,
+        formatter: () => txt, color: isB ? up : dn, fontSize: 10, fontWeight: 700,
+        textBorderColor: card, textBorderWidth: 2
+      }
+    };
+  });
   const startPct = Math.max(0, 100 * (1 - Math.min(90, dates.length) / Math.max(dates.length, 1)));
   kChart.setOption({
     animation: false,
@@ -1316,7 +1348,8 @@ function renderKline(r) {
     ],
     dataZoom: [{ type: 'inside', xAxisIndex: [0, 1], start: startPct, end: 100 }],
     series: [
-      { name: 'K线', type: 'candlestick', data: cs, itemStyle: { color: up, color0: dn, borderColor: up, borderColor0: dn }, markPoint: { animation: false, data: marks } },
+      { name: 'K线', type: 'candlestick', data: cs, itemStyle: { color: up, color0: dn, borderColor: up, borderColor0: dn } },
+      { name: '买卖点', type: 'scatter', data: bsData, symbol: 'circle', symbolSize: 5, z: 5, emphasis: { disabled: true }, labelLayout: { hideOverlap: true } },
       { name: 'MA5', type: 'line', data: ma(5), showSymbol: false, lineStyle: { width: 1.2, color: '#e0a832' }, itemStyle: { color: '#e0a832' }, emphasis: { disabled: true } },
       { name: 'MA10', type: 'line', data: ma(10), showSymbol: false, lineStyle: { width: 1.2, color: '#b678f0' }, itemStyle: { color: '#b678f0' }, emphasis: { disabled: true } },
       { name: 'MA20', type: 'line', data: ma(20), showSymbol: false, lineStyle: { width: 1.2, color: '#4aa3f0' }, itemStyle: { color: '#4aa3f0' }, emphasis: { disabled: true } },
