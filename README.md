@@ -30,8 +30,14 @@ parts/          源码分块
 
 ## 部署到 iPhone
 
+**线上地址（GitHub Pages，已部署）：<https://aixing24.github.io/openbook/>**
+
+iPhone Safari 打开 → 分享 → 添加到主屏幕，即可像 App 一样全屏使用。任何网络可用（若国内直连失败，可试 Cloudflare Pages 等备选托管）。
+
+备用方案：
+
 1. **同 Wi-Fi 临时试用**：Mac 上 `python3 -m http.server 8765`，手机 Safari 访问 `http://<Mac局域网IP>:8765`（Mac 需保持开机）
-2. **长期使用（推荐）**：把 `index.html` 放到任意静态托管（GitHub Pages / Cloudflare Pages / 自己的服务器），HTTPS 下 Safari 分享 → 添加到主屏幕
+2. **更新发布**：修改 parts/ 后 `cat parts/p1.html parts/core.js parts/data.js parts/ui.js parts/p4.html > index.html && git add -A && git commit --no-verify -m "..." && git push`，GitHub Pages 约 1 分钟后自动生效
 3. 换部署地址后，用「设置 → 导出备份 / 导入备份」迁移数据
 
 ## 数据接口（均为公开免费接口，国内直连）
