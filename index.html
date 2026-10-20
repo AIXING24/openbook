@@ -139,10 +139,15 @@ input,textarea{font:inherit;color:inherit}
 /* ---- 表单 ---- */
 .f-lbl{font-size:12px;color:var(--muted);margin:14px 0 6px;display:block}
 .f-lbl:first-child{margin-top:0}
-.inp{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;font-size:15px}
+.inp{width:100%;min-width:0;background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;font-size:15px}
+.inp[type=date]{-webkit-appearance:none;appearance:none}
+@media (pointer:coarse){.inp{font-size:16px}}  /* iOS: 输入框≥16px 防聚焦自动缩放 */
 .inp:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .inp::placeholder{color:var(--faint)}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* 网格子项允许收缩: 原生date/number控件固有最小宽度会把1fr轨道挤歪(iOS上尤为明显) */
+.frow>div{min-width:0}
+.sum-grid>div,.tile-row>.tile,.qgrid>div,.setrow>div:first-child{min-width:0}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .searchbox{position:relative}
@@ -708,9 +713,9 @@ function renderPos() {
      <div class="lbl">总市值（折${CN[S.base]}）</div>
      <div class="big num">${fmtAmt(mktB, S.base)}</div>
      <div class="sum-grid">
-       <div><div class="lbl">浮动盈亏</div><div class="v num ${unreal >= 0 ? 'up' : 'down'}">${fmtAmt(unreal, S.base, true)}</div></div>
-       <div><div class="lbl">持仓成本</div><div class="v num">${fmtAmt(costB, S.base)}</div></div>
-       <div><div class="lbl">已实现盈亏</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${fmtAmt(realB, S.base, true)}</div></div>
+       <div><div class="lbl">浮动盈亏</div><div class="v num ${unreal >= 0 ? 'up' : 'down'}">${fmtAmtC(unreal, S.base, true)}</div></div>
+       <div><div class="lbl">持仓成本</div><div class="v num">${fmtAmtC(costB, S.base)}</div></div>
+       <div><div class="lbl">已实现盈亏</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${fmtAmtC(realB, S.base, true)}</div></div>
      </div>
      <div class="fx-line num">1 USD = ${F.USDCNY.toFixed(4)} CNY · 1 HKD = ${F.HKDCNY.toFixed(4)} CNY${F.approx ? ' · 备用汇率' : ''}${noPx ? ` · ${noPx} 只无行情未计入总市值` : ''}</div>
    </div>

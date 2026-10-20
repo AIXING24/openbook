@@ -145,9 +145,9 @@ function renderPos() {
      <div class="lbl">总市值（折${CN[S.base]}）</div>
      <div class="big num">${fmtAmt(mktB, S.base)}</div>
      <div class="sum-grid">
-       <div><div class="lbl">浮动盈亏</div><div class="v num ${unreal >= 0 ? 'up' : 'down'}">${fmtAmt(unreal, S.base, true)}</div></div>
-       <div><div class="lbl">持仓成本</div><div class="v num">${fmtAmt(costB, S.base)}</div></div>
-       <div><div class="lbl">已实现盈亏</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${fmtAmt(realB, S.base, true)}</div></div>
+       <div><div class="lbl">浮动盈亏</div><div class="v num ${unreal >= 0 ? 'up' : 'down'}">${fmtAmtC(unreal, S.base, true)}</div></div>
+       <div><div class="lbl">持仓成本</div><div class="v num">${fmtAmtC(costB, S.base)}</div></div>
+       <div><div class="lbl">已实现盈亏</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${fmtAmtC(realB, S.base, true)}</div></div>
      </div>
      <div class="fx-line num">1 USD = ${F.USDCNY.toFixed(4)} CNY · 1 HKD = ${F.HKDCNY.toFixed(4)} CNY${F.approx ? ' · 备用汇率' : ''}${noPx ? ` · ${noPx} 只无行情未计入总市值` : ''}</div>
    </div>

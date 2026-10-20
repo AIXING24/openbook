@@ -139,10 +139,15 @@ input,textarea{font:inherit;color:inherit}
 /* ---- 表单 ---- */
 .f-lbl{font-size:12px;color:var(--muted);margin:14px 0 6px;display:block}
 .f-lbl:first-child{margin-top:0}
-.inp{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;font-size:15px}
+.inp{width:100%;min-width:0;background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:11px 12px;font-size:15px}
+.inp[type=date]{-webkit-appearance:none;appearance:none}
+@media (pointer:coarse){.inp{font-size:16px}}  /* iOS: 输入框≥16px 防聚焦自动缩放 */
 .inp:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .inp::placeholder{color:var(--faint)}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* 网格子项允许收缩: 原生date/number控件固有最小宽度会把1fr轨道挤歪(iOS上尤为明显) */
+.frow>div{min-width:0}
+.sum-grid>div,.tile-row>.tile,.qgrid>div,.setrow>div:first-child{min-width:0}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .searchbox{position:relative}
