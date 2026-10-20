@@ -1,4 +1,4 @@
-# OPEN BOOK（持仓手账）
+# OPEN BOOK
 
 > 名字三关：open position（未平仓持仓）· 交易员的 book（持仓簿）· open book（一目了然——把分散各平台的账目摊成一页）
 
