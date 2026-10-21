@@ -198,8 +198,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 #tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border:0;background:none;color:var(--faint);font-size:10px}
 #tabs button.on{color:var(--accent)}
 #tabs svg{width:22px;height:22px}
-/* ---- 详情页 ---- */
-#scrim{position:fixed;inset:0;z-index:55;background:rgba(8,12,18,.45)}
+/* ---- 详情页(全端全屏, 内容列居中) ---- */
 #sheet{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column}
 .sh-head{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) 12px 12px;
   background:var(--bg);border-bottom:1px solid var(--line);
@@ -249,11 +248,6 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 /* ---- 桌面端(鼠标+宽屏)适配 ---- */
 @media (min-width:700px) and (pointer:fine){
   #app{border-inline:1px solid var(--line)}
-  /* 详情页呈现为居中对话框(触屏设备保持全屏); 遮罩是独立元素#scrim(z低于#sheet), 不能用#sheet::before —— 定位伪元素会绘制在静态子内容之上把内容盖住 */
-  #sheet{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);
-    width:560px;max-width:calc(100vw - 48px);
-    height:min(780px,calc(100vh - 96px));height:min(780px,calc(100dvh - 96px));
-    border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
 }
 @media (hover:hover) and (pointer:fine){
   .pos-row:hover,.btn:hover,.iconbtn:hover{border-color:var(--line2)}
@@ -330,7 +324,6 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="15.5" cy="7" r="2.5"/><circle cx="7.5" cy="17" r="2.5"/></svg>设置
   </button>
 </div></nav>
-<div id="scrim" hidden></div>
 <div id="sheet" hidden></div>
 <div id="toast" hidden></div>
 <div id="modal" hidden><div class="modal-card"><h3 id="modal-title"></h3><div id="modal-body"></div><div class="modal-acts" id="modal-acts"></div></div></div>

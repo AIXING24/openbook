@@ -585,7 +585,7 @@ function openSheet(tc, fromPop) {
   const mkt = p ? p.mkt : (/^(sh|sz|hk|us)/.exec(tc) || ['', ''])[1];
   const cur = p ? p.cur : Core.CUR_OF[mkt];
   const sh = $('#sheet');
-  sh.hidden = false; $('#scrim').hidden = false; document.body.style.overflow = 'hidden';
+  sh.hidden = false; document.body.style.overflow = 'hidden';
   sh.innerHTML = `
    <div class="sh-head">
      <button class="iconbtn" id="sh-close" aria-label="关闭">✕</button>
@@ -624,7 +624,7 @@ function openSheet(tc, fromPop) {
 }
 function closeSheet(fromPop) {
   const popIt = !fromPop && history.state && history.state.sheet;   // 消费掉详情页的栈条目
-  $('#sheet').hidden = true; $('#scrim').hidden = true; document.body.style.overflow = '';
+  $('#sheet').hidden = true; document.body.style.overflow = '';
   if (kChart) { kChart.dispose(); kChart = null; }
   sheetTc = null; kCache = {};
   if (popIt) history.back();
@@ -784,25 +784,35 @@ function renderKline(r) {
     };
   });
   const startPct = Math.max(0, 100 * (1 - Math.min(90, dates.length) / Math.max(dates.length, 1)));
-  /* 跨年时间轴: 每年第一根K线显示年份(如 2025), 其余 MM-DD。
-     年份标签两侧的常规标签"让位"(suppress), 避免与年份叠字; 让位范围随缩放窗口的蜡烛宽度自适应 */
+  /* 跨年时间轴(同花顺式): 年份首根显示年份, 日/周K其余显示MM-DD、月K显示月份。
+     一律按"日期值"定位(缩放过滤后轴索引语义不可靠); 年份标签自身也按间距抽稀(月K多年份时隔年显示), 且两侧常规标签让位 —— 任何缩放状态都不叠字 */
   const yearFirst = new Set();
   let lastY = '';
   for (const d of dates) { const y = d.slice(0, 4); if (y !== lastY) { yearFirst.add(d); lastY = y; } }
+  const dateIdx = new Map(dates.map((d, i) => [d, i]));
   const vis0 = Math.min(90, dates.length);
   let xStep = Math.max(1, Math.round(vis0 / 6));
-  let suppress = new Set();   // 相对可见窗口的索引集合: 这些位置不显示常规标签
-  const markSuppress = (s, e, plotW) => {
-    suppress = new Set();
+  let keepYears = new Set(yearFirst);   // 保留年份标签的日期
+  let suppress = new Set();             // 全量索引: 不显示常规标签的位置(年份±让位区)
+  const relabel = (s, e, plotW) => {
     const candleW = plotW / Math.max(e - s + 1, 1);
-    const minGap = Math.max(1, Math.ceil(40 / candleW));   // ≈ 年份与日期两个标签宽度之和的一半
-    for (let i = s; i <= e; i++) {
-      if (!yearFirst.has(dates[i])) continue;
-      for (let j = Math.max(s, i - minGap); j <= Math.min(e, i + minGap); j++) suppress.add(j - s);
-    }
+    const minGap = Math.max(1, Math.ceil(56 / candleW));   // ≈ 年份与常规标签宽度之和
+    const cand = [];
+    for (let i = s; i <= e; i++) if (yearFirst.has(dates[i])) cand.push(i);
+    const keep = [];
+    for (const yi of cand) { if (!keep.length || yi - keep[keep.length - 1] >= minGap) keep.push(yi); }
+    keepYears = new Set(keep.map(i => dates[i]));
+    const set = new Set();
+    for (const yi of keep) for (let j = Math.max(0, yi - minGap); j <= Math.min(dates.length - 1, yi + minGap); j++) set.add(j);
+    return set;
   };
-  markSuppress(dates.length - vis0, dates.length - 1, 380);
-  const xInterval = (idx, val) => yearFirst.has(val) || (idx % xStep === 0 && !suppress.has(idx));
+  suppress = relabel(dates.length - vis0, dates.length - 1, 380);
+  const xInterval = (idx, val) => {
+    const fi = dateIdx.get(val);
+    if (fi == null) return false;
+    return keepYears.has(val) || (fi % xStep === 0 && !suppress.has(fi));
+  };
+  const fmtLabel = val => keepYears.has(val) ? val.slice(0, 4) : (kPeriod === 'month' ? val.slice(5, 7) : (val.length > 7 ? val.slice(5) : val));
   kChart.setOption({
     animation: false,
     tooltip: {
@@ -825,7 +835,7 @@ function renderKline(r) {
     },
     grid: [{ left: 6, right: 8, top: 30, height: '54%' }, { left: 6, right: 8, top: '74%', height: '14%' }],
     xAxis: [
-      { type: 'category', data: dates, boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: line } }, axisLabel: { color: muted, fontSize: 9, interval: xInterval, formatter: val => yearFirst.has(val) ? val.slice(0, 4) : (val.length > 7 ? val.slice(5) : val) } },
+      { type: 'category', data: dates, boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: line } }, axisLabel: { color: muted, fontSize: 9, interval: xInterval, formatter: fmtLabel } },
       { type: 'category', gridIndex: 1, data: dates, axisTick: { show: false }, axisLabel: { show: false }, axisLine: { lineStyle: { color: line } } }
     ],
     yAxis: [
@@ -849,8 +859,8 @@ function renderKline(r) {
       const zs = dz.startValue != null ? dz.startValue : 0;
       const ze = dz.endValue != null ? dz.endValue : dates.length - 1;
       xStep = Math.max(1, Math.round((ze - zs + 1) / 6));
-      markSuppress(zs, ze, Math.max(120, kChart.getWidth() - 16));
-      kChart.setOption({ xAxis: [{ axisLabel: { interval: xInterval } }] });   // 触发轴标签按新间隔重排
+      suppress = relabel(zs, ze, Math.max(120, kChart.getWidth() - 16));
+      kChart.setOption({ xAxis: [{ axisLabel: { interval: xInterval } }] });   // 触发轴标签按新参数重排
     } catch (err) {}
   });
   updateMaLegend(k);
@@ -894,7 +904,11 @@ function boot() {
   if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
   initAdd();
   $$('#tabs button').forEach(b => b.onclick = () => showView(b.dataset.view));
-  $('#scrim').addEventListener('click', () => closeSheet());   // 桌面对话框: 点遮罩关闭
+  document.addEventListener('keydown', e => {   // 桌面: Esc 关闭弹层
+    if (e.key !== 'Escape') return;
+    if (!$('#modal').hidden) { closeModal(); return; }
+    if (!$('#sheet').hidden) closeSheet();
+  });
   $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
   window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); });
   onData = () => rerender();
