@@ -877,6 +877,7 @@ function boot() {
   if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
   initAdd();
   $$('#tabs button').forEach(b => b.onclick = () => showView(b.dataset.view));
+  $('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet') closeSheet(); });   // 桌面对话框遮罩点击关闭
   $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
   window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); });
   onData = () => rerender();

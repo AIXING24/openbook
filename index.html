@@ -194,7 +194,8 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 /* ---- 详情页 ---- */
 #sheet{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column}
 .sh-head{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) 12px 12px;
-  background:var(--bg);border-bottom:1px solid var(--line)}
+  background:var(--bg);border-bottom:1px solid var(--line);
+  width:100%;max-width:560px;margin:0 auto}
 .sh-name{font-size:17px;font-weight:700;display:flex;align-items:center;gap:6px}
 .sh-code{font-size:11px;color:var(--faint);font-family:var(--mono);margin-top:1px}
 .sh-px{margin-left:auto;text-align:right;flex:none}
@@ -237,6 +238,25 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .modal-acts{display:flex;gap:10px}
 .modal-acts .btn{flex:1}
 .modal-acts .btn-primary{width:auto}
+/* ---- 桌面端(鼠标+宽屏)适配 ---- */
+@media (min-width:700px) and (pointer:fine){
+  #app{border-inline:1px solid var(--line)}
+  /* 详情页呈现为居中对话框(触屏设备保持全屏) */
+  #sheet{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:560px;max-width:calc(100vw - 48px);
+    height:min(780px,calc(100vh - 96px));height:min(780px,calc(100dvh - 96px));
+    border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+  #sheet::before{content:"";position:fixed;inset:0;background:rgba(8,12,18,.45)}
+}
+@media (hover:hover) and (pointer:fine){
+  .pos-row:hover,.btn:hover,.iconbtn:hover{border-color:var(--line2)}
+  .sugg button:hover{background:var(--card2)}
+  .t tbody tr:hover{background:var(--card2)}
+  #tabs button:hover{color:var(--muted)}
+}
+@media (pointer:fine){
+  .inp[type=date]::-webkit-calendar-picker-indicator{display:block;opacity:.6;cursor:pointer}
+}
 /* ---- 空状态 ---- */
 .empty{padding:46px 16px;text-align:center;color:var(--muted)}
 .empty svg{width:40px;height:40px;color:var(--faint);margin-bottom:10px}
@@ -1471,6 +1491,7 @@ function boot() {
   if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
   initAdd();
   $$('#tabs button').forEach(b => b.onclick = () => showView(b.dataset.view));
+  $('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet') closeSheet(); });   // 桌面对话框遮罩点击关闭
   $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
   window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); });
   onData = () => rerender();
