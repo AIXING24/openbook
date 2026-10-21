@@ -525,7 +525,7 @@ function renderSet() {
      <p><b>行情说明：</b>行情与K线来自腾讯财经公开接口；美股在美东交易时段内为实时行情（休市时显示上一交易日收盘）；K线为前复权数据。</p>
      <p><b>成本口径：</b>持仓成本为移动加权平均（含手续费）；卖出即时结转已实现盈亏。</p>
    </div>
-   <p class="footnote" style="text-align:center">OPEN BOOK v1.2 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
+   <p class="footnote" style="text-align:center">OPEN BOOK v1.9 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
   bindSeg('#set-base', v => { if (v === S.base) return; S.base = v; save(); rerender(); showToast('基准货币已切换为' + CN[v]); });
   bindSeg('#set-ud', v => { S.upRed = v === '1'; save(); applyUpDown(); rerender(); });
   bindSeg('#set-theme', v => { S.theme = v; save(); applyTheme(); rerender(); });
