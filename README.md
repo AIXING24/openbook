@@ -43,7 +43,7 @@ iPhone Safari 打开 → 分享 → 添加到主屏幕，即可像 App 一样全
 | 用途 | 接口 |
 |---|---|
 | A股/港股实时行情 + 汇率 | `qt.gtimg.cn/q=sh600519,whUSDCNY`（GBK，已带 CORS `*`） |
-| K线（日/周/月，前复权） | `web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=<code>,day,,,250,qfq`（自带美股报价，美股延时约15分钟） |
+| K线（日/周/月，前复权） | `web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=<code>,day,,,250,qfq`（自带美股报价，**交易时段内实测实时**，qt[0]标记 real/delay 对应开市/休市） |
 | 股票搜索 | `smartbox.gtimg.cn/s3/?v=2&q=..&t=all`（JSONP） |
 | 汇率兜底 | `open.er-api.com/v6/latest/USD` |
 

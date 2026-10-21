@@ -488,13 +488,13 @@ async function fetchKline(tc, period, count) {
   return { k, qt };
 }
 
-/* ===== 美股( qt.gtimg 不支持, 走 ifzq 的 qt 段, 延时行情 ) ===== */
+/* ===== 美股( qt.gtimg 不支持, 走 ifzq 的 qt 段; 实测交易时段内为实时行情, qt[0]标记 real/delay 对应开市/休市 ) ===== */
 async function usQuote(tc) {
   try {
     const r = await fetchKline(tc, 'day', 1);
     if (r && r.qt) {
       const q = r.qt, px = +q[3];
-      if (px > 0) return { px, prev: +q[4] || px, open: +q[5] || 0, hi: +q[33] || 0, lo: +q[34] || 0, chg: +q[31] || 0, pct: +q[32] || 0, name: q[1] || '', delayed: true };
+      if (px > 0) return { px, prev: +q[4] || px, open: +q[5] || 0, hi: +q[33] || 0, lo: +q[34] || 0, chg: +q[31] || 0, pct: +q[32] || 0, name: q[1] || '' };
     }
   } catch (e) {}
   return null;
@@ -790,7 +790,7 @@ function renderPicked() {
   const q = quotes[picked.tc];
   $('#pk-name').innerHTML = esc(picked.name || picked.code) + ' <span class="tag">' + (MKT_TAG[picked.mkt] || '') + (picked.ty ? '·' + esc(picked.ty) : '') + '</span>';
   $('#pk-sub').textContent = picked.code + ' · ' + picked.cur +
-    (q && isFinite(q.px) ? ' · 现价 ' + fmtPx(q.px) + (q.delayed ? '（延时）' : '') : '');
+    (q && isFinite(q.px) ? ' · 现价 ' + fmtPx(q.px) : '');
   $('#f-usepx').hidden = !(q && isFinite(q.px));
   updateAmt();
 }
@@ -1142,7 +1142,7 @@ function renderSet() {
    <div class="card help">
      <p><b>添加到主屏幕：</b>iPhone 用 Safari 打开本页面，点分享按钮 →「添加到主屏幕」，即可像 App 一样全屏使用。</p>
      <p><b>数据安全：</b>所有数据仅保存在本设备的浏览器中，不上传任何服务器。清除浏览器数据或换设备前，请先导出备份。</p>
-     <p><b>行情说明：</b>行情与K线来自腾讯财经公开接口；美股行情约延时 15 分钟；K线为前复权数据。</p>
+     <p><b>行情说明：</b>行情与K线来自腾讯财经公开接口；美股在美东交易时段内为实时行情（休市时显示上一交易日收盘）；K线为前复权数据。</p>
      <p><b>成本口径：</b>持仓成本为移动加权平均（含手续费）；卖出即时结转已实现盈亏。</p>
    </div>
    <p class="footnote" style="text-align:center">OPEN BOOK v1.2 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
@@ -1245,7 +1245,7 @@ function openSheet(tc, fromPop) {
    <div class="sh-head">
      <button class="iconbtn" id="sh-close" aria-label="关闭">✕</button>
      <div style="min-width:0;flex:1"><div class="sh-name"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</span><span class="tag">${MKT_TAG[mkt] || ''}</span></div>
-     <div class="sh-code">${esc(tc)} · ${cur}${mkt === 'us' ? ' · 美股延时' : ''}</div></div>
+     <div class="sh-code">${esc(tc)} · ${cur}</div></div>
      <div class="sh-px"><div class="p num" id="sh-px">--</div><div class="c num" id="sh-chg">--</div></div>
    </div>
    <div class="sh-body">
@@ -1373,7 +1373,7 @@ async function loadKline() {
         const q = r.qt, px = +q[3];
         if (px > 0) {
           quotes[sheetTc] = Object.assign({ ts: Date.now() },
-            { px, prev: +q[4] || px, open: +q[5] || 0, hi: +q[33] || 0, lo: +q[34] || 0, chg: +q[31] || 0, pct: +q[32] || 0, name: q[1] || '', delayed: /^us/.test(sheetTc) });
+            { px, prev: +q[4] || px, open: +q[5] || 0, hi: +q[33] || 0, lo: +q[34] || 0, chg: +q[31] || 0, pct: +q[32] || 0, name: q[1] || '' });
           saveQuotes(); renderSheetQuote(); renderSheetPos();
         }
       }

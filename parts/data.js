@@ -59,13 +59,13 @@ async function fetchKline(tc, period, count) {
   return { k, qt };
 }
 
-/* ===== 美股( qt.gtimg 不支持, 走 ifzq 的 qt 段, 延时行情 ) ===== */
+/* ===== 美股( qt.gtimg 不支持, 走 ifzq 的 qt 段; 实测交易时段内为实时行情, qt[0]标记 real/delay 对应开市/休市 ) ===== */
 async function usQuote(tc) {
   try {
     const r = await fetchKline(tc, 'day', 1);
     if (r && r.qt) {
       const q = r.qt, px = +q[3];
-      if (px > 0) return { px, prev: +q[4] || px, open: +q[5] || 0, hi: +q[33] || 0, lo: +q[34] || 0, chg: +q[31] || 0, pct: +q[32] || 0, name: q[1] || '', delayed: true };
+      if (px > 0) return { px, prev: +q[4] || px, open: +q[5] || 0, hi: +q[33] || 0, lo: +q[34] || 0, chg: +q[31] || 0, pct: +q[32] || 0, name: q[1] || '' };
     }
   } catch (e) {}
   return null;
