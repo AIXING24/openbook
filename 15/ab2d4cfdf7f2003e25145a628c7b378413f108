@@ -1,0 +1,31 @@
+index.html
+  s_62935fafdc165c::t_3e653ee4e87abf 72-78,202,252,333,1210,1249,1409-1410,1414-1427,1450,1471-1476,1519
+parts/ui.js
+  s_62935fafdc165c::t_1800263aa17c93 828
+  s_62935fafdc165c::t_540c304ce8a687 787-788,792-805
+  s_62935fafdc165c::t_fa42d84201bdb5 627
+  s_62935fafdc165c::t_b7acd654c0a74c 588
+  s_62935fafdc165c::t_2ec87d24aa190f 897
+  s_62935fafdc165c::t_140f0da4412d34 849-854
+parts/p1.html
+  s_62935fafdc165c::t_4f5bdd4610d37b 72-78
+  s_62935fafdc165c::t_b712ef68904991 202
+  s_62935fafdc165c::t_db6ba247240f7b 252
+  s_62935fafdc165c::t_f765fc3d124623 333
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.50-trip",
+  "base_commit_sha": "15ab2d4cfdf7f2003e25145a628c7b378413f108",
+  "prompts": {},
+  "sessions": {
+    "s_62935fafdc165c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bbdbbea1-d41c-49e1-93e4-0a98967fa395",
+        "model": "glm-5.3"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
