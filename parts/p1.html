@@ -133,6 +133,11 @@ input,textarea{font:inherit;color:inherit}
 .t tbody tr{cursor:pointer}
 #st-chart{height:220px}
 #st-donut{height:200px}
+/* 周期左右滑动切换的内容滑入动画 */
+#v-stats.from-r{animation:stInR .18s ease-out}
+#v-stats.from-l{animation:stInL .18s ease-out}
+@keyframes stInR{from{opacity:.35;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes stInL{from{opacity:.35;transform:translateX(-18px)}to{opacity:1;transform:none}}
 .dlegend{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;padding:10px 4px 0;font-size:11px;color:var(--muted)}
 .dlegend .dl{display:flex;align-items:center;gap:5px;min-width:0}
 .dlegend .dl i{width:8px;height:8px;border-radius:3px;flex:none}

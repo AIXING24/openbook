@@ -133,6 +133,11 @@ input,textarea{font:inherit;color:inherit}
 .t tbody tr{cursor:pointer}
 #st-chart{height:220px}
 #st-donut{height:200px}
+/* 周期左右滑动切换的内容滑入动画 */
+#v-stats.from-r{animation:stInR .18s ease-out}
+#v-stats.from-l{animation:stInL .18s ease-out}
+@keyframes stInR{from{opacity:.35;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes stInL{from{opacity:.35;transform:translateX(-18px)}to{opacity:1;transform:none}}
 .dlegend{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;padding:10px 4px 0;font-size:11px;color:var(--muted)}
 .dlegend .dl{display:flex;align-items:center;gap:5px;min-width:0}
 .dlegend .dl i{width:8px;height:8px;border-radius:3px;flex:none}
@@ -927,7 +932,7 @@ function resetAddForm() {
 }
 
 /* ===== 统计页 ===== */
-let statPeriod = 'month', stChart = null, stDonut = null;
+let statPeriod = 'month', stChart = null, stDonut = null, statsSlideDir = 0;   // 1=滑入自右侧(切下一个), -1=自左侧
 /* 分类色板(环形图按股票身份编码), 取自已验证的参考调色板, 固定顺序不循环 */
 const CAT = {
   light: ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300'],
@@ -975,11 +980,14 @@ function renderStats() {
      <div class="twrap"><table class="t" id="st-stocks"><thead><tr><th>股票</th><th>买入</th><th>卖出</th><th>净额</th></tr></thead><tbody>${stocksHtml}</tbody></table></div></div>` : ''}
    ${st.brokers.length ? `<div class="card"><div class="pos-h" style="padding:0 0 8px"><h2>按券商</h2><span>${st.brokers.length} 家</span></div>
      <div class="twrap"><table class="t"><thead><tr><th>券商</th><th>买入</th><th>卖出</th><th>净额</th></tr></thead><tbody>${brokersHtml}</tbody></table></div></div>` : ''}
-   <p class="footnote">外币金额按当前汇率折算${F.approx ? '（备用汇率，仅供参考）' : ''} · 金额满10万以「万」计 · 点击股票行可查看K线与交易记录</p>`;
+   <p class="footnote">外币金额按当前汇率折算${F.approx ? '（备用汇率，仅供参考）' : ''} · 金额满10万以「万」计 · 左右滑动可切换周期 · 点击股票行可查看K线与交易记录</p>`;
   bindSeg('#st-period', v => { statPeriod = v; renderStats(); }, 'p');
   el.querySelectorAll('#st-stocks tbody tr').forEach(tr => tr.onclick = () => openSheet(tr.dataset.tc));
   if (donutMode) renderStatsDonut(st, donutMode);
   if (statPeriod === 'year') renderStatsChart(st);
+  /* 滑动切换后的滑入动画(点击切换不加动画) */
+  el.classList.remove('from-r', 'from-l');
+  if (statsSlideDir) { void el.offsetWidth; el.classList.add(statsSlideDir > 0 ? 'from-r' : 'from-l'); statsSlideDir = 0; }
 }
 /* 环形图: 本期买入(或卖出)金额按股票构成, 前6只 + 其他。
    图例用 HTML 放在画布下方(数量任意自动换行, 不与饼图争canvas空间) */
@@ -1065,6 +1073,38 @@ function renderStatsChart(st) {
       { name: '卖出', type: 'bar', data: sell, itemStyle: { color: cssVar('--down'), borderRadius: [3, 3, 0, 0] }, barMaxWidth: 16 }
     ]
   });
+}
+
+/* 统计页左右滑动切换周期:
+   - 水平位移≥56px 且明显大于垂直分量才判定(不误伤上下滚动)
+   - 起手在可横向滚动的表格(.twrap)上不接管
+   - 起手在左缘24px内不接管(留给 iOS 系统返回手势)
+   - 多指(捏合)不接管; 点击仍然走原逻辑 */
+function initStatsSwipe() {
+  const el = $('#v-stats');
+  if (!el) return;
+  let sx = 0, sy = 0, st = 0, multi = false, onScroll = false;
+  el.addEventListener('touchstart', e => {
+    multi = e.touches.length > 1;
+    onScroll = !!(e.target.closest && e.target.closest('.twrap'));
+    const t = e.changedTouches[0];
+    sx = t.clientX; sy = t.clientY; st = Date.now();
+  }, { passive: true });
+  el.addEventListener('touchend', e => {
+    if (multi || onScroll || sx < 24) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - sx, dy = t.clientY - sy;
+    if (Date.now() - st > 800) return;
+    if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    const order = ['week', 'month', 'year', 'all'];
+    const i = order.indexOf(statPeriod);
+    if (i < 0) return;
+    const ni = dx < 0 ? Math.min(i + 1, order.length - 1) : Math.max(i - 1, 0);
+    if (ni === i) return;
+    statPeriod = order[ni];
+    statsSlideDir = dx < 0 ? 1 : -1;
+    renderStats();
+  }, { passive: true });
 }
 
 /* ===== 设置页 ===== */
@@ -1518,6 +1558,7 @@ function boot() {
   if (location.hash === '#dark') document.documentElement.dataset.theme = 'dark';
   if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
   initAdd();
+  initStatsSwipe();
   $$('#tabs button').forEach(b => b.onclick = () => showView(b.dataset.view));
   document.addEventListener('keydown', e => {   // 桌面: Esc 关闭弹层
     if (e.key !== 'Escape') return;
