@@ -1,0 +1,27 @@
+parts/ui.js
+  s_62935fafdc165c::t_be64f10021eba9 368-370
+  s_62935fafdc165c::t_f08871ad172229 315
+  s_62935fafdc165c::t_9735efb55d0a1d 363
+  s_62935fafdc165c::t_b6156de4ee776b 458-489
+  s_62935fafdc165c::t_382ace7e5b3215 941
+index.html
+  s_62935fafdc165c::t_e9c3fdcc6c74b4 136-140,935,983,988-990,1078-1109,1561
+parts/p1.html
+  s_62935fafdc165c::t_8eaad6a8d72a01 136-140
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.50-trip",
+  "base_commit_sha": "496f280edb9f34ea37ba95555e2146f7b67b0678",
+  "prompts": {},
+  "sessions": {
+    "s_62935fafdc165c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bbdbbea1-d41c-49e1-93e4-0a98967fa395",
+        "model": "glm-5.3"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
