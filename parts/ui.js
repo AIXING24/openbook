@@ -79,7 +79,7 @@ function showView(v) {
   if (v === 'pos') renderPos();
   else if (v === 'stats') renderStats();
   else if (v === 'set') renderSet();
-  window.scrollTo(0, 0);
+  $('#main').scrollTop = 0;   // 内容区滚动归零(应用壳布局下文档本身不滚动)
 }
 function rerender() {
   if (curView === 'pos') renderPos();
