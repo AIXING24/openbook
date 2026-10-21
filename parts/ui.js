@@ -585,7 +585,7 @@ function openSheet(tc, fromPop) {
   const mkt = p ? p.mkt : (/^(sh|sz|hk|us)/.exec(tc) || ['', ''])[1];
   const cur = p ? p.cur : Core.CUR_OF[mkt];
   const sh = $('#sheet');
-  sh.hidden = false; document.body.style.overflow = 'hidden';
+  sh.hidden = false; $('#scrim').hidden = false; document.body.style.overflow = 'hidden';
   sh.innerHTML = `
    <div class="sh-head">
      <button class="iconbtn" id="sh-close" aria-label="关闭">✕</button>
@@ -624,7 +624,7 @@ function openSheet(tc, fromPop) {
 }
 function closeSheet(fromPop) {
   const popIt = !fromPop && history.state && history.state.sheet;   // 消费掉详情页的栈条目
-  $('#sheet').hidden = true; document.body.style.overflow = '';
+  $('#sheet').hidden = true; $('#scrim').hidden = true; document.body.style.overflow = '';
   if (kChart) { kChart.dispose(); kChart = null; }
   sheetTc = null; kCache = {};
   if (popIt) history.back();
@@ -784,11 +784,25 @@ function renderKline(r) {
     };
   });
   const startPct = Math.max(0, 100 * (1 - Math.min(90, dates.length) / Math.max(dates.length, 1)));
-  /* 跨年时间轴: 每年第一根K线显示年份(如 2025), 其余 MM-DD; 密度随缩放窗口自适应 */
+  /* 跨年时间轴: 每年第一根K线显示年份(如 2025), 其余 MM-DD。
+     年份标签两侧的常规标签"让位"(suppress), 避免与年份叠字; 让位范围随缩放窗口的蜡烛宽度自适应 */
   const yearFirst = new Set();
   let lastY = '';
   for (const d of dates) { const y = d.slice(0, 4); if (y !== lastY) { yearFirst.add(d); lastY = y; } }
-  let xStep = Math.max(1, Math.round(Math.min(90, dates.length) / 6));
+  const vis0 = Math.min(90, dates.length);
+  let xStep = Math.max(1, Math.round(vis0 / 6));
+  let suppress = new Set();   // 相对可见窗口的索引集合: 这些位置不显示常规标签
+  const markSuppress = (s, e, plotW) => {
+    suppress = new Set();
+    const candleW = plotW / Math.max(e - s + 1, 1);
+    const minGap = Math.max(1, Math.ceil(40 / candleW));   // ≈ 年份与日期两个标签宽度之和的一半
+    for (let i = s; i <= e; i++) {
+      if (!yearFirst.has(dates[i])) continue;
+      for (let j = Math.max(s, i - minGap); j <= Math.min(e, i + minGap); j++) suppress.add(j - s);
+    }
+  };
+  markSuppress(dates.length - vis0, dates.length - 1, 380);
+  const xInterval = (idx, val) => yearFirst.has(val) || (idx % xStep === 0 && !suppress.has(idx));
   kChart.setOption({
     animation: false,
     tooltip: {
@@ -811,7 +825,7 @@ function renderKline(r) {
     },
     grid: [{ left: 6, right: 8, top: 30, height: '54%' }, { left: 6, right: 8, top: '74%', height: '14%' }],
     xAxis: [
-      { type: 'category', data: dates, boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: line } }, axisLabel: { color: muted, fontSize: 9, interval: (idx, val) => yearFirst.has(val) || idx % xStep === 0, formatter: val => yearFirst.has(val) ? val.slice(0, 4) : (val.length > 7 ? val.slice(5) : val) } },
+      { type: 'category', data: dates, boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: line } }, axisLabel: { color: muted, fontSize: 9, interval: xInterval, formatter: val => yearFirst.has(val) ? val.slice(0, 4) : (val.length > 7 ? val.slice(5) : val) } },
       { type: 'category', gridIndex: 1, data: dates, axisTick: { show: false }, axisLabel: { show: false }, axisLine: { lineStyle: { color: line } } }
     ],
     yAxis: [
@@ -832,9 +846,12 @@ function renderKline(r) {
     updateMaLegend(k);
     try {
       const dz = kChart.getOption().dataZoom[0];
-      const vis = (dz.endValue != null ? dz.endValue : dates.length - 1) - (dz.startValue != null ? dz.startValue : 0) + 1;
-      xStep = Math.max(1, Math.round(vis / 6));
-    } catch (e) {}
+      const zs = dz.startValue != null ? dz.startValue : 0;
+      const ze = dz.endValue != null ? dz.endValue : dates.length - 1;
+      xStep = Math.max(1, Math.round((ze - zs + 1) / 6));
+      markSuppress(zs, ze, Math.max(120, kChart.getWidth() - 16));
+      kChart.setOption({ xAxis: [{ axisLabel: { interval: xInterval } }] });   // 触发轴标签按新间隔重排
+    } catch (err) {}
   });
   updateMaLegend(k);
 }
@@ -877,7 +894,7 @@ function boot() {
   if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
   initAdd();
   $$('#tabs button').forEach(b => b.onclick = () => showView(b.dataset.view));
-  $('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet') closeSheet(); });   // 桌面对话框遮罩点击关闭
+  $('#scrim').addEventListener('click', () => closeSheet());   // 桌面对话框: 点遮罩关闭
   $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
   window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); });
   onData = () => rerender();

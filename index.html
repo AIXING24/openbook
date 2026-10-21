@@ -69,6 +69,13 @@ input,textarea{font:inherit;color:inherit}
 @keyframes spin{to{transform:rotate(360deg)}}
 #app{width:100%;max-width:560px;margin:0 auto;padding-top:env(safe-area-inset-top,0px);flex:1;min-height:0;display:flex;flex-direction:column}
 #main{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px}
+/* 滚动条: 桌面细窄不碍事; 触屏(含iOS)隐藏 —— 否则叠加在模块右侧且离屏幕边缘过远 */
+#main::-webkit-scrollbar,.sh-body::-webkit-scrollbar,.twrap::-webkit-scrollbar{width:6px;height:6px}
+#main::-webkit-scrollbar-thumb,.sh-body::-webkit-scrollbar-thumb,.twrap::-webkit-scrollbar-thumb{background:var(--line2);border-radius:3px}
+@media (pointer:coarse){
+  #main,.sh-body,.twrap{scrollbar-width:none}
+  #main::-webkit-scrollbar,.sh-body::-webkit-scrollbar,.twrap::-webkit-scrollbar{display:none}
+}
 .view{display:flex;flex-direction:column;gap:12px;padding-bottom:6px}
 /* ---- 页头 ---- */
 .pagehead{position:sticky;top:0;z-index:20;background:var(--bg);
@@ -192,6 +199,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 #tabs button.on{color:var(--accent)}
 #tabs svg{width:22px;height:22px}
 /* ---- 详情页 ---- */
+#scrim{position:fixed;inset:0;z-index:55;background:rgba(8,12,18,.45)}
 #sheet{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column}
 .sh-head{display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) 12px 12px;
   background:var(--bg);border-bottom:1px solid var(--line);
@@ -241,12 +249,11 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 /* ---- 桌面端(鼠标+宽屏)适配 ---- */
 @media (min-width:700px) and (pointer:fine){
   #app{border-inline:1px solid var(--line)}
-  /* 详情页呈现为居中对话框(触屏设备保持全屏) */
+  /* 详情页呈现为居中对话框(触屏设备保持全屏); 遮罩是独立元素#scrim(z低于#sheet), 不能用#sheet::before —— 定位伪元素会绘制在静态子内容之上把内容盖住 */
   #sheet{inset:auto;left:50%;top:50%;transform:translate(-50%,-50%);
     width:560px;max-width:calc(100vw - 48px);
     height:min(780px,calc(100vh - 96px));height:min(780px,calc(100dvh - 96px));
     border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
-  #sheet::before{content:"";position:fixed;inset:0;background:rgba(8,12,18,.45)}
 }
 @media (hover:hover) and (pointer:fine){
   .pos-row:hover,.btn:hover,.iconbtn:hover{border-color:var(--line2)}
@@ -323,6 +330,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="15.5" cy="7" r="2.5"/><circle cx="7.5" cy="17" r="2.5"/></svg>设置
   </button>
 </div></nav>
+<div id="scrim" hidden></div>
 <div id="sheet" hidden></div>
 <div id="toast" hidden></div>
 <div id="modal" hidden><div class="modal-card"><h3 id="modal-title"></h3><div id="modal-body"></div><div class="modal-acts" id="modal-acts"></div></div></div>
@@ -1199,7 +1207,7 @@ function openSheet(tc, fromPop) {
   const mkt = p ? p.mkt : (/^(sh|sz|hk|us)/.exec(tc) || ['', ''])[1];
   const cur = p ? p.cur : Core.CUR_OF[mkt];
   const sh = $('#sheet');
-  sh.hidden = false; document.body.style.overflow = 'hidden';
+  sh.hidden = false; $('#scrim').hidden = false; document.body.style.overflow = 'hidden';
   sh.innerHTML = `
    <div class="sh-head">
      <button class="iconbtn" id="sh-close" aria-label="关闭">✕</button>
@@ -1238,7 +1246,7 @@ function openSheet(tc, fromPop) {
 }
 function closeSheet(fromPop) {
   const popIt = !fromPop && history.state && history.state.sheet;   // 消费掉详情页的栈条目
-  $('#sheet').hidden = true; document.body.style.overflow = '';
+  $('#sheet').hidden = true; $('#scrim').hidden = true; document.body.style.overflow = '';
   if (kChart) { kChart.dispose(); kChart = null; }
   sheetTc = null; kCache = {};
   if (popIt) history.back();
@@ -1398,11 +1406,25 @@ function renderKline(r) {
     };
   });
   const startPct = Math.max(0, 100 * (1 - Math.min(90, dates.length) / Math.max(dates.length, 1)));
-  /* 跨年时间轴: 每年第一根K线显示年份(如 2025), 其余 MM-DD; 密度随缩放窗口自适应 */
+  /* 跨年时间轴: 每年第一根K线显示年份(如 2025), 其余 MM-DD。
+     年份标签两侧的常规标签"让位"(suppress), 避免与年份叠字; 让位范围随缩放窗口的蜡烛宽度自适应 */
   const yearFirst = new Set();
   let lastY = '';
   for (const d of dates) { const y = d.slice(0, 4); if (y !== lastY) { yearFirst.add(d); lastY = y; } }
-  let xStep = Math.max(1, Math.round(Math.min(90, dates.length) / 6));
+  const vis0 = Math.min(90, dates.length);
+  let xStep = Math.max(1, Math.round(vis0 / 6));
+  let suppress = new Set();   // 相对可见窗口的索引集合: 这些位置不显示常规标签
+  const markSuppress = (s, e, plotW) => {
+    suppress = new Set();
+    const candleW = plotW / Math.max(e - s + 1, 1);
+    const minGap = Math.max(1, Math.ceil(40 / candleW));   // ≈ 年份与日期两个标签宽度之和的一半
+    for (let i = s; i <= e; i++) {
+      if (!yearFirst.has(dates[i])) continue;
+      for (let j = Math.max(s, i - minGap); j <= Math.min(e, i + minGap); j++) suppress.add(j - s);
+    }
+  };
+  markSuppress(dates.length - vis0, dates.length - 1, 380);
+  const xInterval = (idx, val) => yearFirst.has(val) || (idx % xStep === 0 && !suppress.has(idx));
   kChart.setOption({
     animation: false,
     tooltip: {
@@ -1425,7 +1447,7 @@ function renderKline(r) {
     },
     grid: [{ left: 6, right: 8, top: 30, height: '54%' }, { left: 6, right: 8, top: '74%', height: '14%' }],
     xAxis: [
-      { type: 'category', data: dates, boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: line } }, axisLabel: { color: muted, fontSize: 9, interval: (idx, val) => yearFirst.has(val) || idx % xStep === 0, formatter: val => yearFirst.has(val) ? val.slice(0, 4) : (val.length > 7 ? val.slice(5) : val) } },
+      { type: 'category', data: dates, boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: line } }, axisLabel: { color: muted, fontSize: 9, interval: xInterval, formatter: val => yearFirst.has(val) ? val.slice(0, 4) : (val.length > 7 ? val.slice(5) : val) } },
       { type: 'category', gridIndex: 1, data: dates, axisTick: { show: false }, axisLabel: { show: false }, axisLine: { lineStyle: { color: line } } }
     ],
     yAxis: [
@@ -1446,9 +1468,12 @@ function renderKline(r) {
     updateMaLegend(k);
     try {
       const dz = kChart.getOption().dataZoom[0];
-      const vis = (dz.endValue != null ? dz.endValue : dates.length - 1) - (dz.startValue != null ? dz.startValue : 0) + 1;
-      xStep = Math.max(1, Math.round(vis / 6));
-    } catch (e) {}
+      const zs = dz.startValue != null ? dz.startValue : 0;
+      const ze = dz.endValue != null ? dz.endValue : dates.length - 1;
+      xStep = Math.max(1, Math.round((ze - zs + 1) / 6));
+      markSuppress(zs, ze, Math.max(120, kChart.getWidth() - 16));
+      kChart.setOption({ xAxis: [{ axisLabel: { interval: xInterval } }] });   // 触发轴标签按新间隔重排
+    } catch (err) {}
   });
   updateMaLegend(k);
 }
@@ -1491,7 +1516,7 @@ function boot() {
   if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
   initAdd();
   $$('#tabs button').forEach(b => b.onclick = () => showView(b.dataset.view));
-  $('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet') closeSheet(); });   // 桌面对话框遮罩点击关闭
+  $('#scrim').addEventListener('click', () => closeSheet());   // 桌面对话框: 点遮罩关闭
   $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
   window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); });
   onData = () => rerender();
