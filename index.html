@@ -656,13 +656,16 @@ function fxInfo() {
 }
 
 /* ===== 视图切换 ===== */
-let curView = 'pos', picked = null, side = 'B';
+let curView = null, picked = null, side = 'B';
 function activeTcs() {
   const set = new Set(Core.calcPositions(S.trades).map(p => p.tc));
   if (picked && picked.tc) set.add(picked.tc);
   return [...set];
 }
-function showView(v) {
+/* 视图切换压入浏览器历史 → 支持 iOS 边缘右滑返回(popstate 驱动) */
+function showView(v, fromPop) {
+  if (v === curView) { $('#main').scrollTop = 0; return; }
+  if (!fromPop) { try { history.pushState({ v: v }, ''); } catch (e) {} }
   curView = v;
   $$('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.view === v));
   ['pos', 'add', 'stats', 'set'].forEach(x => { $('#v-' + x).hidden = (x !== v); });
@@ -1167,7 +1170,9 @@ function closeModal() { $('#modal').hidden = true; }
 
 /* ===== 个股详情页 ===== */
 let sheetTc = null, kChart = null, kPeriod = 'day', kCache = {};
-function openSheet(tc) {
+function openSheet(tc, fromPop) {
+  if (sheetTc === tc && !$('#sheet').hidden) return;
+  if (!fromPop) { try { history.pushState({ sheet: tc }, ''); } catch (e) {} }   // 详情页压栈 → 右滑关闭
   sheetTc = tc; kPeriod = 'day'; kCache = {};
   const p = Core.calcPositions(S.trades).find(x => x.tc === tc);
   const name = p ? p.name : (quotes[tc] && quotes[tc].name) || tc;
@@ -1194,8 +1199,14 @@ function openSheet(tc) {
      <div class="card"><div class="pos-h" style="padding:0 0 8px"><h2>交易记录</h2><span id="sh-tcount"></span></div><div id="sh-trades"></div>
        <button class="btn" style="width:100%;margin-top:10px" id="sh-add">为这只股票记一笔</button></div>
    </div>`;
-  $('#sh-close').onclick = closeSheet;
-  $('#sh-add').onclick = () => { const st = p; closeSheet(); showView('add'); if (st) setPicked({ tc: st.tc, code: st.code, mkt: st.mkt, name: st.name, cur: st.cur }); };
+  $('#sh-close').onclick = () => closeSheet();   // 注意不能直接赋值closeSheet: 事件对象会被误当作fromPop参数
+  $('#sh-add').onclick = () => {
+    const st = p;
+    try { history.replaceState({ v: 'add' }, ''); } catch (e) {}   // 原地改写栈顶, 避免与返回竞态
+    closeSheet(true);
+    showView('add', true);
+    if (st) setPicked({ tc: st.tc, code: st.code, mkt: st.mkt, name: st.name, cur: st.cur, ty: st.ty || '' });
+  };
   $('#sh-period').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     kPeriod = b.dataset.p;
@@ -1205,10 +1216,12 @@ function openSheet(tc) {
   renderSheetQuote(); renderSheetPos(); renderSheetTrades();
   loadKline();
 }
-function closeSheet() {
+function closeSheet(fromPop) {
+  const popIt = !fromPop && history.state && history.state.sheet;   // 消费掉详情页的栈条目
   $('#sheet').hidden = true; document.body.style.overflow = '';
   if (kChart) { kChart.dispose(); kChart = null; }
   sheetTc = null; kCache = {};
+  if (popIt) history.back();
 }
 function renderSheetQuote() {
   if (!sheetTc) return;
@@ -1365,6 +1378,11 @@ function renderKline(r) {
     };
   });
   const startPct = Math.max(0, 100 * (1 - Math.min(90, dates.length) / Math.max(dates.length, 1)));
+  /* 跨年时间轴: 每年第一根K线显示年份(如 2025), 其余 MM-DD; 密度随缩放窗口自适应 */
+  const yearFirst = new Set();
+  let lastY = '';
+  for (const d of dates) { const y = d.slice(0, 4); if (y !== lastY) { yearFirst.add(d); lastY = y; } }
+  let xStep = Math.max(1, Math.round(Math.min(90, dates.length) / 6));
   kChart.setOption({
     animation: false,
     tooltip: {
@@ -1387,7 +1405,7 @@ function renderKline(r) {
     },
     grid: [{ left: 6, right: 8, top: 30, height: '54%' }, { left: 6, right: 8, top: '74%', height: '14%' }],
     xAxis: [
-      { type: 'category', data: dates, boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: line } }, axisLabel: { color: muted, fontSize: 9, formatter: v => v.length > 7 ? v.slice(5) : v } },
+      { type: 'category', data: dates, boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: line } }, axisLabel: { color: muted, fontSize: 9, interval: (idx, val) => yearFirst.has(val) || idx % xStep === 0, formatter: val => yearFirst.has(val) ? val.slice(0, 4) : (val.length > 7 ? val.slice(5) : val) } },
       { type: 'category', gridIndex: 1, data: dates, axisTick: { show: false }, axisLabel: { show: false }, axisLine: { lineStyle: { color: line } } }
     ],
     yAxis: [
@@ -1404,7 +1422,14 @@ function renderKline(r) {
       { name: '成交量', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: vol, barWidth: '58%' }
     ]
   });
-  kChart.on('datazoom', () => updateMaLegend(k));
+  kChart.on('datazoom', () => {
+    updateMaLegend(k);
+    try {
+      const dz = kChart.getOption().dataZoom[0];
+      const vis = (dz.endValue != null ? dz.endValue : dates.length - 1) - (dz.startValue != null ? dz.startValue : 0) + 1;
+      xStep = Math.max(1, Math.round(vis / 6));
+    } catch (e) {}
+  });
   updateMaLegend(k);
 }
 function updateMaLegend(k) {
@@ -1451,7 +1476,20 @@ function boot() {
   onData = () => rerender();
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
   document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - net.at > 60e3) refreshQuotes(); });
-  showView('pos');
+  /* 浏览器历史导航: 视图/详情页压栈, iOS 边缘右滑(或浏览器返回)经 popstate 驱动回退 */
+  try { history.replaceState({ v: 'pos' }, ''); } catch (e) {}
+  window.addEventListener('popstate', e => {
+    const st = e.state || { v: 'pos' };
+    if (st.sheet) {
+      if (!$('#sheet').hidden && sheetTc === st.sheet) return;
+      if (!$('#sheet').hidden) closeSheet(true);
+      openSheet(st.sheet, true);
+    } else {
+      if (!$('#sheet').hidden) closeSheet(true);
+      if (st.v && st.v !== curView) showView(st.v, true);
+    }
+  });
+  showView('pos', true);
   const h = location.hash.slice(1);
   if (h && h !== 'dark' && S.trades.some(t => t.tc === h)) openSheet(h);   // 深链: #股票代码 直达详情
   /* 只读调试钩子: window.__cj.kChart / .stChart / .stDonut / .S */
