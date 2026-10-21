@@ -479,6 +479,7 @@ function parseQtText(txt) {
 
 /* ===== K线 ===== */
 async function fetchKline(tc, period, count) {
+  if (/^us/.test(tc)) tc = 'us' + tc.slice(2).toUpperCase();   // 兜底: 美股代码大小写敏感, 任何路径进来都归一化
   const url = 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + tc + ',' + period + ',,,' + count + ',qfq';
   const j = await fjson(url);
   const d = j && j.data && j.data[tc]; if (!d) return null;
@@ -556,7 +557,8 @@ function parseHint(h) {
   };
   const push = (mkt, code, name, ty) => {
     if (!mkt || !keep(ty) || !code) return;
-    out.push({ mkt, code, tc: mkt + code, name, ty: tyOf(ty) });
+    const c = mkt === 'us' ? code.toUpperCase() : code;   // 行情接口对美股代码大小写敏感(实测), 统一大写
+    out.push({ mkt, code: c, tc: mkt + c, name, ty: tyOf(ty) });
   };
   let i = 0;
   if (g.length >= 5 && ['sh', 'sz', 'hk', 'us'].indexOf(g[0]) >= 0) {
@@ -1557,6 +1559,12 @@ function boot() {
   applyTheme();
   if (location.hash === '#dark') document.documentElement.dataset.theme = 'dark';
   if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
+  /* 数据迁移: v1.3~v1.8.1 期间经搜索保存的美股代码是小写(行情拉不到), 统一转大写 */
+  let migrated = false;
+  for (const t of S.trades) {
+    if (/^us[a-z]/.test(t.tc)) { t.tc = 'us' + t.tc.slice(2).toUpperCase(); t.code = String(t.code || '').toUpperCase(); migrated = true; }
+  }
+  if (migrated) save();
   initAdd();
   initStatsSwipe();
   $$('#tabs button').forEach(b => b.onclick = () => showView(b.dataset.view));

@@ -50,6 +50,7 @@ function parseQtText(txt) {
 
 /* ===== K线 ===== */
 async function fetchKline(tc, period, count) {
+  if (/^us/.test(tc)) tc = 'us' + tc.slice(2).toUpperCase();   // 兜底: 美股代码大小写敏感, 任何路径进来都归一化
   const url = 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + tc + ',' + period + ',,,' + count + ',qfq';
   const j = await fjson(url);
   const d = j && j.data && j.data[tc]; if (!d) return null;
@@ -127,7 +128,8 @@ function parseHint(h) {
   };
   const push = (mkt, code, name, ty) => {
     if (!mkt || !keep(ty) || !code) return;
-    out.push({ mkt, code, tc: mkt + code, name, ty: tyOf(ty) });
+    const c = mkt === 'us' ? code.toUpperCase() : code;   // 行情接口对美股代码大小写敏感(实测), 统一大写
+    out.push({ mkt, code: c, tc: mkt + c, name, ty: tyOf(ty) });
   };
   let i = 0;
   if (g.length >= 5 && ['sh', 'sz', 'hk', 'us'].indexOf(g[0]) >= 0) {

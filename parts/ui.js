@@ -937,6 +937,12 @@ function boot() {
   applyTheme();
   if (location.hash === '#dark') document.documentElement.dataset.theme = 'dark';
   if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
+  /* 数据迁移: v1.3~v1.8.1 期间经搜索保存的美股代码是小写(行情拉不到), 统一转大写 */
+  let migrated = false;
+  for (const t of S.trades) {
+    if (/^us[a-z]/.test(t.tc)) { t.tc = 'us' + t.tc.slice(2).toUpperCase(); t.code = String(t.code || '').toUpperCase(); migrated = true; }
+  }
+  if (migrated) save();
   initAdd();
   initStatsSwipe();
   $$('#tabs button').forEach(b => b.onclick = () => showView(b.dataset.view));
