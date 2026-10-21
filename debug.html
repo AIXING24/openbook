@@ -1,0 +1,47 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OPEN BOOK 行情诊断</title>
+<style>body{font:14px/1.6 -apple-system,BlinkMacSystemFont,sans-serif;margin:0;padding:16px;background:#f2f4f8;color:#1b2430}
+h3{margin:4px 0 12px}pre{background:#fff;border:1px solid #e5e8ee;border-radius:10px;padding:12px;white-space:pre-wrap;word-break:break-all;margin:8px 0;font-size:13px;line-height:1.7}
+button{padding:13px 20px;font-size:16px;border:0;border-radius:12px;background:#2b5ce6;color:#fff;width:100%}
+</style></head><body>
+<h3>OPEN BOOK · 美股行情链路诊断</h3>
+<pre id="log">正在测试…</pre>
+<button onclick="run()">重新测试</button>
+<script>
+const log = [];
+const show = () => document.getElementById('log').textContent = log.join('\n');
+const line = s => { log.push(s); show(); };
+/* 与应用完全相同的 fetch 结构(含 AbortController 超时) */
+async function testFetch(name, url, ms) {
+  const c = new AbortController(); const t = setTimeout(() => c.abort(), ms || 8000);
+  try {
+    const r = await fetch(url, { signal: c.signal });
+    const txt = await r.text();
+    let j = null; try { j = JSON.parse(txt); } catch (e) {}
+    line('【' + name + '】HTTP ' + r.status + ' ' + (r.ok ? '✓成功' : '✗非2xx') + ' · 响应长度' + txt.length);
+    return { r, txt, j };
+  } catch (e) {
+    line('【' + name + '】✗ 失败: ' + (e && e.name) + ': ' + (e && e.message));
+    return null;
+  } finally { clearTimeout(t); }
+}
+const qtOf = j => j && j.data && j.data['usQQQM.OQ'] && j.data['usQQQM.OQ'].qt && j.data['usQQQM.OQ'].qt['usQQQM.OQ'];
+async function run() {
+  log.length = 0;
+  line('时间: ' + new Date().toLocaleString());
+  line('UA: ' + navigator.userAgent.slice(0, 90));
+  line('');
+  const a = await testFetch('① 美股行情主机 web.ifzq.gtimg(应用同款请求)', 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=usQQQM.OQ,day,,,1,qfq');
+  if (a && a.j) { const qt = qtOf(a.j); line(qt ? '   解析✓ 现价=' + qt[3] + ' 名称=' + qt[1] + ' 标记=' + qt[0] : '   解析✗ 响应结构与预期不符: ' + a.txt.slice(0, 80)); }
+  line('');
+  await testFetch('② A股行情主机 qt.gtimg(对照)', 'https://qt.gtimg.cn/q=sh600519');
+  line('');
+  const c2 = await testFetch('③ 备用主机 proxy.finance.qq.com', 'https://proxy.finance.qq.com/ifzqgtimg/appstock/app/fqkline/get?param=usQQQM.OQ,day,,,1,qfq');
+  if (c2 && c2.j) { const qt = qtOf(c2.j); line(qt ? '   解析✓ 现价=' + qt[3] : '   解析✗ 结构异常'); }
+  line('');
+  try { localStorage.setItem('__t', '1'); localStorage.removeItem('__t'); line('④ localStorage ✓ 可用'); } catch (e) { line('④ localStorage ✗: ' + e.message); }
+  line('');
+  line('—— 请把以上全部内容截图发回 ——');
+}
+run();
+</script></body></html>
