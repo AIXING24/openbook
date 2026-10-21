@@ -70,9 +70,10 @@ async function usQuote(tc) {
   } catch (e) {}
   return null;
 }
-/* 美股交易所后缀自动探测: 错误后缀只回 1 根K线 */
-async function resolveUS(sym) {
-  for (const suf of ['OQ', 'N']) {
+/* 美股交易所后缀自动探测: 错误后缀只回 1 根K线; 可带已知后缀优先(NYSE=N, NASDAQ=OQ, Arca/AMEX=AM) */
+async function resolveUS(sym, prefSuf) {
+  const sufs = [...new Set([prefSuf, 'OQ', 'N', 'AM'].filter(Boolean))];
+  for (const suf of sufs) {
     const tc = 'us' + sym + '.' + suf;
     try {
       const r = await fetchKline(tc, 'day', 5);
@@ -105,32 +106,50 @@ function rawSearch(q) {
     document.head.appendChild(s);
   });
 }
-/* 返回扁平 5 字段分组: 市场~代码~名称~拼音~类型 */
+/* smartbox 返回格式(实测): 首条5字段[市场~代码~名称~拼音~类型], 其余条目4字段[代码~名称~拼音~类型]。
+   类型后缀市场信息不可靠, 市场主要由代码形状推断; 白名单保留 股票GP/场内基金ETF,LOF */
 function parseHint(h) {
   if (!h || h.indexOf('none_match') >= 0) return [];
-  const g = h.split('~'); const out = [];
-  for (let i = 0; i + 4 < g.length; i += 5) {
-    const mkt = g[i], code = g[i + 1], name = g[i + 2], type = g[i + 4];
-    if (['sh', 'sz', 'hk', 'us'].indexOf(mkt) < 0) continue;
-    if (!/^GP/.test(type)) continue;
-    const disp = mkt === 'us' ? code.toUpperCase() : code;
-    out.push({ mkt, code: disp, tc: mkt + disp, name });
-    if (out.length >= 8) break;
+  const g = h.split('~');
+  const out = [];
+  const keep = ty => /^(GP|ETF|LOF)/.test(ty);
+  const tyOf = ty => ty.indexOf('ETF') === 0 ? 'ETF' : ty.indexOf('LOF') === 0 ? 'LOF' : '';
+  const mktOf = (code, ty) => {
+    if (/^\d{6}$/.test(code)) {
+      if (/^(60|68|51|56|58|50)/.test(code)) return 'sh';
+      if (/^(00|30|15|16)/.test(code)) return 'sz';
+      const m = /\^(\w+)$/.exec(ty);
+      return (m && (m[1] === 'sh' || m[1] === 'sz')) ? m[1] : null;
+    }
+    if (/^\d{1,5}$/.test(code)) return 'hk';
+    if (/^[A-Za-z]/.test(code)) return 'us';
+    return null;
+  };
+  const push = (mkt, code, name, ty) => {
+    if (!mkt || !keep(ty) || !code) return;
+    out.push({ mkt, code, tc: mkt + code, name, ty: tyOf(ty) });
+  };
+  let i = 0;
+  if (g.length >= 5 && ['sh', 'sz', 'hk', 'us'].indexOf(g[0]) >= 0) {
+    push(g[0], g[1], g[2], g[4]);
+    i = 5;
+  }
+  for (; i + 3 < g.length; i += 4) {
+    push(mktOf(g[i], g[i + 3]), g[i], g[i + 1], g[i + 3]);
+    if (out.length >= 10) break;
   }
   return out;
 }
 
-/* ===== 手输代码直判 ===== */
+/* ===== 手输6位代码直判(股票+场内基金前缀; 未知前缀返回null由调用方走搜索) ===== */
 function directTc(raw) {
   raw = String(raw || '').trim();
-  if (/^\d{6}$/.test(raw)) {
-    if (/^(60|68)/.test(raw)) return { tc: 'sh' + raw, code: raw, mkt: 'sh' };
-    if (/^(00|30)/.test(raw)) return { tc: 'sz' + raw, code: raw, mkt: 'sz' };
-    if (/^(43|83|87|92)/.test(raw)) return { err: '北交所代码暂不支持，当前仅支持沪深港美' };
-    return { err: '无法识别的A股代码' };
-  }
-  if (/^\d{1,5}$/.test(raw)) return { tc: 'hk' + raw.padStart(5, '0'), code: raw.padStart(5, '0'), mkt: 'hk' };
-  if (/^[A-Za-z]{1,6}(\.(OQ|N|A|B))?$/i.test(raw)) return { us: raw.toUpperCase() };
+  if (!/^\d{6}$/.test(raw)) return null;
+  if (/^(60|68)/.test(raw)) return { tc: 'sh' + raw, code: raw, mkt: 'sh' };
+  if (/^(00|30)/.test(raw)) return { tc: 'sz' + raw, code: raw, mkt: 'sz' };
+  if (/^(51|56|58|50)/.test(raw)) return { tc: 'sh' + raw, code: raw, mkt: 'sh' };   // 沪 ETF/LOF
+  if (/^(15|16)/.test(raw)) return { tc: 'sz' + raw, code: raw, mkt: 'sz' };         // 深 ETF/LOF
+  if (/^(43|83|87|92)/.test(raw)) return { err: '北交所代码暂不支持，当前仅支持沪深港美' };
   return null;
 }
 

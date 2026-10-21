@@ -165,7 +165,7 @@ function renderPicked() {
   if (!picked) { el.hidden = true; return; }
   el.hidden = false;
   const q = quotes[picked.tc];
-  $('#pk-name').innerHTML = esc(picked.name || picked.code) + ' <span class="tag">' + (MKT_TAG[picked.mkt] || '') + '</span>';
+  $('#pk-name').innerHTML = esc(picked.name || picked.code) + ' <span class="tag">' + (MKT_TAG[picked.mkt] || '') + (picked.ty ? '·' + esc(picked.ty) : '') + '</span>';
   $('#pk-sub').textContent = picked.code + ' · ' + picked.cur +
     (q && isFinite(q.px) ? ' · 现价 ' + fmtPx(q.px) + (q.delayed ? '（延时）' : '') : '');
   $('#f-usepx').hidden = !(q && isFinite(q.px));
@@ -177,10 +177,10 @@ function renderSugg(list) {
   const s = $('#f-sugg');
   if (!list || !list.length) { showSuggTip('无匹配结果，试试拼音或代码'); return; }
   s.hidden = false;
-  s.innerHTML = list.map(r => `<button type="button" data-tc="${esc(r.tc)}"><span class="sg-name">${esc(r.name)} <span class="tag">${MKT_TAG[r.mkt] || ''}</span></span><span class="sg-code">${esc(r.code)}</span></button>`).join('');
+  s.innerHTML = list.map(r => `<button type="button" data-tc="${esc(r.tc)}"><span class="sg-name">${esc(r.name)} <span class="tag">${MKT_TAG[r.mkt] || ''}${r.ty ? '·' + r.ty : ''}</span></span><span class="sg-code">${esc(r.code)}</span></button>`).join('');
   s.querySelectorAll('button').forEach(b => b.onclick = () => {
     const r = list.find(x => x.tc === b.dataset.tc);
-    setPicked({ tc: r.tc, code: r.code, mkt: r.mkt, name: r.name, cur: Core.CUR_OF[r.mkt] });
+    setPicked({ tc: r.tc, code: r.code, mkt: r.mkt, name: r.name, cur: Core.CUR_OF[r.mkt], ty: r.ty || '' });
     $('#f-q').value = ''; hideSugg();
     fetchOneQuote(r.tc);
   });
@@ -196,7 +196,9 @@ function fetchOneQuote(tc) {
 }
 async function pickTc(tc) {
   const mkt = (/^(sh|sz|hk|us)/.exec(tc) || [])[1] || 'sh';
-  const base = { tc, code: tc.slice(2), mkt, name: tc.slice(2), cur: Core.CUR_OF[mkt] };
+  const cd = tc.slice(2);
+  const base = { tc, code: cd, mkt, name: cd, cur: Core.CUR_OF[mkt],
+    ty: /^(51|56|58|15)/.test(cd) ? 'ETF' : /^(50|16)/.test(cd) ? 'LOF' : '' };
   setPicked(base); hideSugg(); $('#f-q').value = '';
   try {
     if (mkt === 'us') { const q = await usQuote(tc); if (q) { quotes[tc] = Object.assign({ ts: Date.now() }, q); saveQuotes(); } }
@@ -215,29 +217,36 @@ async function doSearch(v) {
   showSuggTip('搜索中…');
   const r = await smartSearch(v);
   if (r === null) { showSuggTip('搜索失败 — 网络受限或离线，可直接输入代码'); return; }
+  if (!r.length) {
+    const m = /^([A-Za-z]{1,6})(?:\.([A-Za-z]{1,2}))?$/.exec(v);   // smartbox 未收录的美股代码 → 直连兜底
+    if (m) { await tryUS(m[1].toUpperCase(), m[2] ? m[2].toUpperCase() : null); return; }
+    showSuggTip('无匹配结果，试试拼音或代码');
+    return;
+  }
   renderSugg(r);
 }
-async function resolveUSPick(sym) {
+async function tryUS(sym, suf) {
   showSuggTip('识别美股代码 ' + sym + ' …');
-  const r = await resolveUS(sym);
-  if (!r) { showSuggTip('未找到该美股（NASDAQ/NYSE）'); return; }
-  setPicked({ tc: r.tc, code: r.code, mkt: 'us', name: r.name || r.code, cur: 'USD' });
+  const r = await resolveUS(sym, suf);
+  if (!r) { showSuggTip('无匹配结果，试试拼音或代码'); return; }
+  setPicked({ tc: r.tc, code: r.code, mkt: 'us', name: r.name || r.code, cur: 'USD', ty: '' });
   $('#f-q').value = ''; hideSugg();
   fetchOneQuote(r.tc);
 }
+/* 输入路由: 完整6位数字(已知前缀)直连; 其余(不完整数字/字母/中文/拼音)走搜索建议列表 */
 let qDeb = null;
 function qInput(now) {
   const v = $('#f-q').value.trim();
   clearTimeout(qDeb);
   if (!v) { hideSugg(); return; }
-  const go = () => {
-    const d = directTc(v);
-    if (d && d.err) { showSuggTip(d.err); return; }
-    if (d && d.us) { if (d.us.indexOf('.') > 0) pickTc('us' + d.us); else resolveUSPick(d.us); return; }
-    if (d && d.tc) { pickTc(d.tc); return; }
+  qDeb = setTimeout(() => {
+    if (/^\d{6}$/.test(v)) {
+      const d = directTc(v);
+      if (d && d.err) { showSuggTip(d.err); return; }
+      if (d && d.tc) { pickTc(d.tc); return; }
+    }
     doSearch(v);
-  };
-  qDeb = setTimeout(go, now ? 0 : 350);
+  }, now ? 0 : 600);
 }
 function updateAmt() {
   const px = +$('#f-px').value || 0, qty = +$('#f-qty').value || 0, fee = +$('#f-fee').value || 0;
@@ -262,7 +271,15 @@ function initAdd() {
   $('#f-usepx').onclick = () => { const q = quotes[picked && picked.tc]; if (q && isFinite(q.px)) { $('#f-px').value = q.px; updateAmt(); } };
   ['f-px', 'f-qty', 'f-fee'].forEach(id => $('#' + id).addEventListener('input', updateAmt));
   $('#f-q').addEventListener('input', () => qInput(false));
-  $('#f-q').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); qInput(true); } });
+  $('#f-q').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const s = $('#f-sugg');
+      const first = s && !s.hidden ? s.querySelector('button') : null;
+      if (first) { first.click(); return; }   // 建议列表开着 → 回车选第一条
+      qInput(true);
+    }
+  });
   document.addEventListener('click', e => { if (!e.target.closest('.searchbox')) hideSugg(); });
   $('#f-save').onclick = saveTrade;
 }
