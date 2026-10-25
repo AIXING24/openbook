@@ -1222,7 +1222,7 @@ function renderSet() {
      <p><b>成本口径：</b>持仓成本为移动加权平均（含手续费）；分红冲减成本（摊薄，同券商口径），分红收益单独累计；卖出即时结转已实现盈亏。</p>
      <p><b>分红检测：</b>打开应用时自动比对持仓期间的前复权因子跳变，发现疑似分红会提示一键入账（估算金额可修正，美股暂不支持自动检测）。</p>
    </div>
-   <p class="footnote" style="text-align:center">OPEN BOOK v1.11.1 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
+   <p class="footnote" style="text-align:center">OPEN BOOK v1.12 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
   bindSeg('#set-base', v => { if (v === S.base) return; S.base = v; save(); rerender(); showToast('基准货币已切换为' + CN[v]); });
   bindSeg('#set-ud', v => { S.upRed = v === '1'; save(); applyUpDown(); rerender(); });
   bindSeg('#set-theme', v => { S.theme = v; save(); applyTheme(); rerender(); });
@@ -1444,8 +1444,22 @@ async function loadKline() {
   try {
     let r = kCache[key];
     if (!r) {
-      r = await fetchKline(sheetTc, kPeriod, kPeriod === 'day' ? 250 : kPeriod === 'week' ? 160 : 120);
+      const count = kPeriod === 'day' ? 250 : kPeriod === 'week' ? 160 : 120;
+      const [qfqRes, rawRes] = await Promise.all([
+        fetchKline(sheetTc, kPeriod, count),
+        fetchKline(sheetTc, kPeriod, count, '').catch(() => null)   // 不复权, 用于标记复权因子
+      ]);
+      r = qfqRes;
       if (!r || !r.k.length) throw new Error('empty');
+      /* 构建日期→复权因子映射(qfq÷raw), B/S标记价格乘以该因子即可贴合前复权K线 */
+      if (rawRes && rawRes.k && rawRes.k.length) {
+        const rawMap = new Map(rawRes.k.map(x => [x.d, x.c]));
+        r.factors = {};
+        for (const row of r.k) {
+          const rc = rawMap.get(row.d);
+          if (rc) r.factors[row.d] = row.c / rc;
+        }
+      }
       kCache[key] = r;
       if (r.qt) {   // K线响应自带最新报价, 顺带更新
         const q = r.qt, px = +q[3];
@@ -1503,11 +1517,15 @@ function renderKline(r) {
     (tradesByDate[kd] = tradesByDate[kd] || []).push(t);
   }
   /* 同花顺风格小标记: 5px 价格锚点 + 10px B/S 字母(带底色描边保证可读), 标签自动避让重叠 */
+  /* B/S标记价格需乘以复权因子才能贴合前复权K线(买入135.11在分红后前复权图上应显示~133.8) */
+  const factors = r.factors || {};
   const bsData = [...byd.values()].map(g => {
     const isB = g.side === 'B';
     const txt = (isB ? 'B' : 'S') + (g.n > 1 ? g.n : '');
+    const factor = factors[g.date] || 1;
+    const adjPx = (g.px / g.qty) * factor;
     return {
-      value: [g.date, +(g.px / g.qty).toFixed(2)],
+      value: [g.date, +adjPx.toFixed(2)],
       symbolSize: 5,
       itemStyle: { color: isB ? up : dn, borderColor: card, borderWidth: 1 },
       label: {
