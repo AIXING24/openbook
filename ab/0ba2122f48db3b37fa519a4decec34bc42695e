@@ -1,0 +1,46 @@
+parts/core.js
+  s_62935fafdc165c::t_39f988e21aa0e3 95
+  s_62935fafdc165c::t_7b63a467c5bd93 69,74
+  s_62935fafdc165c::t_6d8b3ff7986650 25-26,34,38-44
+  s_62935fafdc165c::t_22b8f001157273 111
+  s_62935fafdc165c::t_fabd5cbed3e693 99-109
+parts/p1.html
+  s_62935fafdc165c::t_b46146f6d843fd 155
+  s_62935fafdc165c::t_0a2039ec3deaa7 114,116-119
+  s_62935fafdc165c::t_503b2b52d58f88 301,303-305,308
+  s_62935fafdc165c::t_6573557dd26209 238
+parts/ui.js
+  s_62935fafdc165c::t_8e8c74c3d399d8 275-282
+  s_62935fafdc165c::t_27f78ce346fdc5 154,156,162
+  s_62935fafdc165c::t_0b4683aba8e3b5 305,308-314,321-322
+  s_62935fafdc165c::t_17f1bf5b0d828c 138,148
+  s_62935fafdc165c::t_9f6daabff132f5 261,263
+  s_62935fafdc165c::t_0c468cb3230e22 734-735,737-740
+  s_62935fafdc165c::t_5f84429b6b1fb9 936-1010
+  s_62935fafdc165c::t_5c8f5206681539 544-545
+  s_62935fafdc165c::t_2b6e1dc367d96f 547
+  s_62935fafdc165c::t_dd4a56cb5155e4 723
+  s_62935fafdc165c::t_7b4a8d34cff27e 1051
+index.html
+  s_62935fafdc165c::t_8a1a2c55d220cc 114,116-119,155,238,301,303-305,308,368-369,377,381-387,412,417,438,442-452,454,507,509-510,519-549,816,826,832,834,840,939,941,953-960,983,986-992,999-1000,1222-1223,1225,1401,1412-1413,1415-1418,1614-1688,1729
+parts/data.js
+  s_62935fafdc165c::t_3ed50497288dfd 52,54-55
+  s_62935fafdc165c::t_8a7f26d19add2a 94
+  s_62935fafdc165c::t_20a8d0641ff14a 64-93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.51-trip",
+  "base_commit_sha": "ab0ba2122f48db3b37fa519a4decec34bc42695e",
+  "prompts": {},
+  "sessions": {
+    "s_62935fafdc165c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bbdbbea1-d41c-49e1-93e4-0a98967fa395",
+        "model": "glm-5.3"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
