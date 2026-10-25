@@ -1493,6 +1493,7 @@ function renderKline(r) {
   const byd = new Map();
   const tradesByDate = {};
   for (const t of posTrades) {
+    if (t.side === 'D') continue;   // 分红不进K线标记(其px=每份派息, 远低于股价, 会压扁Y轴)
     const kd = snapDate(t.date);
     if (!kd) continue;
     const kk = kd + '|' + t.side;
@@ -1728,7 +1729,7 @@ function boot() {
   window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); });
   onData = () => { rerender(); checkDividends(); };
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - net.at > 60e3) refreshQuotes(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { fitShell(); if (Date.now() - net.at > 60e3) refreshQuotes(); } });
   /* iOS Safari 工具栏收放时 100dvh 偶发不触发重排, 壳高滞留导致底栏下方出现空隙(重进才恢复)。
      改由 JS 用 innerHeight 主动驱动壳高: 随工具栏实时变化、不受键盘影响、resize 事件可靠;
      CSS 的 100dvh 仅作 JS 生效前的首屏回退; 捏合缩放期间跳过 */
