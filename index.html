@@ -1578,6 +1578,18 @@ function boot() {
   onData = () => rerender();
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
   document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - net.at > 60e3) refreshQuotes(); });
+  /* iOS Safari 工具栏收放时 100dvh 偶发不触发重排, 壳高滞留导致底栏下方出现空隙(重进才恢复)。
+     改由 JS 用 innerHeight 主动驱动壳高: 随工具栏实时变化、不受键盘影响、resize 事件可靠;
+     CSS 的 100dvh 仅作 JS 生效前的首屏回退; 捏合缩放期间跳过 */
+  function fitShell() {
+    const vv = window.visualViewport;
+    if (vv && Math.abs(vv.scale - 1) > 0.02) return;
+    document.body.style.height = window.innerHeight + 'px';
+  }
+  window.addEventListener('resize', fitShell);
+  window.addEventListener('orientationchange', () => setTimeout(fitShell, 300));
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', fitShell);
+  fitShell();
   /* 浏览器历史导航: 视图/详情页压栈, iOS 边缘右滑(或浏览器返回)经 popstate 驱动回退 */
   try { history.replaceState({ v: 'pos' }, ''); } catch (e) {}
   window.addEventListener('popstate', e => {
