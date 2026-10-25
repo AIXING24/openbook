@@ -22,8 +22,8 @@ const Core = (() => {
   }
 
   /* 持仓计算: 移动加权平均成本法（手续费入成本）; 卖出产生已实现盈亏。
-     多空对称账本: cost 与 shares 同号(空头时均为负, avg=cost/shares 恒为正的均价),
-     因此"先卖后买"(做空或补录历史交易)与"先买后卖"结果一致。 */
+     分红(side='D', 券商口径): 冲减持仓成本(摊薄), 分红收益单独累计, 已实现盈亏不含分红;
+     清仓后到账的分红直接计入已实现。多空对称账本: cost 与 shares 同号(空头时均为负)。 */
   function calcPositions(trades) {
     const map = new Map();
     const sorted = [...trades].sort((a, b) => a.date === b.date ? (a.ts || 0) - (b.ts || 0) : (a.date < b.date ? -1 : 1));
@@ -31,10 +31,17 @@ const Core = (() => {
       let p = map.get(t.tc);
       if (!p) {
         p = { tc: t.tc, mkt: t.mkt, code: t.code, name: t.name, cur: t.cur || CUR_OF[t.mkt] || 'CNY',
-          shares: 0, cost: 0, avg: 0, realized: 0, trades: [] };
+          shares: 0, cost: 0, avg: 0, realized: 0, dividend: 0, trades: [] };
         map.set(t.tc, p);
       }
       p.trades.push(t);
+      if (t.side === 'D') {
+        const amt = t.amt != null ? +t.amt : t.px * (t.qty || 0);
+        p.dividend += amt;
+        if (p.shares > 0) { p.cost -= amt; p.avg = p.cost / p.shares; }
+        else { p.realized += amt; }
+        continue;
+      }
       if (t.side === 'B') {
         const short = Math.min(t.qty, Math.max(-p.shares, 0));   // 先买回平空的部分
         const longQ = t.qty - short;
@@ -59,11 +66,12 @@ const Core = (() => {
   function calcStats(trades, startStr) {
     const inP = trades.filter(t => t.date >= startStr);
     const bucket = () => ({ CNY: 0, USD: 0, HKD: 0, n: 0 });
-    const buy = bucket(), sell = bucket();
+    const buy = bucket(), sell = bucket(), div = bucket();
     const byStock = new Map(), byBroker = new Map(), monthly = new Map();
     const nowY = new Date().getFullYear();
     for (const t of inP) {
       const cur = t.cur || CUR_OF[t.mkt] || 'CNY';
+      if (t.side === 'D') { div[cur] += t.amt != null ? +t.amt : t.px * (t.qty || 0); continue; }   // 分红不计入买卖金额
       const amt = t.px * t.qty;
       const gross = t.side === 'B' ? amt + (t.fee || 0) : amt - (t.fee || 0);
       const dst = t.side === 'B' ? buy : sell;
@@ -84,10 +92,21 @@ const Core = (() => {
         monthly.set(mk, mo);
       }
     }
-    return { buy, sell, n: inP.length, stocks: [...byStock.values()],
+    return { buy, sell, div, n: inP.length, stocks: [...byStock.values()],
       brokers: [...byBroker.values()], monthly: [...monthly.values()].sort((a, b) => a.m < b.m ? -1 : 1) };
   }
 
+  /* 某标的在指定日期(含)时的持股数量 —— 用于分红 entitlement 匹配 */
+  function sharesAt(trades, tc, dateStr) {
+    let sh = 0;
+    for (const t of trades) {
+      if (t.tc !== tc || t.date > dateStr) continue;
+      if (t.side === 'B') sh += t.qty;
+      else if (t.side === 'S') sh -= t.qty;
+    }
+    return sh;
+  }
+
   return { pad, dstr, todayStr, weekStartStr, monthStartStr, yearStartStr,
-    toBase, toCnyMap, calcPositions, calcStats, CUR_OF, FX_FALLBACK };
+    toBase, toCnyMap, calcPositions, calcStats, sharesAt, CUR_OF, FX_FALLBACK };
 })();

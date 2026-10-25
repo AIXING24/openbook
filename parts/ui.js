@@ -135,6 +135,7 @@ function renderPos() {
     return `<button class="pos-row" data-tc="${esc(p.tc)}">${left}${right}</button>`;
   }).join('');
   const unreal = mktB - costB;
+  const divB = poss.reduce((a, p) => a + Core.toBase(p.dividend, p.cur, S.base, F), 0);
   const demo = S.trades.some(t => t.demo);
   const d = new Date(); const week = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
   el.innerHTML = `
@@ -144,18 +145,21 @@ function renderPos() {
    ${storageDead ? '<div class="banner">浏览器存储不可用（可能处于隐私模式）— 数据仅本次会话有效，请尽快导出备份。</div>' : ''}
    ${demo ? '<div class="banner">当前为示例数据：记录第一笔真实交易后自动替换，也可在设置中清空。</div>' : ''}
    ${net.ok === false ? '<div class="banner">行情获取失败（可能离线或受限环境）— 现价与K线暂不可用，记账与统计不受影响。</div>' : ''}
+   ${divInbox.length ? `<button class="divcard" id="div-inbox-btn"><div style="flex:1"><div class="dc-t">发现 ${divInbox.length} 笔疑似分红待确认</div><div class="dc-s">点击查看 · 金额自动估算可修正 · 一键入账</div></div><span class="dc-arrow">›</span></button>` : ''}
    <div class="card sum">
      <div class="lbl">总市值（折${CN[S.base]}）</div>
      <div class="big num">${fmtAmt(mktB, S.base)}</div>
      <div class="sum-grid">
        <div><div class="lbl">浮动盈亏</div><div class="v num ${unreal >= 0 ? 'up' : 'down'}">${fmtAmtC(unreal, S.base, true)}</div></div>
-       <div><div class="lbl">持仓成本</div><div class="v num">${fmtAmtC(costB, S.base)}</div></div>
+       <div><div class="lbl">持仓成本（摊薄）</div><div class="v num">${fmtAmtC(costB, S.base)}</div></div>
        <div><div class="lbl">已实现盈亏</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${fmtAmtC(realB, S.base, true)}</div></div>
+       <div><div class="lbl">分红收益（累计）</div><div class="v num">${fmtAmtC(divB, S.base)}</div></div>
      </div>
      <div class="fx-line num">1 USD = ${F.USDCNY.toFixed(4)} CNY · 1 HKD = ${F.HKDCNY.toFixed(4)} CNY${F.approx ? ' · 备用汇率' : ''}${noPx ? ` · ${noPx} 只无行情未计入总市值` : ''}</div>
    </div>
    ${poss.length ? `<div class="pos-h"><h2>持仓明细</h2><span>${poss.length} 只 · 点击看K线</span></div><div class="poslist">${rows}</div>` : emptyHtml()}`;
   const rb = $('#btn-refresh'); if (rb) rb.onclick = () => refreshQuotes();
+  const dib = $('#div-inbox-btn'); if (dib) dib.onclick = openDivModal;
   el.querySelectorAll('.pos-row').forEach(b => b.onclick = () => openSheet(b.dataset.tc));
   const ea = $('#e-add'); if (ea) ea.onclick = () => showView('add');
   const ed = $('#e-demo'); if (ed) ed.onclick = () => { S.trades = demoTrades(); save(); renderPos(); };
@@ -254,9 +258,9 @@ function qInput(now) {
 function updateAmt() {
   const px = +$('#f-px').value || 0, qty = +$('#f-qty').value || 0, fee = +$('#f-fee').value || 0;
   const cur = picked ? picked.cur : 'CNY';
-  const amt = side === 'B' ? px * qty + fee : px * qty - fee;
+  const amt = side === 'D' ? px * qty : (side === 'B' ? px * qty + fee : px * qty - fee);
   $('#f-amt-v').textContent = (picked && qty > 0)
-    ? fmtAmt(amt, cur) + (S.base !== cur ? ' ≈ ' + fmtAmt(Core.toBase(amt, cur, S.base, fxInfo()), S.base) : '')
+    ? fmtAmt(amt, cur) + (side === 'D' ? '（分红冲减成本）' : (S.base !== cur ? ' ≈ ' + fmtAmt(Core.toBase(amt, cur, S.base, fxInfo()), S.base) : ''))
     : '—';
 }
 function initAdd() {
@@ -268,6 +272,14 @@ function initAdd() {
     const b = e.target.closest('button'); if (!b) return;
     side = b.dataset.side;
     $$('#f-side button').forEach(x => x.classList.toggle('on', x === b));
+    const isD = side === 'D';
+    $('#f-px-lbl').textContent = isD ? '每份派息（元）' : '价格';
+    $('#f-qty-lbl').textContent = isD ? '分红份额' : '数量（股）';
+    $('#f-fee-cell').hidden = isD;
+    if (isD) {
+      const p = picked && Core.calcPositions(S.trades).find(x => x.tc === picked.tc);
+      if (p && p.shares > 0) $('#f-qty').value = p.shares;
+    }
     updateAmt();
   });
   $('#f-unpick').onclick = () => setPicked(null);
@@ -290,18 +302,24 @@ function saveTrade() {
   if (!picked) { showToast('请先选择股票'); return; }
   const px = +$('#f-px').value, qty = +$('#f-qty').value, fee = +$('#f-fee').value || 0;
   const date = $('#f-date').value || Core.todayStr(), broker = $('#f-broker').value.trim(), note = $('#f-note').value.trim();
-  if (!(px > 0)) { showToast('请输入价格'); return; }
-  if (!(qty > 0)) { showToast('请输入数量'); return; }
+  if (!(qty > 0)) { showToast(side === 'D' ? '请输入分红份额' : '请输入数量'); return; }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { showToast('请选择日期'); return; }
   if (S.trades.length && S.trades.every(t => t.demo)) S.trades = [];   // 首笔真实交易替换示例
-  const t = { id: uid(), date, tc: picked.tc, mkt: picked.mkt, code: picked.code, name: picked.name || picked.code, cur: picked.cur, side, px, qty, fee, broker, note, ts: Date.now() };
+  const t = { id: uid(), date, tc: picked.tc, mkt: picked.mkt, code: picked.code, name: picked.name || picked.code, cur: picked.cur,
+    side, px: +px.toFixed(6), qty, fee: side === 'D' ? 0 : fee, broker, note, ts: Date.now() };
+  if (side !== 'D' && !(px > 0)) { showToast('请输入价格'); return; }
+  if (side === 'D') {
+    if (!(px > 0)) { showToast('请输入每份派息（可从公告的每10份÷10）'); return; }
+    t.amt = +(px * qty).toFixed(4);
+  }
   S.trades.push(t);
   if (broker) {
     S.lastBroker = broker;
     if (S.brokers[0] !== broker) S.brokers = [broker].concat(S.brokers.filter(b => b !== broker)).slice(0, 12);
   }
   save();
-  showToast('已记录' + (side === 'B' ? '买入' : '卖出') + ' ' + t.name + ' ' + fmtQty(qty) + '股');
+  if (side === 'D') showToast('已记录分红 ' + t.name + ' ' + fmtAmt(t.amt, t.cur));
+  else showToast('已记录' + (side === 'B' ? '买入' : '卖出') + ' ' + t.name + ' ' + fmtQty(qty) + '股');
   resetAddForm(); showView('pos'); refreshQuotes();
 }
 function resetAddForm() {
@@ -523,9 +541,10 @@ function renderSet() {
      <p><b>添加到主屏幕：</b>iPhone 用 Safari 打开本页面，点分享按钮 →「添加到主屏幕」，即可像 App 一样全屏使用。</p>
      <p><b>数据安全：</b>所有数据仅保存在本设备的浏览器中，不上传任何服务器。清除浏览器数据或换设备前，请先导出备份。</p>
      <p><b>行情说明：</b>行情与K线来自腾讯财经公开接口；美股在美东交易时段内为实时行情（休市时显示上一交易日收盘）；K线为前复权数据。</p>
-     <p><b>成本口径：</b>持仓成本为移动加权平均（含手续费）；卖出即时结转已实现盈亏。</p>
+     <p><b>成本口径：</b>持仓成本为移动加权平均（含手续费）；分红冲减成本（摊薄，同券商口径），分红收益单独累计；卖出即时结转已实现盈亏。</p>
+     <p><b>分红检测：</b>打开应用时自动比对持仓期间的前复权因子跳变，发现疑似分红会提示一键入账（估算金额可修正，美股暂不支持自动检测）。</p>
    </div>
-   <p class="footnote" style="text-align:center">OPEN BOOK v1.10 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
+   <p class="footnote" style="text-align:center">OPEN BOOK v1.11 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
   bindSeg('#set-base', v => { if (v === S.base) return; S.base = v; save(); rerender(); showToast('基准货币已切换为' + CN[v]); });
   bindSeg('#set-ud', v => { S.upRed = v === '1'; save(); applyUpDown(); rerender(); });
   bindSeg('#set-theme', v => { S.theme = v; save(); applyTheme(); rerender(); });
@@ -701,7 +720,7 @@ function renderSheetPos() {
      ${cell('现价', has ? fmtPx(q.px) : '--')}
      ${cell('浮动盈亏', pnl != null ? fmtAmt(pnl, p.cur, true) + bNote(pnl) : '--', pnl != null && pnl < 0 ? 'down' : 'up')}
    </div>
-   <div class="fx-line num" style="margin-top:10px">本股已实现盈亏 <b class="${p.realized >= 0 ? 'up' : 'down'}">${fmtAmt(p.realized, p.cur, true)}</b>${bNote(p.realized)} · 共 ${p.trades.length} 笔</div>`;
+   <div class="fx-line num" style="margin-top:10px">本股已实现盈亏 <b class="${p.realized >= 0 ? 'up' : 'down'}">${fmtAmt(p.realized, p.cur, true)}</b>${bNote(p.realized)}${p.dividend > 0 ? ` · 分红收益 <b>${fmtAmt(p.dividend, p.cur)}</b>（已冲减成本）` : ''} · 共 ${p.trades.length} 笔</div>`;
 }
 function renderSheetTrades() {
   if (!sheetTc) return;
@@ -712,12 +731,13 @@ function renderSheetTrades() {
   if (!ts.length) { box.innerHTML = '<p class="footnote" style="padding:4px 0">暂无记录</p>'; return; }
   const F = fxInfo();
   box.innerHTML = ts.map(t => {
-    const amt = t.px * t.qty;
+    const isD = t.side === 'D';
+    const amt = isD ? (t.amt != null ? +t.amt : t.px * t.qty) : t.px * t.qty;
     const base = t.cur !== S.base ? '<span class="b2">≈ ' + fmtAmt(Core.toBase(amt, t.cur, S.base, F), S.base) + '</span>' : '';
-    return `<div class="trade-row"><span class="bs ${t.side}">${t.side}</span>
-      <div class="tr-mid"><div class="tr-px num">${fmtPx(t.px)} × ${fmtQty(t.qty)}</div>
-      <div class="tr-sub">${fmtDate(t.date)}${t.fee ? ' · 费 ' + fmtAmt(t.fee, t.cur) : ''}${t.broker ? ' · ' + esc(t.broker) : ''}${t.note ? ' · ' + esc(t.note) : ''}</div></div>
-      <div class="tr-amt num">${fmtAmt(amt, t.cur)}${base}</div>
+    return `<div class="trade-row"><span class="bs ${t.side}">${isD ? '息' : t.side}</span>
+      <div class="tr-mid"><div class="tr-px num">${isD ? fmtAmt(amt, t.cur) : fmtPx(t.px) + ' × ' + fmtQty(t.qty)}</div>
+      <div class="tr-sub">${fmtDate(t.date)}${isD && t.px > 0 ? ' · 每份 ' + fmtPx(t.px) + ' × ' + fmtQty(t.qty) : ''}${!isD && t.fee ? ' · 费 ' + fmtAmt(t.fee, t.cur) : ''}${t.broker ? ' · ' + esc(t.broker) : ''}${t.note ? ' · ' + esc(t.note) : ''}</div></div>
+      <div class="tr-amt num">${isD ? '冲减成本' : fmtAmt(amt, t.cur)}${isD ? '' : base}</div>
       <button class="del" data-id="${esc(t.id)}" aria-label="删除">删除</button></div>`;
   }).join('');
   box.querySelectorAll('.del').forEach(b => b.onclick = () => {
@@ -913,6 +933,81 @@ function updateMaLegend(k) {
   el.innerHTML = `<span style="color:#e0a832">MA5 <b>${one(5)}</b></span><span style="color:#b678f0">MA10 <b>${one(10)}</b></span><span style="color:#4aa3f0">MA20 <b>${one(20)}</b></span><span style="margin-left:auto;color:var(--faint)">${k[end].d}</span>`;
 }
 
+/* ===== 分红自动检测(方案B): 双K线因子法, 每股每天一次, 持仓页待确认卡片 ===== */
+let divInbox = [];   // {tc,name,cur,date,perShare,shares,amt,kind}
+const DIVCHK = 'cj.divchk';
+function getDivChk() { try { return JSON.parse(localStorage.getItem(DIVCHK)) || {}; } catch (e) { return {}; } }
+function setDivChk(o) { try { localStorage.setItem(DIVCHK, JSON.stringify(o)); } catch (e) {} }
+async function checkDividends() {
+  const today = Core.todayStr();
+  const chk = getDivChk();
+  const poss = Core.calcPositions(S.trades).filter(p => p.shares > 0 && !/^us/.test(p.tc));
+  const todo = poss.filter(p => !chk[p.tc] || chk[p.tc].d !== today);
+  if (!todo.length) { if (curView === 'pos') renderPos(); return; }
+  for (const p of todo) {
+    chk[p.tc] = Object.assign({ ig: [] }, chk[p.tc], { d: today });
+    setDivChk(chk);
+    let evs;
+    try { evs = await detectDividends(p.tc, p.trades[0].date); } catch (e) { continue; }
+    if (!evs) continue;
+    const dDates = S.trades.filter(t => t.tc === p.tc && t.side === 'D').map(t => t.date);
+    for (const ev of evs) {
+      const key = p.tc + '|' + ev.date;
+      const near = dDates.some(dd => Math.abs(new Date(dd) - new Date(ev.date)) / 864e5 <= 7);
+      if (near || (chk[p.tc].ig || []).indexOf(key) >= 0) continue;
+      const sh = Core.sharesAt(S.trades, p.tc, ev.date);
+      if (sh <= 0 && ev.kind !== 'big') continue;
+      divInbox = divInbox.filter(x => !(x.tc === p.tc && x.date === ev.date));
+      divInbox.push({ tc: p.tc, mkt: p.mkt, code: p.code, name: p.name, cur: p.cur, date: ev.date, perShare: ev.perShare, shares: sh, amt: +(ev.perShare * sh).toFixed(2), kind: ev.kind });
+    }
+  }
+  if (curView === 'pos') renderPos();
+}
+function openDivModal() {
+  if (!divInbox.length) return;
+  const rows = divInbox.map((it, i) => {
+    if (it.kind === 'big') {
+      return `<div style="padding:10px 0;border-bottom:1px solid var(--line)">
+        <div style="font-weight:600">${esc(it.name)} <span class="tag">${MKT_TAG[it.mkt] || ''}</span> · ${fmtDate(it.date)}</div>
+        <div class="footnote" style="padding:2px 0 0">复权因子大幅跳变（疑似送转/份额折算），请核对公告后手动记账。</div>
+        <button class="btn" style="margin-top:6px;padding:6px 14px;font-size:12px" data-ig="${i}">忽略</button></div>`;
+    }
+    return `<div style="padding:10px 0;border-bottom:1px solid var(--line)">
+      <div style="font-weight:600">${esc(it.name)} <span class="tag">${MKT_TAG[it.mkt] || ''}</span> · ${fmtDate(it.date)}</div>
+      <div class="footnote" style="padding:2px 0 0">估算每份 ${fmtPx(it.perShare)} × 当时持股 ${fmtQty(it.shares)} 份</div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+        <input class="inp num" id="div-amt-${i}" type="number" inputmode="decimal" step="any" value="${it.amt}" style="flex:1;padding:8px 10px;font-size:14px">
+        <button class="btn" style="flex:none;padding:8px 14px;font-size:13px;background:var(--up);color:#fff;border:0" data-ok="${i}">入账</button>
+        <button class="btn" style="flex:none;padding:8px 14px;font-size:13px" data-ig="${i}">忽略</button>
+      </div></div>`;
+  }).join('');
+  openModal('确认分红入账（冲减成本）', rows, [{ t: '关闭' }]);
+  divInbox.forEach((it, i) => { void i; });
+  document.querySelectorAll('#modal-body [data-ok]').forEach(b => b.onclick = () => {
+    const i = +b.dataset.ok, it = divInbox[i];
+    if (!it) return;
+    const amt = +($('#div-amt-' + i) ? $('#div-amt-' + i).value : it.amt) || it.amt;
+    const t = { id: uid(), date: it.date, tc: it.tc, mkt: it.mkt, code: it.code, name: it.name, cur: it.cur,
+      side: 'D', px: it.shares > 0 ? +(amt / it.shares).toFixed(6) : 0, qty: it.shares, fee: 0, amt: +amt.toFixed(2),
+      broker: '', note: '自动检测', ts: Date.now() };
+    if (S.trades.length && S.trades.every(x => x.demo)) S.trades = [];
+    S.trades.push(t); save();
+    divInbox.splice(i, 1);
+    closeModal(); rerender();
+    showToast('已入账分红 ' + it.name + ' ' + fmtAmt(+amt.toFixed(2), it.cur));
+    if (!divInbox.length) checkDividends();
+  });
+  document.querySelectorAll('#modal-body [data-ig]').forEach(b => b.onclick = () => {
+    const i = +b.dataset.ig, it = divInbox[i];
+    if (!it) return;
+    const chk = getDivChk();
+    (chk[it.tc] = Object.assign({ ig: [] }, chk[it.tc])).ig.push(it.tc + '|' + it.date);
+    setDivChk(chk);
+    divInbox.splice(i, 1);
+    closeModal(); rerender();
+  });
+}
+
 /* ===== 示例数据 ===== */
 function demoTrades() {
   const t = (date, tc, mkt, code, name, cur, s2, px, qty, fee, broker) =>
@@ -953,7 +1048,7 @@ function boot() {
   });
   $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
   window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); });
-  onData = () => rerender();
+  onData = () => { rerender(); checkDividends(); };
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
   document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - net.at > 60e3) refreshQuotes(); });
   /* iOS Safari 工具栏收放时 100dvh 偶发不触发重排, 壳高滞留导致底栏下方出现空隙(重进才恢复)。

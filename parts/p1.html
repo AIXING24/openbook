@@ -111,8 +111,12 @@ input,textarea{font:inherit;color:inherit}
 /* ---- 汇总卡 ---- */
 .sum .lbl{font-size:12px;color:var(--muted)}
 .big{font-size:28px;font-weight:700;letter-spacing:-.5px;margin-top:2px}
-.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.sum-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
 .sum-grid .v{font-size:15px;font-weight:600;margin-top:2px}
+.divcard{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:14px;padding:13px 14px;box-shadow:var(--shadow)}
+.divcard .dc-t{flex:1;font-size:14px;font-weight:600;color:var(--warn)}
+.divcard .dc-s{font-size:11px;color:var(--warn);margin-top:2px}
+.divcard .dc-arrow{color:var(--warn);font-size:18px}
 .fx-line{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:11px;color:var(--faint)}
 /* ---- 提示条 ---- */
 .banner{display:flex;gap:8px;align-items:flex-start;background:var(--warn-bg);border:1px solid var(--warn-line);
@@ -148,6 +152,7 @@ input,textarea{font:inherit;color:inherit}
 .seg button.on{background:var(--card);color:var(--fg);font-weight:600;box-shadow:0 1px 3px rgba(16,24,40,.14)}
 .seg.side button.on[data-side="B"]{background:var(--up);color:#fff}
 .seg.side button.on[data-side="S"]{background:var(--down);color:#fff}
+.seg.side button.on[data-side="D"]{background:var(--warn);color:#fff}
 .seg.mini{width:150px}
 .seg.mini button{padding:5px 2px;font-size:12px}
 .seg.set{width:196px;flex:none}
@@ -230,6 +235,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .bs{flex:none;width:22px;height:22px;border-radius:7px;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .bs.B{background:var(--up)}
 .bs.S{background:var(--down)}
+.bs.D{background:var(--warn)}
 .tr-mid{flex:1;min-width:0}
 .tr-px{font-size:13px;font-weight:600}
 .tr-sub{font-size:11px;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -292,13 +298,14 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
         <div class="seg side" id="f-side">
           <button type="button" data-side="B" class="on">买入</button>
           <button type="button" data-side="S">卖出</button>
+          <button type="button" data-side="D">分红</button>
+        </div>
+        <div class="frow" id="f-row-pxqty">
+          <div><label class="f-lbl" for="f-px" id="f-px-lbl">价格</label><input class="inp num" id="f-px" type="number" inputmode="decimal" step="any" min="0" placeholder="0.00"></div>
+          <div><label class="f-lbl" for="f-qty" id="f-qty-lbl">数量（股）</label><input class="inp num" id="f-qty" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div>
         </div>
         <div class="frow">
-          <div><label class="f-lbl" for="f-px">价格</label><input class="inp num" id="f-px" type="number" inputmode="decimal" step="any" min="0" placeholder="0.00"></div>
-          <div><label class="f-lbl" for="f-qty">数量（股）</label><input class="inp num" id="f-qty" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div>
-        </div>
-        <div class="frow">
-          <div><label class="f-lbl" for="f-fee">手续费（可选）</label><input class="inp num" id="f-fee" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div>
+          <div id="f-fee-cell"><label class="f-lbl" for="f-fee">手续费（可选）</label><input class="inp num" id="f-fee" type="number" inputmode="decimal" step="any" min="0" placeholder="0"></div>
           <div><label class="f-lbl" for="f-date">日期</label><input class="inp num" id="f-date" type="date"></div>
         </div>
         <label class="f-lbl" for="f-broker">券商 / 平台</label>

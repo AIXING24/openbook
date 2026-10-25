@@ -49,9 +49,10 @@ function parseQtText(txt) {
 }
 
 /* ===== K线 ===== */
-async function fetchKline(tc, period, count) {
+async function fetchKline(tc, period, count, fq) {
   if (/^us/.test(tc)) tc = 'us' + tc.slice(2).toUpperCase();   // 兜底: 美股代码大小写敏感, 任何路径进来都归一化
-  const url = 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + tc + ',' + period + ',,,' + count + ',qfq';
+  const fqv = fq === undefined ? 'qfq' : fq;
+  const url = 'https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=' + tc + ',' + period + ',,,' + count + ',' + fqv;
   const j = await fjson(url);
   const d = j && j.data && j.data[tc]; if (!d) return null;
   const rows = d['qfq' + period] || d[period]; if (!rows || !rows.length) return null;
@@ -60,8 +61,37 @@ async function fetchKline(tc, period, count) {
   return { k, qt };
 }
 
-/* ===== 美股( qt.gtimg 不支持, 走 ifzq 的 qt 段; 实测交易时段内为实时行情, qt[0]标记 real/delay 对应开市/休市 ) ===== */
-async function usQuote(tc) {
+/* ===== 分红自动检测(双K线复权因子法) =====
+   原理: qfq/raw 比值=累计复权因子, 因子跳变日=除息日, 跳变幅度反推每份分红。
+   实测 511260: 估算 ¥12.75/10份 vs 官方 ¥12.747, 误差 0.02%。
+   局限: 腾讯美股K线无复权数据 → 美股不支持; 大幅跳变(>10%)标记为疑似送转/份额折算 */
+async function detectDividends(tc, sinceDate) {
+  if (/^us/.test(tc)) return [];
+  let raw, qfq;
+  try {
+    [raw, qfq] = await Promise.all([fetchKline(tc, 'day', 250, ''), fetchKline(tc, 'day', 250, 'qfq')]);
+  } catch (e) { return null; }
+  if (!raw || !qfq || !raw.k.length || !qfq.k.length) return null;
+  const rmap = new Map(raw.k.map(r => [r.d, r]));
+  let prevF = null, prevC = null;
+  const events = [];
+  for (const row of qfq.k) {
+    const r = rmap.get(row.d);
+    if (!r || !r.c || !row.c) continue;
+    const f = row.c / r.c;
+    if (prevF != null && Math.abs(f / prevF - 1) > 0.0005) {
+      const jump = f / prevF - 1;
+      if (row.d >= sinceDate) {
+        const perShare = prevC * jump / (1 + jump);
+        events.push({ date: row.d, perShare: +perShare.toFixed(4), pct: +jump.toFixed(4), kind: jump > 0.10 ? 'big' : 'div' });
+      }
+    }
+    prevF = f; prevC = r.c;
+  }
+  return events;
+}
+
+/* ===== 美股( qt.gtimg 不支持, 走 ifzq 的 qt 段; 实测交易时段内为实时行情, qt[0]标记 real/delay 对应开市/休市 ) ===== */async function usQuote(tc) {
   try {
     const r = await fetchKline(tc, 'day', 1);
     if (r && r.qt) {
