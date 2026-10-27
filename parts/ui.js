@@ -1089,19 +1089,21 @@ function boot() {
   window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); });
   onData = () => { rerender(); checkDividends(); };
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) { fitShell(); if (Date.now() - net.at > 60e3) refreshQuotes(); } });
-  /* iOS Safari 工具栏收放时 100dvh 偶发不触发重排, 壳高滞留导致底栏下方出现空隙(重进才恢复)。
-     改由 JS 用 innerHeight 主动驱动壳高: 随工具栏实时变化、不受键盘影响、resize 事件可靠;
-     CSS 的 100dvh 仅作 JS 生效前的首屏回退; 捏合缩放期间跳过 */
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(fitShell, 200); if (Date.now() - net.at > 60e3) refreshQuotes(); } });
+  /* iOS 壳高管理(三层策略):
+     ① 首屏渲染: CSS 100dvh 负责(不调用 fitShell, 避免A2HS冷启动时 innerHeight 未稳定导致误设)
+     ② 事件驱动: resize(工具栏变化)/orientationchange(旋转) → fitShell 修正 dvh 偶发不重排的 bug
+     ③ 后台恢复: visibilitychange → 延时200ms再调 fitShell(等 iOS 完成视口更新, 立即读 innerHeight 可能拿到旧值) */
   function fitShell() {
     const vv = window.visualViewport;
     if (vv && Math.abs(vv.scale - 1) > 0.02) return;
-    document.body.style.height = window.innerHeight + 'px';
+    const h = Math.max(window.innerHeight, vv ? vv.height : 0);
+    document.body.style.height = h + 'px';
   }
   window.addEventListener('resize', fitShell);
   window.addEventListener('orientationchange', () => setTimeout(fitShell, 300));
   if (window.visualViewport) window.visualViewport.addEventListener('resize', fitShell);
-  fitShell();
+  setTimeout(fitShell, 500);   // 延时安全网(而非boot立即调用), 确保视口已稳定后再校准
   /* 浏览器历史导航: 视图/详情页压栈, iOS 边缘右滑(或浏览器返回)经 popstate 驱动回退 */
   try { history.replaceState({ v: 'pos' }, ''); } catch (e) {}
   window.addEventListener('popstate', e => {
