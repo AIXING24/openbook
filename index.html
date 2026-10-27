@@ -683,7 +683,21 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&am
 const SYM = { CNY: '¥', USD: '$', HKD: 'HK$' };
 const CN = { CNY: '人民币', USD: '美元' };
 const MKT_TAG = { sh: '沪', sz: '深', hk: '港', us: '美' };
-const ICO = { refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>' };
+const ICO = {
+  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 4v5h-5"/></svg>',
+  eyeOpen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  eyeClosed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+};
+
+/* ===== 隐私遮盖(眼睛开关) =====
+   每次启动默认遮盖(不持久化), 点击眼睛切换; 全局生效(所有页面联动) */
+let privacyMasked = true;
+function maskAmt(txt) { return privacyMasked ? '****' : txt; }
+function maskQty(txt) { return privacyMasked ? '****' : txt; }
+function togglePrivacy() {
+  privacyMasked = !privacyMasked;
+  rerender();
+}
 
 function fmtAmt(v, cur, sign) {
   const s = SYM[cur] || cur + ' ';
@@ -804,12 +818,12 @@ function renderPos() {
     realB += Core.toBase(p.realized, p.cur, S.base, F);
     const pnl = p.shares > 0 && mvB != null ? mvB - cB : null;
     const left = `<div class="pr-l"><div class="pr-name"><span class="nm">${esc(p.name)}</span><span class="tag">${MKT_TAG[p.mkt] || ''}</span></div>
-      <div class="pr-sub num">${p.shares > 0 ? fmtQty(p.shares) + '股 · 成本 ' + fmtAmt(p.avg, p.cur) : '已清仓 · 已实现 ' + fmtAmt(p.realized, p.cur, true)}</div></div>`;
+      <div class="pr-sub num">${p.shares > 0 ? maskQty(fmtQty(p.shares)) + '股 · 成本 ' + maskAmt(fmtAmt(p.avg, p.cur)) : '已清仓 · 已实现 ' + maskAmt(fmtAmt(p.realized, p.cur, true))}</div></div>`;
     const right = p.shares > 0
       ? `<div class="pr-r"><div class="pr-px num">${has ? fmtPx(q.px) : '--'}${has ? ` <span class="pill ${q.pct >= 0 ? 'up' : 'down'}">${fmtPct(q.pct)}</span>` : ''}</div>
-         <div class="pr-val num">${mvB != null ? fmtAmt(mvB, S.base) : '现价不可用'}${pnl != null ? ` <span class="pnl ${pnl >= 0 ? 'up' : 'down'}">${fmtAmt(pnl, S.base, true)}</span>` : ''}</div></div>`
+         <div class="pr-val num">${mvB != null ? maskAmt(fmtAmt(mvB, S.base)) : '现价不可用'}${pnl != null ? ` <span class="pnl ${pnl >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmt(pnl, S.base, true))}</span>` : ''}</div></div>`
       : `<div class="pr-r"><div class="pr-px num" style="color:var(--faint)">--</div>
-         <div class="pr-val num"><span class="${p.realized >= 0 ? 'up' : 'down'}">${fmtAmt(Core.toBase(p.realized, p.cur, S.base, F), S.base, true)}</span></div></div>`;
+         <div class="pr-val num"><span class="${p.realized >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmt(Core.toBase(p.realized, p.cur, S.base, F), S.base, true))}</span></div></div>`;
     return `<button class="pos-row" data-tc="${esc(p.tc)}">${left}${right}</button>`;
   }).join('');
   const unreal = mktB - costB;
@@ -819,6 +833,7 @@ function renderPos() {
   el.innerHTML = `
    <div class="pagehead"><div style="flex:1"><div class="ttl" style="letter-spacing:.04em">OPEN BOOK</div>
      <div class="sub">${d.getMonth() + 1}月${d.getDate()}日 周${week} · ${netBadge()}</div></div>
+     <button class="iconbtn" id="btn-privacy" aria-label="${privacyMasked ? '显示金额' : '隐藏金额'}">${privacyMasked ? ICO.eyeClosed : ICO.eyeOpen}</button>
      <button class="iconbtn" id="btn-refresh" aria-label="刷新行情">${ICO.refresh}</button></div>
    ${storageDead ? '<div class="banner">浏览器存储不可用（可能处于隐私模式）— 数据仅本次会话有效，请尽快导出备份。</div>' : ''}
    ${demo ? '<div class="banner">当前为示例数据：记录第一笔真实交易后自动替换，也可在设置中清空。</div>' : ''}
@@ -826,17 +841,18 @@ function renderPos() {
    ${divInbox.length ? `<button class="divcard" id="div-inbox-btn"><div style="flex:1"><div class="dc-t">发现 ${divInbox.length} 笔疑似分红待确认</div><div class="dc-s">点击查看 · 金额自动估算可修正 · 一键入账</div></div><span class="dc-arrow">›</span></button>` : ''}
    <div class="card sum">
      <div class="lbl">总市值（折${CN[S.base]}）</div>
-     <div class="big num">${fmtAmt(mktB, S.base)}</div>
+     <div class="big num">${maskAmt(fmtAmt(mktB, S.base))}</div>
      <div class="sum-grid">
-       <div><div class="lbl">浮动盈亏</div><div class="v num ${unreal >= 0 ? 'up' : 'down'}">${fmtAmtC(unreal, S.base, true)}</div></div>
-       <div><div class="lbl">持仓成本（摊薄）</div><div class="v num">${fmtAmtC(costB, S.base)}</div></div>
-       <div><div class="lbl">已实现盈亏</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${fmtAmtC(realB, S.base, true)}</div></div>
-       <div><div class="lbl">分红收益（累计）</div><div class="v num">${fmtAmtC(divB, S.base)}</div></div>
+       <div><div class="lbl">浮动盈亏</div><div class="v num ${unreal >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(unreal, S.base, true))}</div></div>
+       <div><div class="lbl">持仓成本（摊薄）</div><div class="v num">${maskAmt(fmtAmtC(costB, S.base))}</div></div>
+       <div><div class="lbl">已实现盈亏</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(realB, S.base, true))}</div></div>
+       <div><div class="lbl">分红收益（累计）</div><div class="v num">${maskAmt(fmtAmtC(divB, S.base))}</div></div>
      </div>
      <div class="fx-line num">1 USD = ${F.USDCNY.toFixed(4)} CNY · 1 HKD = ${F.HKDCNY.toFixed(4)} CNY${F.approx ? ' · 备用汇率' : ''}${noPx ? ` · ${noPx} 只无行情未计入总市值` : ''}</div>
    </div>
    ${poss.length ? `<div class="pos-h"><h2>持仓明细</h2><span>${poss.length} 只 · 点击看K线</span></div><div class="poslist">${rows}</div>` : emptyHtml()}`;
   const rb = $('#btn-refresh'); if (rb) rb.onclick = () => refreshQuotes();
+  const pb = $('#btn-privacy'); if (pb) pb.onclick = togglePrivacy;
   const dib = $('#div-inbox-btn'); if (dib) dib.onclick = openDivModal;
   el.querySelectorAll('.pos-row').forEach(b => b.onclick = () => openSheet(b.dataset.tc));
   const ea = $('#e-add'); if (ea) ea.onclick = () => showView('add');
@@ -1026,11 +1042,11 @@ function renderStats() {
   const rangeLabel = statPeriod === 'week' ? '本周（' + fmtDate(Core.weekStartStr()) + ' 起）' : statPeriod === 'month' ? '本月' : statPeriod === 'year' ? '本年' : '全部';
   const stocksHtml = st.stocks.map(sk => {
     const b = cvt(sk.buy), s = cvt(sk.sell), n = b - s;
-    return `<tr data-tc="${esc(sk.tc)}"><td class="nm">${esc(sk.name)}</td><td class="num">${fmtAmtC(b, S.base)}</td><td class="num">${fmtAmtC(s, S.base)}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${fmtAmtC(n, S.base, true)}</td></tr>`;
+    return `<tr data-tc="${esc(sk.tc)}"><td class="nm">${esc(sk.name)}</td><td class="num">${maskAmt(fmtAmtC(b, S.base))}</td><td class="num">${maskAmt(fmtAmtC(s, S.base))}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(n, S.base, true))}</td></tr>`;
   }).join('');
   const brokersHtml = st.brokers.map(br => {
     const b = cvt(br.buy), s = cvt(br.sell), n = b - s;
-    return `<tr><td class="nm">${esc(br.broker)}</td><td class="num">${fmtAmtC(b, S.base)}</td><td class="num">${fmtAmtC(s, S.base)}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${fmtAmtC(n, S.base, true)}</td></tr>`;
+    return `<tr><td class="nm">${esc(br.broker)}</td><td class="num">${maskAmt(fmtAmtC(b, S.base))}</td><td class="num">${maskAmt(fmtAmtC(s, S.base))}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(n, S.base, true))}</td></tr>`;
   }).join('');
   const donutMode = st.buy.n > 0 ? 'buy' : (st.sell.n > 0 ? 'sell' : null);
   el.innerHTML = `
@@ -1043,15 +1059,17 @@ function renderStats() {
      <button data-p="all" class="${statPeriod === 'all' ? 'on' : ''}">全部</button>
    </div>
    <div class="tile-row">
-     <div class="tile"><div class="lbl">买入金额</div><div class="v num">${fmtAmtC(buyB, S.base)}</div><div class="s">${st.buy.n} 笔</div></div>
-     <div class="tile"><div class="lbl">卖出金额</div><div class="v num">${fmtAmtC(sellB, S.base)}</div><div class="s">${st.sell.n} 笔</div></div>
+     <div class="tile"><div class="lbl">买入金额</div><div class="v num">${maskAmt(fmtAmtC(buyB, S.base))}</div><div class="s">${st.buy.n} 笔</div></div>
+     <div class="tile"><div class="lbl">卖出金额</div><div class="v num">${maskAmt(fmtAmtC(sellB, S.base))}</div><div class="s">${st.sell.n} 笔</div></div>
    </div>
    <div class="tile-row">
-     <div class="tile"><div class="lbl">净买入</div><div class="v num ${netB >= 0 ? 'up' : 'down'}">${fmtAmtC(netB, S.base, true)}</div><div class="s">买入 − 卖出</div></div>
-     <div class="tile"><div class="lbl">已实现盈亏（累计）</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${fmtAmtC(realB, S.base, true)}</div><div class="s">含历史全部卖出</div></div>
+     <div class="tile"><div class="lbl">净买入</div><div class="v num ${netB >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(netB, S.base, true))}</div><div class="s">买入 − 卖出</div></div>
+     <div class="tile"><div class="lbl">已实现盈亏（累计）</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(realB, S.base, true))}</div><div class="s">含历史全部卖出</div></div>
    </div>
    ${donutMode ? `<div class="card"><div class="chart-head"><h2 style="font-size:15px;margin:0">本期${donutMode === 'buy' ? '买入' : '卖出'}构成</h2></div><div id="st-donut"></div><div class="dlegend" id="st-dlegend"></div></div>` : ''}
-   ${statPeriod === 'year' ? `<div class="card"><div class="chart-head"><h2 style="font-size:15px;margin:0">月度买卖（本年）</h2></div><div id="st-chart"></div></div>` : ''}
+   ${statPeriod === 'year' ? (privacyMasked
+     ? `<div class="card"><div class="chart-head"><h2 style="font-size:15px;margin:0">月度买卖（本年）</h2></div><div class="kerr" style="padding:24px 8px">数据已隐藏 · 点击持仓页眼睛图标查看</div></div>`
+     : `<div class="card"><div class="chart-head"><h2 style="font-size:15px;margin:0">月度买卖（本年）</h2></div><div id="st-chart"></div></div>`) : ''}
    ${st.stocks.length ? `<div class="card"><div class="pos-h" style="padding:0 0 8px"><h2>按股票</h2><span>${st.stocks.length} 只</span></div>
      <div class="twrap"><table class="t" id="st-stocks"><thead><tr><th>股票</th><th>买入</th><th>卖出</th><th>净额</th></tr></thead><tbody>${stocksHtml}</tbody></table></div></div>` : ''}
    ${st.brokers.length ? `<div class="card"><div class="pos-h" style="padding:0 0 8px"><h2>按券商</h2><span>${st.brokers.length} 家</span></div>
@@ -1222,7 +1240,7 @@ function renderSet() {
      <p><b>成本口径：</b>持仓成本为移动加权平均（含手续费）；分红冲减成本（摊薄，同券商口径），分红收益单独累计；卖出即时结转已实现盈亏。</p>
      <p><b>分红检测：</b>打开应用时自动比对持仓期间的前复权因子跳变，发现疑似分红会提示一键入账（估算金额可修正，美股暂不支持自动检测）。</p>
    </div>
-   <p class="footnote" style="text-align:center">OPEN BOOK v1.12 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
+   <p class="footnote" style="text-align:center">OPEN BOOK v1.13 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
   bindSeg('#set-base', v => { if (v === S.base) return; S.base = v; save(); rerender(); showToast('基准货币已切换为' + CN[v]); });
   bindSeg('#set-ud', v => { S.upRed = v === '1'; save(); applyUpDown(); rerender(); });
   bindSeg('#set-theme', v => { S.theme = v; save(); applyTheme(); rerender(); });
@@ -1393,12 +1411,12 @@ function renderSheetPos() {
   const cell = (l, v, c) => `<div><div class="l">${l}</div><div class="v num ${c || ''}">${v}</div></div>`;
   elc.innerHTML = `
    <div class="qgrid">
-     ${cell('持仓', p.shares > 0 ? fmtQty(p.shares) + '股' : '已清仓')}
-     ${cell('平均成本', p.shares > 0 ? fmtAmt(p.avg, p.cur) : '--')}
+     ${cell('持仓', p.shares > 0 ? maskQty(fmtQty(p.shares)) + '股' : '已清仓')}
+     ${cell('平均成本', p.shares > 0 ? maskAmt(fmtAmt(p.avg, p.cur)) : '--')}
      ${cell('现价', has ? fmtPx(q.px) : '--')}
-     ${cell('浮动盈亏', pnl != null ? fmtAmt(pnl, p.cur, true) + bNote(pnl) : '--', pnl != null && pnl < 0 ? 'down' : 'up')}
+     ${cell('浮动盈亏', pnl != null ? maskAmt(fmtAmt(pnl, p.cur, true)) : '--', pnl != null && pnl < 0 ? 'down' : 'up')}
    </div>
-   <div class="fx-line num" style="margin-top:10px">本股已实现盈亏 <b class="${p.realized >= 0 ? 'up' : 'down'}">${fmtAmt(p.realized, p.cur, true)}</b>${bNote(p.realized)}${p.dividend > 0 ? ` · 分红收益 <b>${fmtAmt(p.dividend, p.cur)}</b>（已冲减成本）` : ''} · 共 ${p.trades.length} 笔</div>`;
+   <div class="fx-line num" style="margin-top:10px">本股已实现盈亏 <b class="${p.realized >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmt(p.realized, p.cur, true))}</b>${p.dividend > 0 ? ` · 分红收益 <b>${maskAmt(fmtAmt(p.dividend, p.cur))}</b>（已冲减成本）` : ''} · 共 ${p.trades.length} 笔</div>`;
 }
 function renderSheetTrades() {
   if (!sheetTc) return;
@@ -1411,11 +1429,11 @@ function renderSheetTrades() {
   box.innerHTML = ts.map(t => {
     const isD = t.side === 'D';
     const amt = isD ? (t.amt != null ? +t.amt : t.px * t.qty) : t.px * t.qty;
-    const base = t.cur !== S.base ? '<span class="b2">≈ ' + fmtAmt(Core.toBase(amt, t.cur, S.base, F), S.base) + '</span>' : '';
+    const base = t.cur !== S.base ? '<span class="b2">≈ ' + maskAmt(fmtAmt(Core.toBase(amt, t.cur, S.base, F), S.base)) + '</span>' : '';
     return `<div class="trade-row"><span class="bs ${t.side}">${isD ? '息' : t.side}</span>
-      <div class="tr-mid"><div class="tr-px num">${isD ? fmtAmt(amt, t.cur) : fmtPx(t.px) + ' × ' + fmtQty(t.qty)}</div>
-      <div class="tr-sub">${fmtDate(t.date)}${isD && t.px > 0 ? ' · 每份 ' + fmtPx(t.px) + ' × ' + fmtQty(t.qty) : ''}${!isD && t.fee ? ' · 费 ' + fmtAmt(t.fee, t.cur) : ''}${t.broker ? ' · ' + esc(t.broker) : ''}${t.note ? ' · ' + esc(t.note) : ''}</div></div>
-      <div class="tr-amt num">${isD ? '冲减成本' : fmtAmt(amt, t.cur)}${isD ? '' : base}</div>
+      <div class="tr-mid"><div class="tr-px num">${isD ? maskAmt(fmtAmt(amt, t.cur)) : fmtPx(t.px) + ' × ' + maskQty(fmtQty(t.qty))}</div>
+      <div class="tr-sub">${fmtDate(t.date)}${isD && t.px > 0 ? ' · 每份 ' + fmtPx(t.px) + ' × ' + maskQty(fmtQty(t.qty)) : ''}${!isD && t.fee ? ' · 费 ' + maskAmt(fmtAmt(t.fee, t.cur)) : ''}${t.broker ? ' · ' + esc(t.broker) : ''}${t.note ? ' · ' + esc(t.note) : ''}</div></div>
+      <div class="tr-amt num">${isD ? '冲减成本' : maskAmt(fmtAmt(amt, t.cur))}${isD ? '' : base}</div>
       <button class="del" data-id="${esc(t.id)}" aria-label="删除">删除</button></div>`;
   }).join('');
   box.querySelectorAll('.del').forEach(b => b.onclick = () => {
@@ -1580,7 +1598,7 @@ function renderKline(r) {
         let h = `<div style="font-weight:600">${rr.d}</div><div>开 ${fmtPx(rr.o)} 收 <b style="color:${rr.c >= rr.o ? up : dn}">${fmtPx(rr.c)}</b></div><div>高 ${fmtPx(rr.h)} 低 ${fmtPx(rr.l)}</div><div>量 ${fmtVol(rr.v)} · <span style="color:${chg >= 0 ? up : dn}">${fmtPct(chg)}</span></div>`;
         const ts = tradesByDate[rr.d];
         if (ts) for (const t of ts) {
-          h += `<div style="margin-top:4px;padding-top:4px;border-top:1px dashed ${line}"><b style="color:${t.side === 'B' ? up : dn}">${t.side === 'B' ? '买入' : '卖出'}</b> ${fmtPx(t.px)}×${fmtQty(t.qty)}${t.broker ? ' · ' + esc(t.broker) : ''}</div>`;
+          h += `<div style="margin-top:4px;padding-top:4px;border-top:1px dashed ${line}"><b style="color:${t.side === 'B' ? up : dn}">${t.side === 'B' ? '买入' : '卖出'}</b> ${privacyMasked ? '已隐藏' : fmtPx(t.px) + '×' + fmtQty(t.qty)}${!privacyMasked && t.broker ? ' · ' + esc(t.broker) : ''}</div>`;
         }
         return h;
       }
