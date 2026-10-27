@@ -1090,20 +1090,25 @@ function boot() {
   onData = () => { rerender(); checkDividends(); };
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(fitShell, 200); if (Date.now() - net.at > 60e3) refreshQuotes(); } });
-  /* iOS 壳高管理(三层策略):
-     ① 首屏渲染: CSS 100dvh 负责(不调用 fitShell, 避免A2HS冷启动时 innerHeight 未稳定导致误设)
-     ② 事件驱动: resize(工具栏变化)/orientationchange(旋转) → fitShell 修正 dvh 偶发不重排的 bug
-     ③ 后台恢复: visibilitychange → 延时200ms再调 fitShell(等 iOS 完成视口更新, 立即读 innerHeight 可能拿到旧值) */
+  /* iOS 壳高管理(分模式策略):
+     A2HS standalone: 无工具栏动态, CSS 100dvh 始终正确 → 完全不干预(清空内联样式)
+     Safari browser: 工具栏收放时 dvh 偶发不重排 → JS fitShell 修正
+     判定方法: navigator.standalone(iOS) 或 matchMedia display-mode */
   function fitShell() {
+    const standalone = window.navigator.standalone === true ||
+      window.matchMedia('(display-mode: standalone)').matches;
+    if (standalone) {
+      document.body.style.height = '';   // 清除任何历史覆盖, 让 CSS 100dvh 全权接管
+      return;
+    }
     const vv = window.visualViewport;
     if (vv && Math.abs(vv.scale - 1) > 0.02) return;
-    const h = Math.max(window.innerHeight, vv ? vv.height : 0);
-    document.body.style.height = h + 'px';
+    document.body.style.height = window.innerHeight + 'px';
   }
   window.addEventListener('resize', fitShell);
   window.addEventListener('orientationchange', () => setTimeout(fitShell, 300));
   if (window.visualViewport) window.visualViewport.addEventListener('resize', fitShell);
-  setTimeout(fitShell, 500);   // 延时安全网(而非boot立即调用), 确保视口已稳定后再校准
+  setTimeout(fitShell, 500);
   /* 浏览器历史导航: 视图/详情页压栈, iOS 边缘右滑(或浏览器返回)经 popstate 驱动回退 */
   try { history.replaceState({ v: 'pos' }, ''); } catch (e) {}
   window.addEventListener('popstate', e => {
