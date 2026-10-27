@@ -1,0 +1,32 @@
+parts/ui.js
+  s_62935fafdc165c::t_b77ec801962fc7 565
+  s_62935fafdc165c::t_c2adf00ff79bfa 158
+  s_62935fafdc165c::t_ec17fa87f38505 8-22
+  s_62935fafdc165c::t_d78e3b84835cac 166,168-171
+  s_62935fafdc165c::t_1ed3158f7a19a3 736-737,739,741
+  s_62935fafdc165c::t_952cba42ec111a 384-385,388-389
+  s_62935fafdc165c::t_5bdc9f7cbd898b 367,371
+  s_62935fafdc165c::t_a92f471ee70c67 177
+  s_62935fafdc165c::t_bd6e64273f5315 392-394
+  s_62935fafdc165c::t_55b124e9f370b4 754,756-758
+  s_62935fafdc165c::t_9f1d22d39d2869 923
+  s_62935fafdc165c::t_b2a0267487c567 143,146,148
+index.html
+  s_62935fafdc165c::t_b77ec801962fc7 686-700,821,824,826,836,844,846-849,855,1045,1049,1062-1063,1066-1067,1070-1072,1243,1414-1415,1417,1419,1432,1434-1436,1601
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.51-trip",
+  "base_commit_sha": "982b769d4dd3bf29e9200b1831f17ddfecb1fa08",
+  "prompts": {},
+  "sessions": {
+    "s_62935fafdc165c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "bbdbbea1-d41c-49e1-93e4-0a98967fa395",
+        "model": "glm-5.3"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
