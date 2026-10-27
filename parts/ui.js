@@ -438,7 +438,7 @@ function renderStatsDonut(st, mode) {
     animation: false,
     tooltip: {
       trigger: 'item', backgroundColor: cssVar('--card'), borderColor: cssVar('--line'), textStyle: { color: cssVar('--fg'), fontSize: 12 },
-      formatter: p => esc(p.name) + '<br/>' + fmtAmt(p.value, S.base) + ' · ' + p.percent.toFixed(1) + '%'
+      formatter: p => esc(p.name) + '<br/>' + maskAmt(fmtAmt(p.value, S.base)) + ' · ' + p.percent.toFixed(1) + '%'
     },
     series: [{
       type: 'pie', radius: ['50%', '72%'], center: ['50%', '50%'],
@@ -448,7 +448,7 @@ function renderStatsDonut(st, mode) {
       data
     }],
     graphic: [
-      { type: 'text', left: 'center', top: '40%', style: { text: fmtAmtC(total, S.base), textAlign: 'center', fill: cssVar('--fg'), fontSize: 15, fontWeight: 700 } },
+      { type: 'text', left: 'center', top: '40%', style: { text: maskAmt(fmtAmtC(total, S.base)), textAlign: 'center', fill: cssVar('--fg'), fontSize: 15, fontWeight: 700 } },
       { type: 'text', left: 'center', top: '53%', style: { text: label, textAlign: 'center', fill: cssVar('--muted'), fontSize: 11 } }
     ]
   });
@@ -478,7 +478,7 @@ function renderStatsChart(st) {
       backgroundColor: cssVar('--card'), borderColor: cssVar('--line'), textStyle: { color: cssVar('--fg'), fontSize: 12 },
       formatter: ps => {
         let h = '<b>' + (ps[0].dataIndex + 1) + '月</b>';
-        ps.forEach(p => { h += '<div>' + p.marker + esc(p.seriesName) + ' ' + fmtAmt(p.value, S.base) + '</div>'; });
+        ps.forEach(p => { h += '<div>' + p.marker + esc(p.seriesName) + ' ' + maskAmt(fmtAmt(p.value, S.base)) + '</div>'; });
         return h;
       }
     },
