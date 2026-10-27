@@ -16,6 +16,7 @@ const ICO = {
 let privacyMasked = true;
 function maskAmt(txt) { return privacyMasked ? '****' : txt; }
 function maskQty(txt) { return privacyMasked ? '****' : txt; }
+function pcl(v) { return privacyMasked ? '' : (v >= 0 ? 'up' : 'down'); }   // 遮盖时去掉红绿颜色, 防止泄露盈亏方向
 function togglePrivacy() {
   privacyMasked = !privacyMasked;
   rerender();
@@ -143,9 +144,9 @@ function renderPos() {
       <div class="pr-sub num">${p.shares > 0 ? maskQty(fmtQty(p.shares)) + '股 · 成本 ' + maskAmt(fmtAmt(p.avg, p.cur)) : '已清仓 · 已实现 ' + maskAmt(fmtAmt(p.realized, p.cur, true))}</div></div>`;
     const right = p.shares > 0
       ? `<div class="pr-r"><div class="pr-px num">${has ? fmtPx(q.px) : '--'}${has ? ` <span class="pill ${q.pct >= 0 ? 'up' : 'down'}">${fmtPct(q.pct)}</span>` : ''}</div>
-         <div class="pr-val num">${mvB != null ? maskAmt(fmtAmt(mvB, S.base)) : '现价不可用'}${pnl != null ? ` <span class="pnl ${pnl >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmt(pnl, S.base, true))}</span>` : ''}</div></div>`
+         <div class="pr-val num">${mvB != null ? maskAmt(fmtAmt(mvB, S.base)) : '现价不可用'}${pnl != null ? ` <span class="pnl ${pcl(pnl)}">${maskAmt(fmtAmt(pnl, S.base, true))}</span>` : ''}</div></div>`
       : `<div class="pr-r"><div class="pr-px num" style="color:var(--faint)">--</div>
-         <div class="pr-val num"><span class="${p.realized >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmt(Core.toBase(p.realized, p.cur, S.base, F), S.base, true))}</span></div></div>`;
+         <div class="pr-val num"><span class="${pcl(p.realized)}">${maskAmt(fmtAmt(Core.toBase(p.realized, p.cur, S.base, F), S.base, true))}</span></div></div>`;
     return `<button class="pos-row" data-tc="${esc(p.tc)}">${left}${right}</button>`;
   }).join('');
   const unreal = mktB - costB;
@@ -165,9 +166,9 @@ function renderPos() {
      <div class="lbl">总市值（折${CN[S.base]}）</div>
      <div class="big num">${maskAmt(fmtAmt(mktB, S.base))}</div>
      <div class="sum-grid">
-       <div><div class="lbl">浮动盈亏</div><div class="v num ${unreal >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(unreal, S.base, true))}</div></div>
+       <div><div class="lbl">浮动盈亏</div><div class="v num ${pcl(unreal)}">${maskAmt(fmtAmtC(unreal, S.base, true))}</div></div>
        <div><div class="lbl">持仓成本（摊薄）</div><div class="v num">${maskAmt(fmtAmtC(costB, S.base))}</div></div>
-       <div><div class="lbl">已实现盈亏</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(realB, S.base, true))}</div></div>
+       <div><div class="lbl">已实现盈亏</div><div class="v num ${pcl(realB)}">${maskAmt(fmtAmtC(realB, S.base, true))}</div></div>
        <div><div class="lbl">分红收益（累计）</div><div class="v num">${maskAmt(fmtAmtC(divB, S.base))}</div></div>
      </div>
      <div class="fx-line num">1 USD = ${F.USDCNY.toFixed(4)} CNY · 1 HKD = ${F.HKDCNY.toFixed(4)} CNY${F.approx ? ' · 备用汇率' : ''}${noPx ? ` · ${noPx} 只无行情未计入总市值` : ''}</div>
@@ -364,11 +365,11 @@ function renderStats() {
   const rangeLabel = statPeriod === 'week' ? '本周（' + fmtDate(Core.weekStartStr()) + ' 起）' : statPeriod === 'month' ? '本月' : statPeriod === 'year' ? '本年' : '全部';
   const stocksHtml = st.stocks.map(sk => {
     const b = cvt(sk.buy), s = cvt(sk.sell), n = b - s;
-    return `<tr data-tc="${esc(sk.tc)}"><td class="nm">${esc(sk.name)}</td><td class="num">${maskAmt(fmtAmtC(b, S.base))}</td><td class="num">${maskAmt(fmtAmtC(s, S.base))}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(n, S.base, true))}</td></tr>`;
+    return `<tr data-tc="${esc(sk.tc)}"><td class="nm">${esc(sk.name)}</td><td class="num">${maskAmt(fmtAmtC(b, S.base))}</td><td class="num">${maskAmt(fmtAmtC(s, S.base))}</td><td class="num ${pcl(n)}">${maskAmt(fmtAmtC(n, S.base, true))}</td></tr>`;
   }).join('');
   const brokersHtml = st.brokers.map(br => {
     const b = cvt(br.buy), s = cvt(br.sell), n = b - s;
-    return `<tr><td class="nm">${esc(br.broker)}</td><td class="num">${maskAmt(fmtAmtC(b, S.base))}</td><td class="num">${maskAmt(fmtAmtC(s, S.base))}</td><td class="num ${n >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(n, S.base, true))}</td></tr>`;
+    return `<tr><td class="nm">${esc(br.broker)}</td><td class="num">${maskAmt(fmtAmtC(b, S.base))}</td><td class="num">${maskAmt(fmtAmtC(s, S.base))}</td><td class="num ${pcl(n)}">${maskAmt(fmtAmtC(n, S.base, true))}</td></tr>`;
   }).join('');
   const donutMode = st.buy.n > 0 ? 'buy' : (st.sell.n > 0 ? 'sell' : null);
   el.innerHTML = `
@@ -385,8 +386,8 @@ function renderStats() {
      <div class="tile"><div class="lbl">卖出金额</div><div class="v num">${maskAmt(fmtAmtC(sellB, S.base))}</div><div class="s">${st.sell.n} 笔</div></div>
    </div>
    <div class="tile-row">
-     <div class="tile"><div class="lbl">净买入</div><div class="v num ${netB >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(netB, S.base, true))}</div><div class="s">买入 − 卖出</div></div>
-     <div class="tile"><div class="lbl">已实现盈亏（累计）</div><div class="v num ${realB >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmtC(realB, S.base, true))}</div><div class="s">含历史全部卖出</div></div>
+     <div class="tile"><div class="lbl">净买入</div><div class="v num ${pcl(netB)}">${maskAmt(fmtAmtC(netB, S.base, true))}</div><div class="s">买入 − 卖出</div></div>
+     <div class="tile"><div class="lbl">已实现盈亏（累计）</div><div class="v num ${pcl(realB)}">${maskAmt(fmtAmtC(realB, S.base, true))}</div><div class="s">含历史全部卖出</div></div>
    </div>
    ${donutMode ? `<div class="card"><div class="chart-head"><h2 style="font-size:15px;margin:0">本期${donutMode === 'buy' ? '买入' : '卖出'}构成</h2></div><div id="st-donut"></div><div class="dlegend" id="st-dlegend"></div></div>` : ''}
    ${statPeriod === 'year' ? (privacyMasked
@@ -738,7 +739,7 @@ function renderSheetPos() {
      ${cell('现价', has ? fmtPx(q.px) : '--')}
      ${cell('浮动盈亏', pnl != null ? maskAmt(fmtAmt(pnl, p.cur, true)) : '--', pnl != null && pnl < 0 ? 'down' : 'up')}
    </div>
-   <div class="fx-line num" style="margin-top:10px">本股已实现盈亏 <b class="${p.realized >= 0 ? 'up' : 'down'}">${maskAmt(fmtAmt(p.realized, p.cur, true))}</b>${p.dividend > 0 ? ` · 分红收益 <b>${maskAmt(fmtAmt(p.dividend, p.cur))}</b>（已冲减成本）` : ''} · 共 ${p.trades.length} 笔</div>`;
+   <div class="fx-line num" style="margin-top:10px">本股已实现盈亏 <b class="${pcl(p.realized)}">${maskAmt(fmtAmt(p.realized, p.cur, true))}</b>${p.dividend > 0 ? ` · 分红收益 <b>${maskAmt(fmtAmt(p.dividend, p.cur))}</b>（已冲减成本）` : ''} · 共 ${p.trades.length} 笔</div>`;
 }
 function renderSheetTrades() {
   if (!sheetTc) return;
