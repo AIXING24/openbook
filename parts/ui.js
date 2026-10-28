@@ -117,6 +117,30 @@ function bindSeg(sel, fn, attr) {
   });
 }
 
+/* ===== 当日盈亏(用户口径) =====
+   A股/港股: 始终计入当前交易时段变动(API chg)
+   美股: 仅北京时间21:30(美股开盘)至次日09:30(A股开盘前)计入
+   09:30~21:30 期间美股不计入(今晚的美股还没开) */
+function calcDailyPnL() {
+  const now = new Date();
+  const hour = now.getHours() + now.getMinutes() / 60;
+  const usOpen = hour >= 21.5 || hour < 9.5;
+  const F = fxInfo();
+  let pnl = 0, startVal = 0;
+  for (const p of Core.calcPositions(S.trades)) {
+    if (p.shares <= 0) continue;
+    const q = quotes[p.tc];
+    if (!q || !q.px || !q.chg) continue;
+    if (p.mkt === 'us' && !usOpen) continue;
+    const dayChg = Core.toBase(q.chg * p.shares, p.cur, S.base, F);
+    const mktVal = Core.toBase(q.px * p.shares, p.cur, S.base, F);
+    startVal += mktVal - dayChg;
+    pnl += dayChg;
+  }
+  const pct = startVal > 0 ? pnl / startVal * 100 : 0;
+  return { pnl, pct, usOpen };
+}
+
 /* ===== 持仓页 ===== */
 function netBadge() {
   if (net.ok === false) return '<span class="netbad">行情不可用</span>';
@@ -150,6 +174,7 @@ function renderPos() {
     return `<button class="pos-row" data-tc="${esc(p.tc)}">${left}${right}</button>`;
   }).join('');
   const unreal = mktB - costB;
+  const daily = calcDailyPnL();
   const divB = poss.reduce((a, p) => a + Core.toBase(p.dividend, p.cur, S.base, F), 0);
   const demo = S.trades.some(t => t.demo);
   const d = new Date(); const week = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
@@ -165,6 +190,7 @@ function renderPos() {
    <div class="card sum">
      <div class="lbl">总市值（折${CN[S.base]}）</div>
      <div class="big num">${maskAmt(fmtAmt(mktB, S.base))}</div>
+     <div class="daily-pnl num ${pcl(daily.pnl)}">当日 ${maskAmt(fmtAmtC(daily.pnl, S.base, true))} <span class="dp-pct">(${daily.pnl >= 0 ? '+' : ''}${daily.pct.toFixed(2)}%)</span></div>
      <div class="sum-grid">
        <div><div class="lbl">浮动盈亏</div><div class="v num ${pcl(unreal)}">${maskAmt(fmtAmtC(unreal, S.base, true))}</div></div>
        <div><div class="lbl">持仓成本（摊薄）</div><div class="v num">${maskAmt(fmtAmtC(costB, S.base))}</div></div>
@@ -563,7 +589,7 @@ function renderSet() {
      <p><b>成本口径：</b>持仓成本为移动加权平均（含手续费）；分红冲减成本（摊薄，同券商口径），分红收益单独累计；卖出即时结转已实现盈亏。</p>
      <p><b>分红检测：</b>打开应用时自动比对持仓期间的前复权因子跳变，发现疑似分红会提示一键入账（估算金额可修正，美股暂不支持自动检测）。</p>
    </div>
-   <p class="footnote" style="text-align:center">OPEN BOOK v1.13 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
+   <p class="footnote" style="text-align:center">OPEN BOOK v1.14 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
   bindSeg('#set-base', v => { if (v === S.base) return; S.base = v; save(); rerender(); showToast('基准货币已切换为' + CN[v]); });
   bindSeg('#set-ud', v => { S.upRed = v === '1'; save(); applyUpDown(); rerender(); });
   bindSeg('#set-theme', v => { S.theme = v; save(); applyTheme(); rerender(); });
