@@ -1121,21 +1121,14 @@ function boot() {
        → 安全网: 用 screen.height(物理屏幕高度, 不依赖视口时序)作为参考,
          检测底栏是否贴底, 不贴则强制修正。
      Safari browser: 工具栏收放时 dvh 偶发不重排 → JS innerHeight 修正 */
+  /* iOS 壳高管理:
+     A2HS standalone: 底栏已改为 CSS position:fixed, 不依赖 body 高度,
+       fitShell 无需做任何事 — 彻底免疫 100dvh 冷启动 bug
+     Safari browser: 工具栏收放时 dvh 偶发不重排 → JS innerHeight 修正 */
   function fitShell() {
     const standalone = window.navigator.standalone === true ||
       window.matchMedia('(display-mode: standalone)').matches;
-    if (standalone) {
-      const tabs = document.querySelector('#tabs');
-      if (tabs) {
-        const gap = window.screen.height - tabs.getBoundingClientRect().bottom;
-        if (Math.abs(gap) > 5) {
-          document.body.style.height = window.screen.height + 'px';
-          return;
-        }
-      }
-      document.body.style.height = '';
-      return;
-    }
+    if (standalone) return;
     const vv = window.visualViewport;
     if (vv && Math.abs(vv.scale - 1) > 0.02) return;
     document.body.style.height = window.innerHeight + 'px';
@@ -1143,8 +1136,6 @@ function boot() {
   window.addEventListener('resize', fitShell);
   window.addEventListener('orientationchange', () => setTimeout(fitShell, 300));
   if (window.visualViewport) window.visualViewport.addEventListener('resize', fitShell);
-  setTimeout(fitShell, 500);
-  setTimeout(fitShell, 1200);  // 冷启动慢时 dvh 可能还没稳定, 二次校准
   /* 浏览器历史导航: 视图/详情页压栈, iOS 边缘右滑(或浏览器返回)经 popstate 驱动回退 */
   try { history.replaceState({ v: 'pos' }, ''); } catch (e) {}
   window.addEventListener('popstate', e => {

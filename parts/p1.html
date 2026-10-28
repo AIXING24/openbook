@@ -207,6 +207,11 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
   margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
   margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)))}
 #tabs-in{max-width:560px;margin:0 auto;display:flex;padding:6px 10px}
+/* A2HS standalone: 底栏 fixed 定位, 与 body 高度彻底脱钩(100dvh 冷启动bug免疫) */
+@media (display-mode: standalone){
+  #tabs{position:fixed;bottom:0;left:0;right:0;margin-left:0;margin-right:0}
+  #main{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+}
 #tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border:0;background:none;color:var(--faint);font-size:10px}
 #tabs button.on{color:var(--accent)}
 #tabs svg{width:22px;height:22px}
