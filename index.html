@@ -1796,15 +1796,24 @@ function boot() {
   onData = () => { rerender(); checkDividends(); };
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(fitShell, 200); if (Date.now() - net.at > 60e3) refreshQuotes(); } });
-  /* iOS 壳高管理(分模式策略):
-     A2HS standalone: 无工具栏动态, CSS 100dvh 始终正确 → 完全不干预(清空内联样式)
-     Safari browser: 工具栏收放时 dvh 偶发不重排 → JS fitShell 修正
-     判定方法: navigator.standalone(iOS) 或 matchMedia display-mode */
+  /* iOS 壳高管理(分模式 + 安全网):
+     A2HS standalone: CSS 100dvh 应该正确, 但冷启动时偶尔计算出错误值且不触发重排。
+       → 安全网: 用 screen.height(物理屏幕高度, 不依赖视口时序)作为参考,
+         检测底栏是否贴底, 不贴则强制修正。
+     Safari browser: 工具栏收放时 dvh 偶发不重排 → JS innerHeight 修正 */
   function fitShell() {
     const standalone = window.navigator.standalone === true ||
       window.matchMedia('(display-mode: standalone)').matches;
     if (standalone) {
-      document.body.style.height = '';   // 清除任何历史覆盖, 让 CSS 100dvh 全权接管
+      const tabs = document.querySelector('#tabs');
+      if (tabs) {
+        const gap = window.screen.height - tabs.getBoundingClientRect().bottom;
+        if (Math.abs(gap) > 5) {
+          document.body.style.height = window.screen.height + 'px';
+          return;
+        }
+      }
+      document.body.style.height = '';
       return;
     }
     const vv = window.visualViewport;
@@ -1815,6 +1824,7 @@ function boot() {
   window.addEventListener('orientationchange', () => setTimeout(fitShell, 300));
   if (window.visualViewport) window.visualViewport.addEventListener('resize', fitShell);
   setTimeout(fitShell, 500);
+  setTimeout(fitShell, 1200);  // 冷启动慢时 dvh 可能还没稳定, 二次校准
   /* 浏览器历史导航: 视图/详情页压栈, iOS 边缘右滑(或浏览器返回)经 popstate 驱动回退 */
   try { history.replaceState({ v: 'pos' }, ''); } catch (e) {}
   window.addEventListener('popstate', e => {
