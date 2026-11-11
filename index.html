@@ -346,6 +346,209 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 <div id="sheet" hidden></div>
 <div id="toast" hidden></div>
 <div id="modal" hidden><div class="modal-card"><h3 id="modal-title"></h3><div id="modal-body"></div><div class="modal-acts" id="modal-acts"></div></div></div>
+<script id="layout-diagnostics">
+const LayoutDiagnostics = (() => {
+  const version = 'v1.14.3-diag1';
+  const build = 'layout-20261111-01';
+  const storageKey = 'cj.layout-debug.v1';
+  const maxSamples = 60;
+  const initialSamples = 12;
+  const events = new Set([
+    'script-start', 'frame-1', 'frame-2', 'dom-ready', 'load', 'pageshow', 'pagehide',
+    'startup-120', 'startup-500', 'startup-1500', 'startup-3000',
+    'visibility-hidden', 'visibility-visible', 'resume-120', 'resume-500',
+    'window-resize', 'orientation-change', 'orientation-settled', 'viewport-resize',
+    'viewport-scroll', 'window-scroll', 'focus-in', 'focus-out', 'tab-before', 'tab-after',
+    'manual-report', 'cleared',
+  ]);
+  const number = value => typeof value === 'number' && Number.isFinite(value) ? Math.round(value * 100) / 100 : null;
+  const pixels = value => value && value !== 'auto' ? number(parseFloat(value)) : null;
+  const timestamp = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value) ? value : null;
+  const numericFields = (value, fields) => Object.fromEntries(fields.map(field => [field, number(value && value[field])]));
+  const rectangleFields = ['top', 'bottom', 'left', 'right', 'width', 'height'];
+  const styleFields = ['bottom', 'paddingTop', 'paddingBottom', 'marginBottom', 'inlineHeight'];
+  const position = value => ['static', 'fixed', 'absolute', 'relative', 'sticky'].includes(value) ? value : null;
+  function normalizeGeometry(value) {
+    if (!value || !value.rect) return null;
+    return {
+      rect: numericFields(value.rect, rectangleFields),
+      ...numericFields(value, styleFields),
+      position: position(value.position),
+      transformed: value.transformed === true,
+      filtered: value.filtered === true,
+      contained: value.contained === true,
+    };
+  }
+  function normalizeSample(value) {
+    if (!value || !events.has(value.event) || !timestamp(value.at)) return null;
+    return {
+      event: value.event, at: timestamp(value.at),
+      ...numericFields(value, ['elapsedMs', 'layoutGap', 'visualGap', 'innerGap', 'safeAreaBottom']),
+      visible: value.visible === true, persisted: value.persisted === true,
+      standaloneMedia: value.standaloneMedia === true,
+      standaloneNavigator: value.standaloneNavigator === true,
+      activeView: ['pos', 'add', 'stats', 'set'].includes(value.activeView) ? value.activeView : null,
+      viewport: numericFields(value.viewport, ['innerWidth', 'innerHeight', 'documentWidth', 'documentHeight', 'scrollX', 'scrollY', 'rootScrollTop', 'devicePixelRatio']),
+      visualViewport: value.visualViewport ? numericFields(value.visualViewport, ['width', 'height', 'offsetTop', 'offsetLeft', 'pageTop', 'pageLeft', 'scale']) : null,
+      screen: numericFields(value.screen, ['width', 'height']),
+      mainScroll: numericFields(value.mainScroll, ['scrollTop', 'scrollHeight', 'clientHeight']),
+      navigation: normalizeGeometry(value.navigation), navigationInner: normalizeGeometry(value.navigationInner),
+      body: normalizeGeometry(value.body), root: normalizeGeometry(value.root),
+      focus: {
+        tag: ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'BODY'].includes(value.focus && value.focus.tag) ? value.focus.tag : null,
+        type: ['text', 'search', 'number', 'date', 'button', 'submit'].includes(value.focus && value.focus.type) ? value.focus.type : null,
+      },
+    };
+  }
+  function normalizeSession(value) {
+    if (!value || !timestamp(value.startedAt) || !/^layout-\d{8}-\d{2}$/.test(value.build)) return null;
+    return {
+      startedAt: timestamp(value.startedAt), build: value.build,
+      iosVersion: typeof value.iosVersion === 'string' && /^\d{1,2}(\.\d{1,2}){0,2}$/.test(value.iosVersion) ? value.iosVersion : null,
+      firstLargeGap: normalizeSample(value.firstLargeGap),
+      samples: Array.isArray(value.samples) ? value.samples.slice(0, initialSamples).concat(value.samples.slice(initialSamples).slice(-(maxSamples - initialSamples))).map(normalizeSample).filter(Boolean) : [],
+    };
+  }
+  function geometry(element) {
+    if (!element) return null;
+    const style = getComputedStyle(element);
+    return {
+      rect: numericFields(element.getBoundingClientRect(), rectangleFields),
+      position: position(style.position), bottom: pixels(style.bottom),
+      paddingTop: pixels(style.paddingTop), paddingBottom: pixels(style.paddingBottom),
+      marginBottom: pixels(style.marginBottom), inlineHeight: pixels(element.style.height),
+      transformed: style.transform !== 'none', filtered: style.filter !== 'none', contained: style.contain !== 'none',
+    };
+  }
+  let history = [];
+  let storage = 'available';
+  let current;
+  let pendingSave = null;
+  let pendingFrame = null;
+  let captureErrors = 0;
+  const pendingEvents = new Set();
+  const started = performance.now();
+  const iosMatch = navigator.userAgent.match(/(?:iPhone OS|CPU OS) ([\d_]+)/);
+  const newSession = () => ({ startedAt: new Date().toISOString(), build, iosVersion: iosMatch ? iosMatch[1].replace(/_/g, '.') : null, firstLargeGap: null, samples: [] });
+  try {
+    const saved = localStorage.getItem(storageKey);
+    if (saved && saved.length < 300000) {
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.schema === 1 && Array.isArray(parsed.sessions)) history = parsed.sessions.slice(-2).map(normalizeSession).filter(Boolean);
+    }
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) storage = 'unavailable';
+  }
+  current = newSession();
+  function flush() {
+    if (pendingSave !== null) { clearTimeout(pendingSave); pendingSave = null; }
+    if (storage === 'unavailable') return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({ schema: 1, sessions: history.concat(current) }));
+    } catch (error) { storage = 'unavailable'; }
+  }
+  function record(event, immediate = false, persisted = false) {
+    try {
+      const navigation = geometry(document.querySelector('#tabs'));
+      const navigationInner = geometry(document.querySelector('#tabs-in'));
+      const viewport = window.visualViewport;
+      const main = document.querySelector('#main');
+      const activeTab = document.querySelector('#tabs button.on');
+      const focused = document.activeElement;
+      const sample = normalizeSample({
+        event, at: new Date().toISOString(), elapsedMs: performance.now() - started,
+        visible: document.visibilityState === 'visible', persisted,
+        standaloneMedia: window.matchMedia('(display-mode: standalone)').matches,
+        standaloneNavigator: navigator.standalone === true,
+        activeView: activeTab && activeTab.dataset.view,
+        viewport: {
+          innerWidth: window.innerWidth, innerHeight: window.innerHeight,
+          documentWidth: document.documentElement.clientWidth, documentHeight: document.documentElement.clientHeight,
+          scrollX: window.scrollX, scrollY: window.scrollY,
+          rootScrollTop: document.scrollingElement && document.scrollingElement.scrollTop,
+          devicePixelRatio: window.devicePixelRatio,
+        },
+        visualViewport: viewport && numericFields(viewport, ['width', 'height', 'offsetTop', 'offsetLeft', 'pageTop', 'pageLeft', 'scale']),
+        screen: numericFields(window.screen, ['width', 'height']),
+        mainScroll: numericFields(main, ['scrollTop', 'scrollHeight', 'clientHeight']),
+        navigation, navigationInner, body: geometry(document.body), root: geometry(document.documentElement),
+        layoutGap: navigation ? window.innerHeight - navigation.rect.bottom : null,
+        visualGap: navigation && viewport ? viewport.offsetTop + viewport.height - navigation.rect.bottom : null,
+        innerGap: navigation && navigationInner ? navigation.rect.bottom - navigationInner.rect.bottom : null,
+        safeAreaBottom: navigation && navigation.paddingBottom,
+        focus: { tag: focused && focused.tagName, type: focused && focused.type },
+      });
+      if (!sample) return;
+      current.samples.push(sample);
+      if (current.samples.length > maxSamples) current.samples.splice(initialSamples, current.samples.length - maxSamples);
+      if (!current.firstLargeGap && ((sample.layoutGap !== null && Math.abs(sample.layoutGap) > 8) || (sample.visualGap !== null && Math.abs(sample.visualGap) > 8) || (sample.innerGap !== null && sample.innerGap > 48))) current.firstLargeGap = sample;
+      if (immediate) flush();
+      else if (pendingSave === null) pendingSave = setTimeout(flush, 200);
+    } catch (error) { captureErrors += 1; }
+  }
+  const nextFrame = callback => typeof requestAnimationFrame === 'function' ? requestAnimationFrame(callback) : setTimeout(callback, 16);
+  function schedule(event) {
+    pendingEvents.add(event);
+    if (pendingFrame !== null) return;
+    pendingFrame = nextFrame(() => {
+      pendingFrame = null;
+      const queued = [...pendingEvents];
+      pendingEvents.clear();
+      queued.forEach(eventName => record(eventName));
+    });
+  }
+  record('script-start', true);
+  nextFrame(() => { record('frame-1'); nextFrame(() => record('frame-2')); });
+  [120, 500, 1500, 3000].forEach(delay => setTimeout(() => record('startup-' + delay), delay));
+  document.addEventListener('DOMContentLoaded', () => record('dom-ready'));
+  window.addEventListener('load', () => record('load'));
+  window.addEventListener('pageshow', event => record('pageshow', true, event.persisted === true));
+  window.addEventListener('pagehide', event => record('pagehide', true, event.persisted === true));
+  document.addEventListener('visibilitychange', () => {
+    record(document.hidden ? 'visibility-hidden' : 'visibility-visible', true);
+    if (!document.hidden) {
+      setTimeout(() => record('resume-120'), 120);
+      setTimeout(() => record('resume-500'), 500);
+    }
+  });
+  window.addEventListener('resize', () => schedule('window-resize'), { passive: true });
+  window.addEventListener('scroll', () => schedule('window-scroll'), { passive: true });
+  window.addEventListener('orientationchange', () => {
+    record('orientation-change');
+    setTimeout(() => record('orientation-settled'), 300);
+  });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => schedule('viewport-resize'), { passive: true });
+    window.visualViewport.addEventListener('scroll', () => schedule('viewport-scroll'), { passive: true });
+  }
+  document.addEventListener('focusin', () => schedule('focus-in'));
+  document.addEventListener('focusout', () => schedule('focus-out'));
+  document.addEventListener('click', event => {
+    const button = event.target && event.target.closest && event.target.closest('#tabs button');
+    if (!button) return;
+    record('tab-before', true);
+    schedule('tab-after');
+  }, true);
+  return Object.freeze({
+    version, build,
+    summary: () => ({ storage, sessions: history.length + 1, samples: current.samples.length }),
+    report() {
+      record('manual-report', true);
+      return JSON.stringify({
+        format: 'OPEN BOOK layout diagnostics', schema: 1, version, build,
+        privacy: 'Only layout measurements; no trades, balances, notes, input values, URLs or network data.',
+        storage, captureErrors, sessions: history.concat(current),
+      }, null, 2);
+    },
+    clear() {
+      history = [];
+      current.samples = [];
+      current.firstLargeGap = null;
+      record('cleared', true);
+    },
+  });
+})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
 <script>
 /* ===== CORE: 纯逻辑（无 DOM 依赖），便于单元测试 ===== */
@@ -1266,6 +1469,13 @@ function renderSet() {
      <div class="setrow"><div><div class="sl">上次备份</div><div class="sd"${needBackup ? ' style="color:var(--warn)"' : ''}>${backupTxt}${needBackup ? ' · 记录较多，建议尽快备份' : ''}</div></div></div>
      <div class="setrow"><div><div class="sl">清空数据</div><div class="sd">删除全部交易记录（不可恢复）</div></div><button class="btn" id="btn-clear">清空数据</button></div>
    </div>
+   <div class="sec-t">临时布局诊断</div>
+   <div class="card help">
+     <div class="setrow"><div><div class="sl">底栏位置记录</div><div class="sd">${LayoutDiagnostics.summary().storage === 'unavailable' ? '存储不可用，仅本次打开有效' : '仅保存在本机，最多保留三次打开记录'}</div></div><button class="btn" id="btn-layout-report">查看/复制</button></div>
+     <div class="setrow"><div><div class="sl">清除诊断记录</div><div class="sd">不影响交易、备份和设置</div></div><button class="btn" id="btn-layout-clear">清除记录</button></div>
+     <p>发生底栏上移时先复制报告，再关闭重进、复制恢复后的报告。记录仅含视口、底栏、安全区和事件时序，不含持仓或输入内容，不会自动上传。</p>
+     <p>诊断用于收集现场，不代表底栏问题已经修复。构建标识：${LayoutDiagnostics.build}</p>
+   </div>
    <div class="sec-t">使用说明</div>
    <div class="card help">
      <p><b>添加到主屏幕：</b>iPhone 用 Safari 打开本页面，点分享按钮 →「添加到主屏幕」，即可像 App 一样全屏使用。</p>
@@ -1274,7 +1484,7 @@ function renderSet() {
      <p><b>成本口径：</b>持仓成本为移动加权平均（含手续费）；分红冲减成本（摊薄，同券商口径），分红收益单独累计；卖出即时结转已实现盈亏。</p>
      <p><b>分红检测：</b>打开应用时自动比对持仓期间的前复权因子跳变，发现疑似分红会提示一键入账（估算金额可修正，美股暂不支持自动检测）。</p>
    </div>
-   <p class="footnote" style="text-align:center">OPEN BOOK v1.14 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
+   <p class="footnote" style="text-align:center">OPEN BOOK ${LayoutDiagnostics.version} · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
   bindSeg('#set-base', v => { if (v === S.base) return; S.base = v; save(); rerender(); showToast('基准货币已切换为' + CN[v]); });
   bindSeg('#set-ud', v => { S.upRed = v === '1'; save(); applyUpDown(); rerender(); });
   bindSeg('#set-theme', v => { S.theme = v; save(); applyTheme(); rerender(); });
@@ -1282,7 +1492,35 @@ function renderSet() {
   $('#btn-export').onclick = doExport;
   $('#btn-import').onclick = () => $('#imp-file').click();
   $('#imp-file').onchange = e => { const f = e.target.files[0]; if (f) handleImport(f); e.target.value = ''; };
+  $('#btn-layout-report').onclick = showLayoutReport;
+  $('#btn-layout-clear').onclick = () => {
+    openModal('清除布局诊断记录', '<p class="footnote">只清除布局诊断，不修改交易、行情或备份数据。</p>', [
+      { t: '取消' },
+      { t: '确认清除', fn: () => { LayoutDiagnostics.clear(); renderSet(); showToast('已清除布局诊断记录'); } },
+    ]);
+  };
   bindClear();
+}
+function showLayoutReport() {
+  const report = LayoutDiagnostics.report();
+  function manualCopy() {
+    const field = $('#layout-report-ta');
+    if (field) { field.focus(); field.select(); field.setSelectionRange(0, field.value.length); }
+    showToast('请手动复制已选中的报告');
+  }
+  openModal('布局诊断报告',
+    `<p class="footnote" style="padding:0">${LayoutDiagnostics.version} · 仅含布局信息。复制后自行发送，不会自动上传。</p>
+     <textarea readonly id="layout-report-ta" aria-label="布局诊断报告">${esc(report)}</textarea>`,
+    [
+      { t: '复制', fn: () => {
+        try {
+          if (!navigator.clipboard || !navigator.clipboard.writeText) manualCopy();
+          else navigator.clipboard.writeText(report).then(() => showToast('已复制布局诊断报告'), manualCopy);
+        } catch (error) { manualCopy(); }
+        return true;
+      } },
+      { t: '关闭' },
+    ]);
 }
 function bindClear() {
   const b = $('#btn-clear'); if (!b) return;

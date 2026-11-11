@@ -346,5 +346,208 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 <div id="sheet" hidden></div>
 <div id="toast" hidden></div>
 <div id="modal" hidden><div class="modal-card"><h3 id="modal-title"></h3><div id="modal-body"></div><div class="modal-acts" id="modal-acts"></div></div></div>
+<script id="layout-diagnostics">
+const LayoutDiagnostics = (() => {
+  const version = 'v1.14.3-diag1';
+  const build = 'layout-20261111-01';
+  const storageKey = 'cj.layout-debug.v1';
+  const maxSamples = 60;
+  const initialSamples = 12;
+  const events = new Set([
+    'script-start', 'frame-1', 'frame-2', 'dom-ready', 'load', 'pageshow', 'pagehide',
+    'startup-120', 'startup-500', 'startup-1500', 'startup-3000',
+    'visibility-hidden', 'visibility-visible', 'resume-120', 'resume-500',
+    'window-resize', 'orientation-change', 'orientation-settled', 'viewport-resize',
+    'viewport-scroll', 'window-scroll', 'focus-in', 'focus-out', 'tab-before', 'tab-after',
+    'manual-report', 'cleared',
+  ]);
+  const number = value => typeof value === 'number' && Number.isFinite(value) ? Math.round(value * 100) / 100 : null;
+  const pixels = value => value && value !== 'auto' ? number(parseFloat(value)) : null;
+  const timestamp = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value) ? value : null;
+  const numericFields = (value, fields) => Object.fromEntries(fields.map(field => [field, number(value && value[field])]));
+  const rectangleFields = ['top', 'bottom', 'left', 'right', 'width', 'height'];
+  const styleFields = ['bottom', 'paddingTop', 'paddingBottom', 'marginBottom', 'inlineHeight'];
+  const position = value => ['static', 'fixed', 'absolute', 'relative', 'sticky'].includes(value) ? value : null;
+  function normalizeGeometry(value) {
+    if (!value || !value.rect) return null;
+    return {
+      rect: numericFields(value.rect, rectangleFields),
+      ...numericFields(value, styleFields),
+      position: position(value.position),
+      transformed: value.transformed === true,
+      filtered: value.filtered === true,
+      contained: value.contained === true,
+    };
+  }
+  function normalizeSample(value) {
+    if (!value || !events.has(value.event) || !timestamp(value.at)) return null;
+    return {
+      event: value.event, at: timestamp(value.at),
+      ...numericFields(value, ['elapsedMs', 'layoutGap', 'visualGap', 'innerGap', 'safeAreaBottom']),
+      visible: value.visible === true, persisted: value.persisted === true,
+      standaloneMedia: value.standaloneMedia === true,
+      standaloneNavigator: value.standaloneNavigator === true,
+      activeView: ['pos', 'add', 'stats', 'set'].includes(value.activeView) ? value.activeView : null,
+      viewport: numericFields(value.viewport, ['innerWidth', 'innerHeight', 'documentWidth', 'documentHeight', 'scrollX', 'scrollY', 'rootScrollTop', 'devicePixelRatio']),
+      visualViewport: value.visualViewport ? numericFields(value.visualViewport, ['width', 'height', 'offsetTop', 'offsetLeft', 'pageTop', 'pageLeft', 'scale']) : null,
+      screen: numericFields(value.screen, ['width', 'height']),
+      mainScroll: numericFields(value.mainScroll, ['scrollTop', 'scrollHeight', 'clientHeight']),
+      navigation: normalizeGeometry(value.navigation), navigationInner: normalizeGeometry(value.navigationInner),
+      body: normalizeGeometry(value.body), root: normalizeGeometry(value.root),
+      focus: {
+        tag: ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'BODY'].includes(value.focus && value.focus.tag) ? value.focus.tag : null,
+        type: ['text', 'search', 'number', 'date', 'button', 'submit'].includes(value.focus && value.focus.type) ? value.focus.type : null,
+      },
+    };
+  }
+  function normalizeSession(value) {
+    if (!value || !timestamp(value.startedAt) || !/^layout-\d{8}-\d{2}$/.test(value.build)) return null;
+    return {
+      startedAt: timestamp(value.startedAt), build: value.build,
+      iosVersion: typeof value.iosVersion === 'string' && /^\d{1,2}(\.\d{1,2}){0,2}$/.test(value.iosVersion) ? value.iosVersion : null,
+      firstLargeGap: normalizeSample(value.firstLargeGap),
+      samples: Array.isArray(value.samples) ? value.samples.slice(0, initialSamples).concat(value.samples.slice(initialSamples).slice(-(maxSamples - initialSamples))).map(normalizeSample).filter(Boolean) : [],
+    };
+  }
+  function geometry(element) {
+    if (!element) return null;
+    const style = getComputedStyle(element);
+    return {
+      rect: numericFields(element.getBoundingClientRect(), rectangleFields),
+      position: position(style.position), bottom: pixels(style.bottom),
+      paddingTop: pixels(style.paddingTop), paddingBottom: pixels(style.paddingBottom),
+      marginBottom: pixels(style.marginBottom), inlineHeight: pixels(element.style.height),
+      transformed: style.transform !== 'none', filtered: style.filter !== 'none', contained: style.contain !== 'none',
+    };
+  }
+  let history = [];
+  let storage = 'available';
+  let current;
+  let pendingSave = null;
+  let pendingFrame = null;
+  let captureErrors = 0;
+  const pendingEvents = new Set();
+  const started = performance.now();
+  const iosMatch = navigator.userAgent.match(/(?:iPhone OS|CPU OS) ([\d_]+)/);
+  const newSession = () => ({ startedAt: new Date().toISOString(), build, iosVersion: iosMatch ? iosMatch[1].replace(/_/g, '.') : null, firstLargeGap: null, samples: [] });
+  try {
+    const saved = localStorage.getItem(storageKey);
+    if (saved && saved.length < 300000) {
+      const parsed = JSON.parse(saved);
+      if (parsed && parsed.schema === 1 && Array.isArray(parsed.sessions)) history = parsed.sessions.slice(-2).map(normalizeSession).filter(Boolean);
+    }
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) storage = 'unavailable';
+  }
+  current = newSession();
+  function flush() {
+    if (pendingSave !== null) { clearTimeout(pendingSave); pendingSave = null; }
+    if (storage === 'unavailable') return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({ schema: 1, sessions: history.concat(current) }));
+    } catch (error) { storage = 'unavailable'; }
+  }
+  function record(event, immediate = false, persisted = false) {
+    try {
+      const navigation = geometry(document.querySelector('#tabs'));
+      const navigationInner = geometry(document.querySelector('#tabs-in'));
+      const viewport = window.visualViewport;
+      const main = document.querySelector('#main');
+      const activeTab = document.querySelector('#tabs button.on');
+      const focused = document.activeElement;
+      const sample = normalizeSample({
+        event, at: new Date().toISOString(), elapsedMs: performance.now() - started,
+        visible: document.visibilityState === 'visible', persisted,
+        standaloneMedia: window.matchMedia('(display-mode: standalone)').matches,
+        standaloneNavigator: navigator.standalone === true,
+        activeView: activeTab && activeTab.dataset.view,
+        viewport: {
+          innerWidth: window.innerWidth, innerHeight: window.innerHeight,
+          documentWidth: document.documentElement.clientWidth, documentHeight: document.documentElement.clientHeight,
+          scrollX: window.scrollX, scrollY: window.scrollY,
+          rootScrollTop: document.scrollingElement && document.scrollingElement.scrollTop,
+          devicePixelRatio: window.devicePixelRatio,
+        },
+        visualViewport: viewport && numericFields(viewport, ['width', 'height', 'offsetTop', 'offsetLeft', 'pageTop', 'pageLeft', 'scale']),
+        screen: numericFields(window.screen, ['width', 'height']),
+        mainScroll: numericFields(main, ['scrollTop', 'scrollHeight', 'clientHeight']),
+        navigation, navigationInner, body: geometry(document.body), root: geometry(document.documentElement),
+        layoutGap: navigation ? window.innerHeight - navigation.rect.bottom : null,
+        visualGap: navigation && viewport ? viewport.offsetTop + viewport.height - navigation.rect.bottom : null,
+        innerGap: navigation && navigationInner ? navigation.rect.bottom - navigationInner.rect.bottom : null,
+        safeAreaBottom: navigation && navigation.paddingBottom,
+        focus: { tag: focused && focused.tagName, type: focused && focused.type },
+      });
+      if (!sample) return;
+      current.samples.push(sample);
+      if (current.samples.length > maxSamples) current.samples.splice(initialSamples, current.samples.length - maxSamples);
+      if (!current.firstLargeGap && ((sample.layoutGap !== null && Math.abs(sample.layoutGap) > 8) || (sample.visualGap !== null && Math.abs(sample.visualGap) > 8) || (sample.innerGap !== null && sample.innerGap > 48))) current.firstLargeGap = sample;
+      if (immediate) flush();
+      else if (pendingSave === null) pendingSave = setTimeout(flush, 200);
+    } catch (error) { captureErrors += 1; }
+  }
+  const nextFrame = callback => typeof requestAnimationFrame === 'function' ? requestAnimationFrame(callback) : setTimeout(callback, 16);
+  function schedule(event) {
+    pendingEvents.add(event);
+    if (pendingFrame !== null) return;
+    pendingFrame = nextFrame(() => {
+      pendingFrame = null;
+      const queued = [...pendingEvents];
+      pendingEvents.clear();
+      queued.forEach(eventName => record(eventName));
+    });
+  }
+  record('script-start', true);
+  nextFrame(() => { record('frame-1'); nextFrame(() => record('frame-2')); });
+  [120, 500, 1500, 3000].forEach(delay => setTimeout(() => record('startup-' + delay), delay));
+  document.addEventListener('DOMContentLoaded', () => record('dom-ready'));
+  window.addEventListener('load', () => record('load'));
+  window.addEventListener('pageshow', event => record('pageshow', true, event.persisted === true));
+  window.addEventListener('pagehide', event => record('pagehide', true, event.persisted === true));
+  document.addEventListener('visibilitychange', () => {
+    record(document.hidden ? 'visibility-hidden' : 'visibility-visible', true);
+    if (!document.hidden) {
+      setTimeout(() => record('resume-120'), 120);
+      setTimeout(() => record('resume-500'), 500);
+    }
+  });
+  window.addEventListener('resize', () => schedule('window-resize'), { passive: true });
+  window.addEventListener('scroll', () => schedule('window-scroll'), { passive: true });
+  window.addEventListener('orientationchange', () => {
+    record('orientation-change');
+    setTimeout(() => record('orientation-settled'), 300);
+  });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => schedule('viewport-resize'), { passive: true });
+    window.visualViewport.addEventListener('scroll', () => schedule('viewport-scroll'), { passive: true });
+  }
+  document.addEventListener('focusin', () => schedule('focus-in'));
+  document.addEventListener('focusout', () => schedule('focus-out'));
+  document.addEventListener('click', event => {
+    const button = event.target && event.target.closest && event.target.closest('#tabs button');
+    if (!button) return;
+    record('tab-before', true);
+    schedule('tab-after');
+  }, true);
+  return Object.freeze({
+    version, build,
+    summary: () => ({ storage, sessions: history.length + 1, samples: current.samples.length }),
+    report() {
+      record('manual-report', true);
+      return JSON.stringify({
+        format: 'OPEN BOOK layout diagnostics', schema: 1, version, build,
+        privacy: 'Only layout measurements; no trades, balances, notes, input values, URLs or network data.',
+        storage, captureErrors, sessions: history.concat(current),
+      }, null, 2);
+    },
+    clear() {
+      history = [];
+      current.samples = [];
+      current.firstLargeGap = null;
+      record('cleared', true);
+    },
+  });
+})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
 <script>

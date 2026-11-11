@@ -581,6 +581,13 @@ function renderSet() {
      <div class="setrow"><div><div class="sl">上次备份</div><div class="sd"${needBackup ? ' style="color:var(--warn)"' : ''}>${backupTxt}${needBackup ? ' · 记录较多，建议尽快备份' : ''}</div></div></div>
      <div class="setrow"><div><div class="sl">清空数据</div><div class="sd">删除全部交易记录（不可恢复）</div></div><button class="btn" id="btn-clear">清空数据</button></div>
    </div>
+   <div class="sec-t">临时布局诊断</div>
+   <div class="card help">
+     <div class="setrow"><div><div class="sl">底栏位置记录</div><div class="sd">${LayoutDiagnostics.summary().storage === 'unavailable' ? '存储不可用，仅本次打开有效' : '仅保存在本机，最多保留三次打开记录'}</div></div><button class="btn" id="btn-layout-report">查看/复制</button></div>
+     <div class="setrow"><div><div class="sl">清除诊断记录</div><div class="sd">不影响交易、备份和设置</div></div><button class="btn" id="btn-layout-clear">清除记录</button></div>
+     <p>发生底栏上移时先复制报告，再关闭重进、复制恢复后的报告。记录仅含视口、底栏、安全区和事件时序，不含持仓或输入内容，不会自动上传。</p>
+     <p>诊断用于收集现场，不代表底栏问题已经修复。构建标识：${LayoutDiagnostics.build}</p>
+   </div>
    <div class="sec-t">使用说明</div>
    <div class="card help">
      <p><b>添加到主屏幕：</b>iPhone 用 Safari 打开本页面，点分享按钮 →「添加到主屏幕」，即可像 App 一样全屏使用。</p>
@@ -589,7 +596,7 @@ function renderSet() {
      <p><b>成本口径：</b>持仓成本为移动加权平均（含手续费）；分红冲减成本（摊薄，同券商口径），分红收益单独累计；卖出即时结转已实现盈亏。</p>
      <p><b>分红检测：</b>打开应用时自动比对持仓期间的前复权因子跳变，发现疑似分红会提示一键入账（估算金额可修正，美股暂不支持自动检测）。</p>
    </div>
-   <p class="footnote" style="text-align:center">OPEN BOOK v1.14 · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
+   <p class="footnote" style="text-align:center">OPEN BOOK ${LayoutDiagnostics.version} · 本地优先 · 共 ${S.trades.length} 笔记录</p>`;
   bindSeg('#set-base', v => { if (v === S.base) return; S.base = v; save(); rerender(); showToast('基准货币已切换为' + CN[v]); });
   bindSeg('#set-ud', v => { S.upRed = v === '1'; save(); applyUpDown(); rerender(); });
   bindSeg('#set-theme', v => { S.theme = v; save(); applyTheme(); rerender(); });
@@ -597,7 +604,35 @@ function renderSet() {
   $('#btn-export').onclick = doExport;
   $('#btn-import').onclick = () => $('#imp-file').click();
   $('#imp-file').onchange = e => { const f = e.target.files[0]; if (f) handleImport(f); e.target.value = ''; };
+  $('#btn-layout-report').onclick = showLayoutReport;
+  $('#btn-layout-clear').onclick = () => {
+    openModal('清除布局诊断记录', '<p class="footnote">只清除布局诊断，不修改交易、行情或备份数据。</p>', [
+      { t: '取消' },
+      { t: '确认清除', fn: () => { LayoutDiagnostics.clear(); renderSet(); showToast('已清除布局诊断记录'); } },
+    ]);
+  };
   bindClear();
+}
+function showLayoutReport() {
+  const report = LayoutDiagnostics.report();
+  function manualCopy() {
+    const field = $('#layout-report-ta');
+    if (field) { field.focus(); field.select(); field.setSelectionRange(0, field.value.length); }
+    showToast('请手动复制已选中的报告');
+  }
+  openModal('布局诊断报告',
+    `<p class="footnote" style="padding:0">${LayoutDiagnostics.version} · 仅含布局信息。复制后自行发送，不会自动上传。</p>
+     <textarea readonly id="layout-report-ta" aria-label="布局诊断报告">${esc(report)}</textarea>`,
+    [
+      { t: '复制', fn: () => {
+        try {
+          if (!navigator.clipboard || !navigator.clipboard.writeText) manualCopy();
+          else navigator.clipboard.writeText(report).then(() => showToast('已复制布局诊断报告'), manualCopy);
+        } catch (error) { manualCopy(); }
+        return true;
+      } },
+      { t: '关闭' },
+    ]);
 }
 function bindClear() {
   const b = $('#btn-clear'); if (!b) return;
