@@ -1,0 +1,21 @@
+index.html
+  s_954afabfda404a::t_613ed01f415075 1093
+parts/ui.js
+  s_954afabfda404a::t_7a52379107724e 182
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "acdfb559eb7daf400101926ede6cf88e55879d5d",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
