@@ -2,10 +2,10 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=contain">
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="OPEN BOOK">
 <meta name="format-detection" content="telephone=no">
 <meta name="theme-color" content="#f2f4f8" media="(prefers-color-scheme: light)">
@@ -359,9 +359,10 @@ html.openbook-standalone #main{padding-bottom:calc(70px + env(safe-area-inset-bo
 <div id="modal" hidden><div class="modal-card"><h3 id="modal-title"></h3><div id="modal-body"></div><div class="modal-acts" id="modal-acts"></div></div></div>
 <script id="layout-diagnostics">
 const LayoutDiagnostics = (() => {
-  const version = 'v1.14.4-diag2';
-  const build = 'layout-20261111-02';
+  const version = 'v1.14.5-diag3';
+  const build = 'layout-20261111-03';
   const storageKey = 'cj.layout-debug.v1';
+  const maxStoredCharacters = 400000;
   const maxSamples = 60;
   const initialSamples = 12;
   const events = new Set([
@@ -379,6 +380,12 @@ const LayoutDiagnostics = (() => {
   const rectangleFields = ['top', 'bottom', 'left', 'right', 'width', 'height'];
   const styleFields = ['bottom', 'paddingTop', 'paddingBottom', 'marginBottom', 'inlineHeight'];
   const position = value => ['static', 'fixed', 'absolute', 'relative', 'sticky'].includes(value) ? value : null;
+  const normalizeViewportFit = value => ['auto', 'contain', 'cover'].includes(value) ? value : null;
+  const normalizeStatusBarStyle = value => ['default', 'black', 'black-translucent'].includes(value) ? value : null;
+  const viewportMeta = document.querySelector('meta[name="viewport"]');
+  const viewportFitMatch = viewportMeta && viewportMeta.content.match(/(?:^|,)\s*viewport-fit\s*=\s*(auto|contain|cover)\s*(?:,|$)/);
+  const requestedViewportFit = normalizeViewportFit(viewportFitMatch && viewportFitMatch[1]);
+  const requestedStatusBarStyle = normalizeStatusBarStyle(document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')?.content);
   function normalizeGeometry(value) {
     if (!value || !value.rect) return null;
     return {
@@ -394,7 +401,7 @@ const LayoutDiagnostics = (() => {
     if (!value || !events.has(value.event) || !timestamp(value.at)) return null;
     return {
       event: value.event, at: timestamp(value.at),
-      ...numericFields(value, ['elapsedMs', 'layoutGap', 'visualGap', 'innerGap', 'safeAreaBottom']),
+      ...numericFields(value, ['elapsedMs', 'layoutGap', 'visualGap', 'innerGap', 'safeAreaTop', 'safeAreaBottom']),
       visible: value.visible === true, persisted: value.persisted === true,
       standaloneMedia: value.standaloneMedia === true,
       standaloneNavigator: value.standaloneNavigator === true,
@@ -416,6 +423,7 @@ const LayoutDiagnostics = (() => {
     if (!value || !timestamp(value.startedAt) || !/^layout-\d{8}-\d{2}$/.test(value.build)) return null;
     return {
       startedAt: timestamp(value.startedAt), build: value.build,
+      viewportFit: normalizeViewportFit(value.viewportFit), statusBarStyle: normalizeStatusBarStyle(value.statusBarStyle),
       iosVersion: typeof value.iosVersion === 'string' && /^\d{1,2}(\.\d{1,2}){0,2}$/.test(value.iosVersion) ? value.iosVersion : null,
       firstLargeGap: normalizeSample(value.firstLargeGap),
       samples: Array.isArray(value.samples) ? value.samples.slice(0, initialSamples).concat(value.samples.slice(initialSamples).slice(-(maxSamples - initialSamples))).map(normalizeSample).filter(Boolean) : [],
@@ -441,10 +449,10 @@ const LayoutDiagnostics = (() => {
   const pendingEvents = new Set();
   const started = performance.now();
   const iosMatch = navigator.userAgent.match(/(?:iPhone OS|CPU OS) ([\d_]+)/);
-  const newSession = () => ({ startedAt: new Date().toISOString(), build, iosVersion: iosMatch ? iosMatch[1].replace(/_/g, '.') : null, firstLargeGap: null, samples: [] });
+  const newSession = () => ({ startedAt: new Date().toISOString(), build, viewportFit: requestedViewportFit, statusBarStyle: requestedStatusBarStyle, iosVersion: iosMatch ? iosMatch[1].replace(/_/g, '.') : null, firstLargeGap: null, samples: [] });
   try {
     const saved = localStorage.getItem(storageKey);
-    if (saved && saved.length < 300000) {
+    if (saved && saved.length < maxStoredCharacters) {
       const parsed = JSON.parse(saved);
       if (parsed && parsed.schema === 1 && Array.isArray(parsed.sessions)) history = parsed.sessions.slice(-2).map(normalizeSession).filter(Boolean);
     }
@@ -465,6 +473,7 @@ const LayoutDiagnostics = (() => {
       const navigationInner = geometry(document.querySelector('#tabs-in'));
       const viewport = window.visualViewport;
       const main = document.querySelector('#main');
+      const shell = document.querySelector('#app');
       const activeTab = document.querySelector('#tabs button.on');
       const focused = document.activeElement;
       const sample = normalizeSample({
@@ -489,6 +498,7 @@ const LayoutDiagnostics = (() => {
         visualGap: navigation && viewport ? viewport.offsetTop + viewport.height - navigation.rect.bottom : null,
         innerGap: navigation && navigationInner ? navigation.rect.bottom - navigationInner.rect.bottom : null,
         safeAreaBottom: navigation && navigation.paddingBottom,
+        safeAreaTop: shell ? pixels(getComputedStyle(shell).paddingTop) : null,
         focus: { tag: focused && focused.tagName, type: focused && focused.type },
       });
       if (!sample) return;
