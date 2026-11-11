@@ -1090,7 +1090,7 @@ function renderPos() {
   const demo = S.trades.some(t => t.demo);
   const d = new Date(); const week = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
   el.innerHTML = `
-   <div class="pagehead"><div style="flex:1"><div class="ttl" style="letter-spacing:.04em">OPEN BOOK</div>
+   <div class="pagehead"><div style="flex:1"><div class="ttl" style="letter-spacing:.04em">GainTrace</div>
      <div class="sub">${d.getMonth() + 1}月${d.getDate()}日 周${week} · ${netBadge()}</div></div>
      <button class="iconbtn" id="btn-privacy" aria-label="${privacyMasked ? '显示金额' : '隐藏金额'}">${privacyMasked ? ICO.eyeClosed : ICO.eyeOpen}</button>
      <button class="iconbtn" id="btn-refresh" aria-label="刷新行情">${ICO.refresh}</button></div>
