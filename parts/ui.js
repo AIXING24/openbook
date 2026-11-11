@@ -1151,19 +1151,8 @@ function boot() {
   onData = () => { rerender(); checkDividends(); };
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(fitShell, 200); if (Date.now() - net.at > 60e3) refreshQuotes(); } });
-  /* iOS 壳高管理(分模式 + 安全网):
-     A2HS standalone: CSS 100dvh 应该正确, 但冷启动时偶尔计算出错误值且不触发重排。
-       → 安全网: 用 screen.height(物理屏幕高度, 不依赖视口时序)作为参考,
-         检测底栏是否贴底, 不贴则强制修正。
-     Safari browser: 工具栏收放时 dvh 偶发不重排 → JS innerHeight 修正 */
-  /* iOS 壳高管理:
-     A2HS standalone: 底栏已改为 CSS position:fixed, 不依赖 body 高度,
-       fitShell 无需做任何事 — 彻底免疫 100dvh 冷启动 bug
-     Safari browser: 工具栏收放时 dvh 偶发不重排 → JS innerHeight 修正 */
   function fitShell() {
-    const standalone = window.navigator.standalone === true ||
-      window.matchMedia('(display-mode: standalone)').matches;
-    if (standalone) return;
+    if (AppDisplayMode.isStandalone()) return;
     const vv = window.visualViewport;
     if (vv && Math.abs(vv.scale - 1) > 0.02) return;
     document.body.style.height = window.innerHeight + 'px';

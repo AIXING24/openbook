@@ -11,6 +11,20 @@
 <meta name="theme-color" content="#f2f4f8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0f141b" media="(prefers-color-scheme: dark)">
 <title>OPEN BOOK</title>
+<script id="app-display-mode">
+const AppDisplayMode = (() => {
+  const standaloneMedia = window.matchMedia('(display-mode: standalone)');
+  function sync() {
+    const standalone = window.navigator.standalone === true || standaloneMedia.matches;
+    document.documentElement.classList.toggle('openbook-standalone', standalone);
+    return standalone;
+  }
+  sync();
+  standaloneMedia.addEventListener('change', sync);
+  window.addEventListener('pageshow', sync);
+  return Object.freeze({ isStandalone: sync });
+})();
+</script>
 <style>
 /* ============ 设计令牌 ============
    布局概念: 手机优先单列应用, 底部Tab导航, 卡片化信息层级
@@ -207,11 +221,8 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
   margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
   margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)))}
 #tabs-in{max-width:560px;margin:0 auto;display:flex;padding:6px 10px}
-/* A2HS standalone: 底栏 fixed 定位, 与 body 高度彻底脱钩(100dvh 冷启动bug免疫) */
-@media (display-mode: standalone){
-  #tabs{position:fixed;bottom:0;left:0;right:0;margin-left:0;margin-right:0}
-  #main{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
-}
+html.openbook-standalone #tabs{position:fixed;bottom:0;left:0;right:0;margin-left:0;margin-right:0}
+html.openbook-standalone #main{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
 #tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;border:0;background:none;color:var(--faint);font-size:10px}
 #tabs button.on{color:var(--accent)}
 #tabs svg{width:22px;height:22px}
@@ -348,8 +359,8 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 <div id="modal" hidden><div class="modal-card"><h3 id="modal-title"></h3><div id="modal-body"></div><div class="modal-acts" id="modal-acts"></div></div></div>
 <script id="layout-diagnostics">
 const LayoutDiagnostics = (() => {
-  const version = 'v1.14.3-diag1';
-  const build = 'layout-20261111-01';
+  const version = 'v1.14.4-diag2';
+  const build = 'layout-20261111-02';
   const storageKey = 'cj.layout-debug.v1';
   const maxSamples = 60;
   const initialSamples = 12;
@@ -387,6 +398,7 @@ const LayoutDiagnostics = (() => {
       visible: value.visible === true, persisted: value.persisted === true,
       standaloneMedia: value.standaloneMedia === true,
       standaloneNavigator: value.standaloneNavigator === true,
+      standaloneApplied: typeof value.standaloneApplied === 'boolean' ? value.standaloneApplied : null,
       activeView: ['pos', 'add', 'stats', 'set'].includes(value.activeView) ? value.activeView : null,
       viewport: numericFields(value.viewport, ['innerWidth', 'innerHeight', 'documentWidth', 'documentHeight', 'scrollX', 'scrollY', 'rootScrollTop', 'devicePixelRatio']),
       visualViewport: value.visualViewport ? numericFields(value.visualViewport, ['width', 'height', 'offsetTop', 'offsetLeft', 'pageTop', 'pageLeft', 'scale']) : null,
@@ -460,6 +472,7 @@ const LayoutDiagnostics = (() => {
         visible: document.visibilityState === 'visible', persisted,
         standaloneMedia: window.matchMedia('(display-mode: standalone)').matches,
         standaloneNavigator: navigator.standalone === true,
+        standaloneApplied: document.documentElement.classList.contains('openbook-standalone'),
         activeView: activeTab && activeTab.dataset.view,
         viewport: {
           innerWidth: window.innerWidth, innerHeight: window.innerHeight,
@@ -2039,19 +2052,8 @@ function boot() {
   onData = () => { rerender(); checkDividends(); };
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(fitShell, 200); if (Date.now() - net.at > 60e3) refreshQuotes(); } });
-  /* iOS 壳高管理(分模式 + 安全网):
-     A2HS standalone: CSS 100dvh 应该正确, 但冷启动时偶尔计算出错误值且不触发重排。
-       → 安全网: 用 screen.height(物理屏幕高度, 不依赖视口时序)作为参考,
-         检测底栏是否贴底, 不贴则强制修正。
-     Safari browser: 工具栏收放时 dvh 偶发不重排 → JS innerHeight 修正 */
-  /* iOS 壳高管理:
-     A2HS standalone: 底栏已改为 CSS position:fixed, 不依赖 body 高度,
-       fitShell 无需做任何事 — 彻底免疫 100dvh 冷启动 bug
-     Safari browser: 工具栏收放时 dvh 偶发不重排 → JS innerHeight 修正 */
   function fitShell() {
-    const standalone = window.navigator.standalone === true ||
-      window.matchMedia('(display-mode: standalone)').matches;
-    if (standalone) return;
+    if (AppDisplayMode.isStandalone()) return;
     const vv = window.visualViewport;
     if (vv && Math.abs(vv.scale - 1) > 0.02) return;
     document.body.style.height = window.innerHeight + 'px';
