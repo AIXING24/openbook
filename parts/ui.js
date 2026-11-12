@@ -93,6 +93,7 @@ function showView(v, fromPop) {
   if (v !== 'stats') {
     if (stChart) { stChart.dispose(); stChart = null; }
     if (stDonut) { stDonut.dispose(); stDonut = null; }
+    if (stPnl) { stPnl.dispose(); stPnl = null; }
   }
   if (v === 'pos') renderPos();
   else if (v === 'stats') renderStats();
@@ -360,7 +361,7 @@ function saveTrade() {
     S.lastBroker = broker;
     if (S.brokers[0] !== broker) S.brokers = [broker].concat(S.brokers.filter(b => b !== broker)).slice(0, 12);
   }
-  save();
+  if (!save()) return;
   if (side === 'D') showToast('已记录分红 ' + t.name + ' ' + fmtAmt(t.amt, t.cur));
   else showToast('已记录' + (side === 'B' ? '买入' : '卖出') + ' ' + t.name + ' ' + fmtQty(qty) + '股');
   resetAddForm(); showView('pos'); refreshQuotes();
@@ -373,7 +374,7 @@ function resetAddForm() {
 }
 
 /* ===== 统计页 ===== */
-let statPeriod = 'month', stChart = null, stDonut = null, statsSlideDir = 0;   // 1=滑入自右侧(切下一个), -1=自左侧
+let statPeriod = 'month', stChart = null, stDonut = null, stPnl = null, statsSlideDir = 0;   // 1=滑入自右侧(切下一个), -1=自左侧
 /* 分类色板(环形图按股票身份编码), 取自已验证的参考调色板, 固定顺序不循环 */
 const CAT = {
   light: ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300'],
@@ -382,6 +383,7 @@ const CAT = {
 function renderStats() {
   if (stChart) { stChart.dispose(); stChart = null; }
   if (stDonut) { stDonut.dispose(); stDonut = null; }
+  if (stPnl) { stPnl.dispose(); stPnl = null; }
   const el = $('#v-stats'); const F = fxInfo();
   const start = statPeriod === 'week' ? Core.weekStartStr() : statPeriod === 'month' ? Core.monthStartStr() : statPeriod === 'year' ? Core.yearStartStr() : '0000-00-00';
   const st = Core.calcStats(S.trades, start);
@@ -389,6 +391,14 @@ function renderStats() {
   const buyB = cvt(st.buy), sellB = cvt(st.sell), netB = buyB - sellB;
   const realB = Core.calcPositions(S.trades).reduce((a, p) => a + Core.toBase(p.realized, p.cur, S.base, F), 0);
   const rangeLabel = statPeriod === 'week' ? '本周（' + fmtDate(Core.weekStartStr()) + ' 起）' : statPeriod === 'month' ? '本月' : statPeriod === 'year' ? '本年' : '全部';
+  const historyState = PnlHistory.state;
+  const pnl = PnlHistory.view(historyState.snapshots, statPeriod, PnlHistory.dateAt(), S.base, historyState.anchor);
+  const pnlAmount = value => maskAmt(value === null ? '—' : fmtAmtC(value, S.base, true));
+  const periodName = { week: '本周盈亏', month: '本月盈亏', year: '本年盈亏', all: '近一年盈亏' }[statPeriod];
+  const changeLabel = pnl.completePeriod ? periodName : '记录区间盈亏';
+  const intervalLabel = pnl.reference && pnl.latest ? pnl.reference.date + ' 至 ' + pnl.latest.date : '等待完整行情记录';
+  const pnlNotice = historyState.status === 'unavailable' ? '盈亏历史存储不可用，请检查浏览器存储后重试' : historyState.issue;
+  const invalidCount = pnl.records.filter(record => record.invalidatedAt).length;
   const stocksHtml = st.stocks.map(sk => {
     const b = cvt(sk.buy), s = cvt(sk.sell), n = b - s;
     return `<tr data-tc="${esc(sk.tc)}"><td class="nm">${esc(sk.name)}</td><td class="num">${maskAmt(fmtAmtC(b, S.base))}</td><td class="num">${maskAmt(fmtAmtC(s, S.base))}</td><td class="num ${pcl(n)}">${maskAmt(fmtAmtC(n, S.base, true))}</td></tr>`;
@@ -406,6 +416,16 @@ function renderStats() {
      <button data-p="month" class="${statPeriod === 'month' ? 'on' : ''}">本月</button>
      <button data-p="year" class="${statPeriod === 'year' ? 'on' : ''}">本年</button>
      <button data-p="all" class="${statPeriod === 'all' ? 'on' : ''}">全部</button>
+   </div>
+   <div class="card" id="pnl-card">
+     <div class="chart-head"><h2 style="font-size:15px;margin:0">盈亏走势</h2><button class="iconbtn" id="btn-st-privacy" aria-label="${privacyMasked ? '显示金额' : '隐藏金额'}">${privacyMasked ? ICO.eyeClosed : ICO.eyeOpen}</button></div>
+     <div class="tile-row">
+       <div class="tile"><div class="lbl">累计盈亏</div><div class="v num ${pnl.total === null ? '' : pcl(pnl.total)}">${pnlAmount(pnl.total)}</div><div class="s">已实现 + 浮动盈亏</div></div>
+       <div class="tile"><div class="lbl">${changeLabel}</div><div class="v num ${pnl.change === null ? '' : pcl(pnl.change)}">${pnlAmount(pnl.change)}</div><div class="s">${esc(intervalLabel)}</div></div>
+     </div>
+     ${privacyMasked ? '<div class="kerr" style="padding:32px 8px">金额与走势已隐藏 · 点击眼睛图标查看</div>' : '<div id="st-pnl" style="height:230px;margin-top:12px" role="img" aria-label="累计盈亏走势图，零线表示盈亏平衡"></div>'}
+     <p class="footnote" style="padding:8px 0 0">零线 = 盈亏平衡 · 每天保留最后一次完整行情记录${pnl.latest ? ' · 最新记录 ' + pnl.latest.date + ' ' + fmtTs(pnl.latest.capturedAt) : ''}<br>近一年记录，缺失日期留空；未打开应用时不自动采集。外币按各记录保存的汇率折算${pnl.records.some(record => record.fxApprox) ? '（部分为备用来源汇率）' : ''}。</p>
+     ${pnlNotice || invalidCount ? `<p class="footnote" style="padding:8px 0 0">${esc(pnlNotice)}${pnlNotice && invalidCount ? '<br>' : ''}${invalidCount ? '账本变动影响了 ' + invalidCount + ' 个历史记录，已留空，原记录保留供核验。' : ''}</p>` : ''}
    </div>
    <div class="tile-row">
      <div class="tile"><div class="lbl">买入金额</div><div class="v num">${maskAmt(fmtAmtC(buyB, S.base))}</div><div class="s">${st.buy.n} 笔</div></div>
@@ -425,12 +445,42 @@ function renderStats() {
      <div class="twrap"><table class="t"><thead><tr><th>券商</th><th>买入</th><th>卖出</th><th>净额</th></tr></thead><tbody>${brokersHtml}</tbody></table></div></div>` : ''}
    <p class="footnote">外币金额按当前汇率折算${F.approx ? '（备用汇率，仅供参考）' : ''} · 金额满10万以「万」计 · 左右滑动可切换周期 · 点击股票行可查看K线与交易记录</p>`;
   bindSeg('#st-period', v => { statPeriod = v; renderStats(); }, 'p');
+  $('#btn-st-privacy').onclick = togglePrivacy;
+  if (!privacyMasked) renderPnlChart(pnl);
   el.querySelectorAll('#st-stocks tbody tr').forEach(tr => tr.onclick = () => openSheet(tr.dataset.tc));
   if (donutMode) renderStatsDonut(st, donutMode);
   if (statPeriod === 'year') renderStatsChart(st);
   /* 滑动切换后的滑入动画(点击切换不加动画) */
   el.classList.remove('from-r', 'from-l');
   if (statsSlideDir) { void el.offsetWidth; el.classList.add(statsSlideDir > 0 ? 'from-r' : 'from-l'); statsSlideDir = 0; }
+}
+function renderPnlChart(pnl) {
+  const elm = $('#st-pnl'); if (!elm) return;
+  if (!pnl.points.some(point => point[1] !== null)) {
+    elm.innerHTML = '<div class="kerr" style="padding:32px 8px">暂无有效记录 · 完整行情更新后自动记录</div>';
+    return;
+  }
+  if (!window.echarts) { elm.innerHTML = '<div class="kerr" style="padding:32px 8px">图表组件加载失败（需联网）</div>'; return; }
+  stPnl = echarts.init(elm, null, { renderer: 'svg' });
+  stPnl.setOption({
+    animation: false, useUTC: true,
+    grid: { left: 8, right: 38, top: 24, bottom: 8, containLabel: true },
+    tooltip: { trigger: 'axis', backgroundColor: cssVar('--card'), borderColor: cssVar('--line'), textStyle: { color: cssVar('--fg'), fontSize: 12 },
+      formatter: params => {
+        const point = params[0]?.value;
+        return point && point[1] !== null ? new Date(point[0]).toISOString().slice(0, 10) + '<br>累计盈亏 ' + esc(fmtAmt(point[1], S.base, true)) : '当日无有效记录';
+      }
+    },
+    xAxis: { type: 'time', min: pnl.points[0][0] - 43200000, max: pnl.points.at(-1)[0] + 43200000,
+      axisLabel: { color: cssVar('--muted'), fontSize: 10, hideOverlap: true, formatter: value => { const date = new Date(value).toISOString().slice(0, 10); return +date.slice(5, 7) + '/' + +date.slice(8); } },
+      axisLine: { lineStyle: { color: cssVar('--line') } }, splitLine: { show: false } },
+    yAxis: { type: 'value', min: extent => Math.min(0, extent.min), max: extent => Math.max(0, extent.max),
+      axisLabel: { color: cssVar('--muted'), fontSize: 10, formatter: compactNum }, splitLine: { lineStyle: { color: cssVar('--line'), type: 'dashed' } } },
+    series: [{ type: 'line', name: '累计盈亏', data: pnl.points, connectNulls: false, smooth: false, showSymbol: true, symbolSize: 5,
+      itemStyle: { color: cssVar('--accent') || '#2a78d6' }, lineStyle: { width: 2 },
+      markLine: { silent: true, symbol: 'none', label: { show: true, formatter: '0', color: cssVar('--muted') }, lineStyle: { color: cssVar('--muted'), type: 'dashed' }, data: [{ yAxis: 0 }] }
+    }]
+  });
 }
 /* 环形图: 本期买入(或卖出)金额按股票构成, 前6只 + 其他。
    图例用 HTML 放在画布下方(数量任意自动换行, 不与饼图争canvas空间) */
@@ -637,26 +687,35 @@ function showLayoutReport() {
 function bindClear() {
   const b = $('#btn-clear'); if (!b) return;
   let arm = 0;
-  b.onclick = () => {
-    if (!S.trades.length) { showToast('没有数据可清空'); return; }
+  b.onclick = async () => {
+    if (!S.trades.length && !PnlHistory.state.snapshots.length) { showToast('没有数据可清空'); return; }
     if (Date.now() - arm < 4000) {
-      S.trades = []; S.seeded = true; save(); rerender();
+      const cleared = await restoreDataset({ ...S, trades: [], seeded: true }, null);
+      if (!cleared) { showToast('清空未完成，原数据保留或将在重开后恢复处理'); return; }
+      rerender();
       if (!$('#sheet').hidden) closeSheet();
-      showToast('已清空全部交易');
+      showToast('已清空全部交易与盈亏历史');
     } else {
       arm = Date.now(); b.textContent = '再点一次确认清空'; b.style.color = 'var(--up)';
       setTimeout(() => { if (b.isConnected) { b.textContent = '清空数据'; b.style.color = ''; } }, 4000);
     }
   };
 }
-function doExport() {
-  const json = JSON.stringify(S, null, 2);
+async function doExport() {
+  if (datasetRestoring || restorePending) { showToast('数据恢复尚未完成，请重新打开后再备份'); return; }
+  const history = await PnlHistory.exportData();
+  if (datasetRestoring || restorePending) return;
+  if (history && history.complete) {
+    try { PnlHistory.normalizeBackup(history, S.trades, PnlHistory.dateAt()); }
+    catch (error) { showToast('账本正在更新，请稍后再备份'); return; }
+  }
+  const json = JSON.stringify({ ...S, ...(history && history.complete ? { pnlHistory: history } : {}) }, null, 2);
   S.lastBackup = Date.now(); save();
   openModal('备份已生成',
-    `<p class="footnote" style="padding:0">共 ${S.trades.length} 笔交易。数据为明文 JSON，请妥善保管。</p>
+    `<p class="footnote" style="padding:0">共 ${S.trades.length} 笔交易${history && history.complete ? '、' + history.snapshots.length + ' 个盈亏记录' : '。盈亏历史存储不可用，本备份仅含账本，不含盈亏历史'}。数据为明文 JSON，请妥善保管。</p>
      <textarea readonly id="exp-ta">${esc(json)}</textarea>`,
     [
-      { t: '复制', fn: () => { navigator.clipboard.writeText(json).then(() => showToast('已复制到剪贴板'), () => { const ta = $('#exp-ta'); ta.focus(); ta.select(); showToast('请手动全选复制'); }); return true; } },
+      { t: '复制', fn: () => { const manual = () => { const ta = $('#exp-ta'); ta.focus(); ta.select(); showToast('请手动全选复制'); }; try { if (!navigator.clipboard?.writeText) manual(); else navigator.clipboard.writeText(json).then(() => showToast('已复制到剪贴板'), manual); } catch (error) { manual(); } return true; } },
       { t: '下载 .json', fn: () => { downloadBackup(json); return true; } },
       { t: '关闭' }
     ]);
@@ -667,30 +726,51 @@ function downloadBackup(json) {
     const blob = new Blob([json], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'openbook-backup-' + Core.dstr(new Date()).replace(/-/g, '') + '.json';
+    a.download = 'gaintrace-backup-' + Core.dstr(new Date()).replace(/-/g, '') + '.json';
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   } catch (e) { showToast('下载失败，请使用复制'); }
 }
+function prepareImport(obj) {
+  if (!obj || obj.v !== 1 || !Array.isArray(obj.trades) || obj.trades.length > 100000) throw new Error('Invalid backup');
+  const identities = new Set(), stockCurrencies = new Map();
+  const trades = obj.trades.map((trade, index) => {
+    if (!trade || !PnlHistory.normalizeDate(trade.date) || !['sh', 'sz', 'hk', 'us'].includes(trade.mkt) || typeof trade.tc !== 'string' || !new RegExp('^' + trade.mkt + '[A-Za-z0-9_.]+$').test(trade.tc) || !['B', 'S', 'D'].includes(trade.side)) throw new Error('Invalid trade');
+    const cur = trade.cur || ({ sh: 'CNY', sz: 'CNY', hk: 'HKD', us: 'USD' })[trade.mkt];
+    const id = trade.id == null ? 'legacy-' + index : String(trade.id);
+    if (!['CNY', 'USD', 'HKD'].includes(cur) || identities.has(id) || !Number.isFinite(trade.px) || trade.px < 0 || !Number.isFinite(trade.qty) || trade.qty < 0 || !Number.isFinite(trade.fee || 0) || (trade.fee || 0) < 0 || (trade.side !== 'D' && (!trade.px || !trade.qty)) || (trade.amt != null && (!Number.isFinite(trade.amt) || trade.amt < 0)) || (trade.ts != null && (!Number.isFinite(trade.ts) || trade.ts < 0))) throw new Error('Invalid trade values');
+    if (stockCurrencies.has(trade.tc) && stockCurrencies.get(trade.tc) !== cur) throw new Error('Conflicting currency');
+    identities.add(id); stockCurrencies.set(trade.tc, cur);
+    return { id, date: trade.date, tc: trade.tc, mkt: trade.mkt, code: String(trade.code || trade.tc.slice(trade.mkt.length)), name: String(trade.name || trade.code || ''), cur,
+      side: trade.side, px: trade.px, qty: trade.qty, fee: trade.fee || 0, ...(trade.amt != null ? { amt: trade.amt } : {}), broker: String(trade.broker || ''), note: String(trade.note || ''), ts: trade.ts || 0, ...(trade.demo ? { demo: true } : {}) };
+  });
+  const state = { ...DEFAULT_STATE, trades, seeded: true, base: ['CNY', 'USD'].includes(obj.base) ? obj.base : 'CNY', upRed: obj.upRed !== false,
+    theme: ['auto', 'light', 'dark'].includes(obj.theme) ? obj.theme : 'auto', brokers: Array.isArray(obj.brokers) ? obj.brokers.filter(value => typeof value === 'string').slice(0, 12) : [], lastBroker: String(obj.lastBroker || ''), lastBackup: Number.isFinite(obj.lastBackup) ? obj.lastBackup : 0 };
+  PnlHistory.normalizeBackup(obj.pnlHistory, state.trades, PnlHistory.dateAt());
+  return { state, history: obj.pnlHistory || null };
+}
 function handleImport(file) {
+  if (file.size > 30000000) { showToast('备份文件过大'); return; }
   const rd = new FileReader();
   rd.onload = () => {
-    let obj = null;
-    try { obj = JSON.parse(rd.result); } catch (e) {}
-    if (!obj || obj.v !== 1 || !Array.isArray(obj.trades)) { showToast('文件格式不正确'); return; }
+    let prepared;
+    try { prepared = prepareImport(JSON.parse(rd.result)); } catch (error) { showToast('备份格式或盈亏历史不正确，未修改现有数据'); return; }
     openModal('导入备份',
-      `<p class="footnote" style="padding:0">将导入 <b>${obj.trades.length}</b> 笔交易，覆盖当前 <b>${S.trades.length}</b> 笔。此操作不可撤销，建议先导出当前数据。</p>`,
+      `<p class="footnote" style="padding:0">将导入 <b>${prepared.state.trades.length}</b> 笔交易${prepared.history ? '及盈亏历史' : '。旧备份不含盈亏历史，导入后将从新记录开始'}，覆盖当前 <b>${S.trades.length}</b> 笔交易与盈亏历史。建议先导出当前数据。</p>`,
       [
         { t: '取消' },
         {
           t: '确认导入', primary: true, fn: () => {
-            S = Object.assign({}, DEFAULT_STATE, obj); S.seeded = true; save();
-            if (!$('#sheet').hidden) closeSheet();
-            rerender(); showToast('已导入 ' + S.trades.length + ' 笔交易');
+            restoreDataset(prepared.state, prepared.history).then(ok => {
+              if (!ok) { showToast('导入未完成，请检查存储；若恢复待完成，请重新打开应用'); return; }
+              if (!$('#sheet').hidden) closeSheet();
+              applyTheme(); rerender(); showToast('已导入 ' + S.trades.length + ' 笔交易'); refreshQuotes();
+            });
           }
         }
       ]);
   };
+  rd.onerror = () => showToast('备份文件读取失败');
   rd.readAsText(file);
 }
 function openModal(title, bodyHtml, acts) {
@@ -823,11 +903,12 @@ function renderSheetTrades() {
   box.querySelectorAll('.del').forEach(b => b.onclick = () => {
     const id = b.dataset.id;
     if (b.classList.contains('arm')) {
-      S.trades = S.trades.filter(t => t.id !== id); save();
+      S.trades = S.trades.filter(t => t.id !== id); if (!save()) return;
       renderSheetPos(); renderSheetTrades();
       if (curView === 'pos') renderPos();
       if (curView === 'stats') renderStats();
       showToast('已删除该笔交易');
+      refreshQuotes();
     } else {
       b.classList.add('arm'); b.textContent = '确认删';
       setTimeout(() => { if (b.isConnected) { b.classList.remove('arm'); b.textContent = '删除'; } }, 3000);
@@ -1090,10 +1171,11 @@ function openDivModal() {
       side: 'D', px: it.shares > 0 ? +(amt / it.shares).toFixed(6) : 0, qty: it.shares, fee: 0, amt: +amt.toFixed(2),
       broker: '', note: '自动检测', ts: Date.now() };
     if (S.trades.length && S.trades.every(x => x.demo)) S.trades = [];
-    S.trades.push(t); save();
+    S.trades.push(t); if (!save()) return;
     divInbox.splice(i, 1);
     closeModal(); rerender();
     showToast('已入账分红 ' + it.name + ' ' + fmtAmt(+amt.toFixed(2), it.cur));
+    refreshQuotes();
     if (!divInbox.length) checkDividends();
   });
   document.querySelectorAll('#modal-body [data-ig]').forEach(b => b.onclick = () => {
@@ -1128,7 +1210,15 @@ function demoTrades() {
 }
 
 /* ===== 启动 ===== */
-function boot() {
+async function boot() {
+  const pending = lsGet(LS_RESTORE);
+  if (pending) {
+    restorePending = true;
+    try {
+      const prepared = prepareImport({ ...pending.state, pnlHistory: pending.history });
+      if (!await restoreDataset(prepared.state, prepared.history, true)) showToast('上次数据恢复未完成，请检查浏览器存储后重新打开');
+    } catch (error) { showToast('恢复记录需核验，请重新导入有效备份'); }
+  }
   applyTheme();
   if (location.hash === '#dark') document.documentElement.dataset.theme = 'dark';
   if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
@@ -1138,6 +1228,8 @@ function boot() {
     if (/^us[a-z]/.test(t.tc)) { t.tc = 'us' + t.tc.slice(2).toUpperCase(); t.code = String(t.code || '').toUpperCase(); migrated = true; }
   }
   if (migrated) save();
+  PnlHistory.onChange = () => { if (curView === 'stats') renderStats(); };
+  if (!restorePending) { PnlHistory.init(S.trades); historyStarted = true; }
   initAdd();
   initStatsSwipe();
   $$('#tabs button').forEach(b => b.onclick = () => showView(b.dataset.view));
@@ -1147,8 +1239,13 @@ function boot() {
     if (!$('#sheet').hidden) closeSheet();
   });
   $('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
-  window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); });
-  onData = () => { rerender(); checkDividends(); };
+  window.addEventListener('resize', () => { if (kChart) kChart.resize(); if (stChart) stChart.resize(); if (stDonut) stDonut.resize(); if (stPnl) stPnl.resize(); });
+  onData = context => { rerender(); checkDividends(); if (historyStarted && !datasetRestoring && !restorePending) PnlHistory.capture(S.trades, quotes, fx, context); };
+  window.addEventListener('storage', event => {
+    if (event.key !== LS_STATE || datasetRestoring) return;
+    S = Object.assign({}, DEFAULT_STATE, lsGet(LS_STATE) || {});
+    PnlHistory.ledgerChanged(S.trades); applyTheme(); rerender(); refreshQuotes();
+  });
   onBusy = busy => { const el = document.getElementById('btn-refresh'); if (el) el.classList.toggle('spin', busy); };
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { setTimeout(fitShell, 200); if (Date.now() - net.at > 60e3) refreshQuotes(); } });
   function fitShell() {
@@ -1177,7 +1274,7 @@ function boot() {
   const h = location.hash.slice(1);
   if (h && h !== 'dark' && S.trades.some(t => t.tc === h)) openSheet(h);   // 深链: #股票代码 直达详情
   /* 只读调试钩子: window.__cj.kChart / .stChart / .stDonut / .S */
-  window.__cj = { get S() { return S; }, get kChart() { return kChart; }, get stChart() { return stChart; }, get stDonut() { return stDonut; } };
+  window.__cj = { get S() { return S; }, get kChart() { return kChart; }, get stChart() { return stChart; }, get stDonut() { return stDonut; }, get stPnl() { return stPnl; } };
   refreshQuotes();
 }
 boot();

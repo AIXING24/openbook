@@ -7,7 +7,38 @@ const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 't' + Date.now() + 
 
 const DEFAULT_STATE = { v: 1, base: 'CNY', upRed: true, theme: 'auto', brokers: [], trades: [], lastBackup: 0, seeded: false, lastBroker: '' };
 let S = Object.assign({}, DEFAULT_STATE, lsGet(LS_STATE) || {});
-function save() { lsSet(LS_STATE, S); }
+let historyStarted = false, datasetRestoring = false, restorePending = false;
+const LS_RESTORE = 'cj.pnl-restore.v1';
+function save() {
+  if (datasetRestoring || restorePending || !lsSet(LS_STATE, S)) {
+    S = Object.assign({}, DEFAULT_STATE, lsGet(LS_STATE) || {});
+    showToast('数据未保存，请检查存储空间或重新打开后再试');
+    return false;
+  }
+  if (historyStarted) PnlHistory.ledgerChanged(S.trades);
+  return true;
+}
+async function restoreDataset(nextState, history, recovering = false) {
+  if (datasetRestoring) return false;
+  PnlHistory.normalizeBackup(history, nextState.trades, PnlHistory.dateAt());
+  datasetRestoring = true;
+  try {
+    if (!recovering && !lsSet(LS_RESTORE, { state: nextState, history })) return false;
+    restorePending = true;
+    const restored = await PnlHistory.replace(history, nextState.trades);
+    if (!restored) {
+      if (!recovering) { localStorage.removeItem(LS_RESTORE); restorePending = false; }
+      return false;
+    }
+    if (!lsSet(LS_STATE, nextState)) return false;
+    S = nextState;
+    localStorage.removeItem(LS_RESTORE);
+    restorePending = false;
+    historyStarted = true;
+    return true;
+  } catch (error) { return false; }
+  finally { datasetRestoring = false; }
+}
 
 let quotes = lsGet(LS_QUOTES) || {};   // { tc: {px,prev,chg,pct,name,ts,delayed} }
 let fx = lsGet(LS_FX) || null;         // { USDCNY, HKDCNY, ts, approx }
@@ -189,6 +220,7 @@ function directTc(raw) {
 let refreshing = false;
 async function refreshQuotes() {
   if (refreshing) return;
+  const startedAt = Date.now();
   refreshing = true; if (onBusy) onBusy(true);
   const tcs = activeTcs();
   const ah = tcs.filter(t => /^(sh|sz|hk)/.test(t));
@@ -219,5 +251,5 @@ async function refreshQuotes() {
   }
   net = { ok: any, at: Date.now() };
   refreshing = false; if (onBusy) onBusy(false);
-  if (onData) onData();
+  if (onData) onData({ startedAt, now: Date.now() });
 }

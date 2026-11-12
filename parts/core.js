@@ -45,8 +45,8 @@ const Core = (() => {
       if (t.side === 'B') {
         const short = Math.min(t.qty, Math.max(-p.shares, 0));   // 先买回平空的部分
         const longQ = t.qty - short;
-        if (short > 0) { p.realized += (p.avg - t.px) * short; p.cost += p.avg * short; p.shares += short; }
-        p.cost += t.px * longQ + (t.fee || 0);
+        if (short > 0) { p.realized += (p.avg - t.px) * short - (t.fee || 0) * short / t.qty; p.cost += p.avg * short; p.shares += short; }
+        p.cost += t.px * longQ + (t.fee || 0) * longQ / t.qty;
         p.shares += longQ;
       } else {
         const longQ = Math.min(t.qty, Math.max(p.shares, 0));    // 先卖出减多的部分

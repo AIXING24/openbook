@@ -1,0 +1,13 @@
+{
+  "name": "gaintrace",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "echarts": "5.5.0",
+    "fake-indexeddb": "6.2.4",
+    "jsdom": "26.1.0"
+  }
+}
