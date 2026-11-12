@@ -1,0 +1,58 @@
+parts/pnl.js
+  s_954afabfda404a::t_7c965df7484f45 80,128,135
+  s_954afabfda404a::t_1d2c8613643c6d 16,19,79,126,137,164,175-184,188,191-192,198-199,207,233,237
+  s_954afabfda404a::t_f6c4300c2f32fa 92,98
+  s_954afabfda404a::t_63ce6ea943835f 1-15,17-18,20-78,81-91,93-97,99-125,127,129-134,136,138-163,165-174,185-187,189-190,193-197,200,202-206,208-222,224-232,234-236,238-250,252-255
+  s_954afabfda404a::t_a2a7930631fc9e 201
+  s_954afabfda404a::t_b57c9809eaedaa 251
+  s_954afabfda404a::t_e69ea6659aff82 223
+parts/ui.js
+  s_954afabfda404a::t_618e16338c7e77 96,364,377,386,394-401,420-429,448-449,457-483
+  s_954afabfda404a::t_b57c9809eaedaa 690-691,693-695,697,704-712,715,718,729,734-751,753,756-757,759,764-768,773,906,911,1174,1178,1213-1221,1231-1232,1242-1248,1277
+index.html
+  s_954afabfda404a::t_e11d67a01ee00b 624-625
+  s_954afabfda404a::t_d24a1269efc217 725-729,911,942-1078
+  s_954afabfda404a::t_74e1db0e90b4a9 1166
+package.json
+  s_954afabfda404a::t_4472d28027dd89 1-13
+tests/pnl-history.test.mjs
+  s_954afabfda404a::t_e69ea6659aff82 121,195-200
+  s_954afabfda404a::t_7d4392147423bf 58-77,214-239
+  s_954afabfda404a::t_8143db64696ae0 1-57,78-120,122-143,147-194,201-213,240
+  s_954afabfda404a::t_7c965df7484f45 144-146
+package-lock.json
+  s_954afabfda404a::t_e9f3723e8c08b1 1-583
+parts/p1.html
+  s_954afabfda404a::t_a2a7930631fc9e 362-363
+scripts/build.mjs
+  s_954afabfda404a::t_4472d28027dd89 1-5
+tests/application.test.mjs
+  s_954afabfda404a::t_e69ea6659aff82 1-198
+parts/core.js
+  s_954afabfda404a::t_7d4392147423bf 48-49
+parts/data.js
+  s_954afabfda404a::t_618e16338c7e77 10-36,38-41,223,254
+  s_954afabfda404a::t_7c965df7484f45 37
+.gitignore
+  s_954afabfda404a::t_4472d28027dd89 1
+README.md
+  s_954afabfda404a::t_a2a7930631fc9e 11,59,64,75,93-98
+  s_954afabfda404a::t_f6c4300c2f32fa 18-19
+  s_954afabfda404a::t_7c965df7484f45 91,103
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "12e365a76ea676d337e8d6dc76e47f15533b8851",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
