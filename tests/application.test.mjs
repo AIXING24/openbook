@@ -150,6 +150,41 @@ test('sample preview changes only the P&L panel and returns to unchanged real le
   } finally { app.close(); }
 });
 
+test('amount chart tick labels match the exact scale used for mock point coordinates', async () => {
+  const app = await open({ state: { ...fixture, seeded: false, trades: [] } });
+  try {
+    app.click('#tabs button[data-view="stats"]'); app.click('#btn-st-privacy');
+    const check = () => {
+      const chart = app.window.__cj.stPnl;
+      const option = chart.getOption();
+      const axis = chart.getModel().getComponent('yAxis').axis;
+      const rows = axis.scale.getTicks().map(tick => {
+        const label = option.yAxis[0].axisLabel.formatter(tick.value);
+        const multiplier = label.endsWith('亿') ? 1e8 : label.endsWith('万') ? 1e4 : 1;
+        const displayedAmount = parseFloat(label.replaceAll(',', '')) * multiplier;
+        assert.ok(Math.abs(displayedAmount - tick.value) <= 0.01, `${tick.value} was incorrectly labelled ${label}`);
+        assert.ok(chart.renderToSVGString().includes(label), `Actual SVG is missing tick ${label}`);
+        return { value: tick.value, label, pixel: axis.toGlobalCoord(axis.dataToCoord(tick.value)) };
+      });
+      assert.equal(new Set(rows.map(row => row.label)).size, rows.length, 'Different monetary ticks must not share a label');
+      for (const point of option.series[0].data) {
+        if (point[1] === null) continue;
+        const position = chart.convertToPixel({ xAxisIndex: 0, yAxisIndex: 0 }, point);
+        const enclosing = rows.findIndex(row => row.value >= point[1]);
+        assert.ok(enclosing >= 0, 'Point lies outside the monetary scale');
+        if (enclosing > 0) assert.ok(position[1] <= rows[enclosing - 1].pixel + 0.001 && position[1] >= rows[enclosing].pixel - 0.001, 'Point is not between its labelled monetary ticks');
+        assert.ok(Math.abs(axis.coordToData(axis.dataToCoord(point[1])) - point[1]) <= 0.01);
+      }
+    };
+    for (const period of ['month', 'week', 'all']) { app.click('#st-period button[data-p="' + period + '"]'); check(); }
+    for (const values of [[-26360.45], [15000, -25000], [125000000, -26360450], [0.35, -0.125], [0]]) {
+      app.window.axisFixture = { points: values.map((value, index) => [Date.parse('2026-11-12') + index * 86400000, value]) };
+      app.evaluate("if (stPnl) stPnl.dispose(); renderPnlChart(axisFixture, 'amount');");
+      check();
+    }
+  } finally { app.close(); }
+});
+
 test('legacy records remain usable as amounts and never invent a missing percentage basis', async () => {
   const app = await open();
   try {
@@ -266,7 +301,7 @@ test('existing iPhone safe-area configuration and diagnostic privacy are preserv
     assert.match(app.document.querySelector('meta[name="viewport"]').content, /viewport-fit=contain/);
     assert.equal(app.document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content, 'default');
     const report = JSON.parse(app.evaluate('LayoutDiagnostics.report()'));
-    assert.equal(report.version, 'v1.15.1'); assert.equal(report.build, 'layout-20261112-02');
+    assert.equal(report.version, 'v1.15.2'); assert.equal(report.build, 'layout-20261112-03');
     assert.equal(JSON.stringify(report).includes('测试股票'), false);
   } finally { app.close(); }
 });

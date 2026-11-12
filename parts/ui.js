@@ -45,6 +45,12 @@ function fmtQty(q) { return q % 1 ? q.toLocaleString('zh-CN', { maximumFractionD
 function fmtPct(v) { return (v > 0 ? '+' : '') + v.toFixed(2) + '%'; }
 function fmtVol(v) { if (v >= 1e8) return (v / 1e8).toFixed(2) + '亿'; if (v >= 1e4) return (v / 1e4).toFixed(1) + '万'; return String(Math.round(v)); }
 function compactNum(v) { if (!v) return '0'; const a = Math.abs(v); if (a >= 1e8) return (v / 1e8).toFixed(1) + '亿'; if (a >= 1e4) return (v / 1e4).toFixed(0) + '万'; return String(Math.round(v)); }
+function fmtPnlAxisAmount(value) {
+  const magnitude = Math.abs(value);
+  const unit = magnitude >= 1e8 ? '亿' : magnitude >= 1e4 ? '万' : '';
+  const divisor = unit === '亿' ? 1e8 : unit === '万' ? 1e4 : 1;
+  return (value / divisor).toLocaleString('zh-CN', { useGrouping: !unit, maximumFractionDigits: unit === '亿' ? 10 : 6 }) + unit;
+}
 function fmtTs(ts) { const d = new Date(ts); return Core.pad(d.getHours()) + ':' + Core.pad(d.getMinutes()); }
 function fmtDate(ds) { const p = String(ds).split('-'); return +p[1] + '月' + +p[2] + '日'; }
 function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
@@ -482,8 +488,8 @@ function renderPnlChart(pnl, mode = 'amount') {
     xAxis: { type: 'time', min: pnl.points[0][0] - 43200000, max: pnl.points.at(-1)[0] + 43200000,
       axisLabel: { color: cssVar('--muted'), fontSize: 10, hideOverlap: true, formatter: value => { const date = new Date(value).toISOString().slice(0, 10); return +date.slice(5, 7) + '/' + +date.slice(8); } },
       axisLine: { lineStyle: { color: cssVar('--line') } }, splitLine: { show: false } },
-    yAxis: { type: 'value', min: extent => Math.min(0, extent.min), max: extent => Math.max(0, extent.max),
-      axisLabel: { color: cssVar('--muted'), fontSize: 10, formatter: percentMode ? percentLabel : compactNum }, splitLine: { lineStyle: { color: cssVar('--line'), type: 'dashed' } } },
+    yAxis: { type: 'value', ...(percentMode ? { min: extent => Math.min(0, extent.min), max: extent => Math.max(0, extent.max) } : { scale: false }),
+      axisLabel: { color: cssVar('--muted'), fontSize: 10, formatter: percentMode ? percentLabel : fmtPnlAxisAmount }, splitLine: { lineStyle: { color: cssVar('--line'), type: 'dashed' } } },
     series: [{ type: 'line', name: seriesName, data: pnl.points, connectNulls: false, smooth: false, showSymbol: true, symbolSize: 5,
       itemStyle: { color: cssVar('--accent') || '#2a78d6' }, lineStyle: { width: 2 },
       markLine: { silent: true, symbol: 'none', label: { show: true, formatter: percentMode ? '0%' : '0', color: cssVar('--muted') }, lineStyle: { color: cssVar('--muted'), type: 'dashed' }, data: [{ yAxis: 0 }] }
