@@ -1,0 +1,29 @@
+tests/pnl-history.test.mjs
+  s_954afabfda404a::t_c9de45fae405c6 78-115
+parts/pnl.js
+  s_954afabfda404a::t_a29835ad9bd315 63-69,82-83,89,95-98,112,116,120,130-156,163,174,291
+tests/application.test.mjs
+  s_954afabfda404a::t_c9de45fae405c6 73,79-88,92,102-104,109-171,269
+README.md
+  s_954afabfda404a::t_c9de45fae405c6 11-12,95,100
+parts/ui.js
+  s_954afabfda404a::t_a29835ad9bd315 97,378,395-398,424-425,430-431,453-454,462,465,470-472,479,486-487,489
+parts/p1.html
+  s_954afabfda404a::t_c9de45fae405c6 362-363
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "f3c1c24a24093984a2573a52a42ef8cf1c383f49",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
