@@ -5,7 +5,7 @@ function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { storageDead = true; return false; } }
 const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 't' + Date.now() + Math.random().toString(36).slice(2, 8));
 
-const DEFAULT_STATE = { v: 1, base: 'CNY', upRed: true, theme: 'auto', brokers: [], trades: [], lastBackup: 0, seeded: false, lastBroker: '' };
+const DEFAULT_STATE = { v: 1, base: 'CNY', upRed: true, theme: 'auto', brokers: [], trades: [], lastBackup: 0, seeded: false, demoVersion: 0, lastBroker: '' };
 let S = Object.assign({}, DEFAULT_STATE, lsGet(LS_STATE) || {});
 let historyStarted = false, datasetRestoring = false, restorePending = false;
 const LS_RESTORE = 'cj.pnl-restore.v1';

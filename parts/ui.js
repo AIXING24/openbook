@@ -129,15 +129,32 @@ function bindSeg(sel, fn, attr) {
    A股/港股: 始终计入当前交易时段变动(API chg)
    美股: 仅北京时间21:30(美股开盘)至次日09:30(A股开盘前)计入
    09:30~21:30 期间美股不计入(今晚的美股还没开) */
-function calcDailyPnL() {
+let demoMarketCache = null;
+function demoMarket() {
+  if (!S.trades.length || !S.trades.every(trade => trade.demo)) return null;
+  const key = PnlHistory.dateAt() + JSON.stringify(S.trades);
+  if (demoMarketCache?.key === key) return demoMarketCache;
+  const history = PnlHistory.demoHistory(S.trades);
+  const latest = history.snapshots.at(-1), previous = history.snapshots.at(-2);
+  if (!latest) return null;
+  const displayQuotes = {};
+  for (const position of latest.positions) {
+    const prev = previous?.positions.find(item => item.tc === position.tc)?.px || position.px;
+    const chg = position.px - prev;
+    displayQuotes[position.tc] = { px: position.px, prev, chg, pct: chg / prev * 100, ts: latest.capturedAt };
+  }
+  demoMarketCache = { key, quotes: displayQuotes, fx: { USDCNY: latest.rates.USD, HKDCNY: latest.rates.HKD, ts: latest.fxAt, approx: false } };
+  return demoMarketCache;
+}
+function calcDailyPnL(market = demoMarket()) {
   const now = new Date();
   const hour = now.getHours() + now.getMinutes() / 60;
   const usOpen = hour >= 21.5 || hour < 9.5;
-  const F = fxInfo();
+  const F = market?.fx || fxInfo();
   let pnl = 0, startVal = 0;
   for (const p of Core.calcPositions(S.trades)) {
     if (p.shares <= 0) continue;
-    const q = quotes[p.tc];
+    const q = (market?.quotes || quotes)[p.tc];
     if (!q || !q.px || !q.chg) continue;
     if (p.mkt === 'us' && !usOpen) continue;
     const dayChg = Core.toBase(q.chg * p.shares, p.cur, S.base, F);
@@ -162,11 +179,12 @@ function emptyHtml() {
     <button class="btn" id="e-demo" style="margin-top:10px">载入示例数据看看</button></div>`;
 }
 function renderPos() {
-  const el = $('#v-pos'); const F = fxInfo();
+  const market = demoMarket();
+  const el = $('#v-pos'); const F = market?.fx || fxInfo();
   const poss = Core.calcPositions(S.trades);
   let mktB = 0, costB = 0, realB = 0, noPx = 0;
   const rows = poss.map(p => {
-    const q = quotes[p.tc]; const has = q && isFinite(q.px);
+    const q = (market?.quotes || quotes)[p.tc]; const has = q && isFinite(q.px);
     const mvB = has ? Core.toBase(q.px * p.shares, p.cur, S.base, F) : null;
     const cB = Core.toBase(p.cost, p.cur, S.base, F);
     if (p.shares > 0) { costB += cB; if (mvB != null) mktB += mvB; else noPx++; }
@@ -182,18 +200,18 @@ function renderPos() {
     return `<button class="pos-row" data-tc="${esc(p.tc)}">${left}${right}</button>`;
   }).join('');
   const unreal = mktB - costB;
-  const daily = calcDailyPnL();
+  const daily = calcDailyPnL(market);
   const divB = poss.reduce((a, p) => a + Core.toBase(p.dividend, p.cur, S.base, F), 0);
   const demo = S.trades.some(t => t.demo);
   const d = new Date(); const week = ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
   el.innerHTML = `
    <div class="pagehead"><div style="flex:1"><div class="ttl" style="letter-spacing:.04em">GainTrace</div>
-     <div class="sub">${d.getMonth() + 1}月${d.getDate()}日 周${week} · ${netBadge()}</div></div>
+     <div class="sub">${d.getMonth() + 1}月${d.getDate()}日 周${week} · ${market ? '模拟行情' : netBadge()}</div></div>
      <button class="iconbtn" id="btn-privacy" aria-label="${privacyMasked ? '显示金额' : '隐藏金额'}">${privacyMasked ? ICO.eyeClosed : ICO.eyeOpen}</button>
      <button class="iconbtn" id="btn-refresh" aria-label="刷新行情">${ICO.refresh}</button></div>
    ${storageDead ? '<div class="banner">浏览器存储不可用（可能处于隐私模式）— 数据仅本次会话有效，请尽快导出备份。</div>' : ''}
-   ${demo ? '<div class="banner">当前为示例数据：记录第一笔真实交易后自动替换，也可在设置中清空。</div>' : ''}
-   ${net.ok === false ? '<div class="banner">行情获取失败（可能离线或受限环境）— 现价与K线暂不可用，记账与统计不受影响。</div>' : ''}
+   ${demo ? `<div class="banner">${market ? '当前为示例交易与模拟行情：记录第一笔真实交易后自动替换，也可在设置中清空。' : '当前账本包含示例交易。'}</div>` : ''}
+   ${net.ok === false && !market ? '<div class="banner">行情获取失败（可能离线或受限环境）— 现价与K线暂不可用，记账与统计不受影响。</div>' : ''}
    ${divInbox.length ? `<button class="divcard" id="div-inbox-btn"><div style="flex:1"><div class="dc-t">发现 ${divInbox.length} 笔疑似分红待确认</div><div class="dc-s">点击查看 · 金额自动估算可修正 · 一键入账</div></div><span class="dc-arrow">›</span></button>` : ''}
    <div class="card sum">
      <div class="lbl">总市值（折${CN[S.base]}）</div>
@@ -213,7 +231,7 @@ function renderPos() {
   const dib = $('#div-inbox-btn'); if (dib) dib.onclick = openDivModal;
   el.querySelectorAll('.pos-row').forEach(b => b.onclick = () => openSheet(b.dataset.tc));
   const ea = $('#e-add'); if (ea) ea.onclick = () => showView('add');
-  const ed = $('#e-demo'); if (ed) ed.onclick = () => { S.trades = demoTrades(); save(); renderPos(); };
+  const ed = $('#e-demo'); if (ed) ed.onclick = () => { S.trades = demoTrades(); S.demoVersion = DEMO_VERSION; S.seeded = true; save(); renderPos(); };
 }
 
 /* ===== 记一笔 ===== */
@@ -391,7 +409,7 @@ function renderStats() {
   if (stChart) { stChart.dispose(); stChart = null; }
   if (stDonut) { stDonut.dispose(); stDonut = null; }
   if (stPnl) { stPnl.dispose(); stPnl = null; }
-  const el = $('#v-stats'); const F = fxInfo();
+  const el = $('#v-stats'); const F = demoMarket()?.fx || fxInfo();
   const start = statPeriod === 'week' ? Core.weekStartStr() : statPeriod === 'month' ? Core.monthStartStr() : statPeriod === 'year' ? Core.yearStartStr() : '0000-00-00';
   const st = Core.calcStats(S.trades, start);
   const cvt = b => ['CNY', 'USD', 'HKD'].reduce((a, c) => a + Core.toBase(b[c] || 0, c, S.base, F), 0);
@@ -758,7 +776,7 @@ function prepareImport(obj) {
     return { id, date: trade.date, tc: trade.tc, mkt: trade.mkt, code: String(trade.code || trade.tc.slice(trade.mkt.length)), name: String(trade.name || trade.code || ''), cur,
       side: trade.side, px: trade.px, qty: trade.qty, fee: trade.fee || 0, ...(trade.amt != null ? { amt: trade.amt } : {}), broker: String(trade.broker || ''), note: String(trade.note || ''), ts: trade.ts || 0, ...(trade.demo ? { demo: true } : {}) };
   });
-  const state = { ...DEFAULT_STATE, trades, seeded: true, base: ['CNY', 'USD'].includes(obj.base) ? obj.base : 'CNY', upRed: obj.upRed !== false,
+  const state = { ...DEFAULT_STATE, trades, seeded: true, demoVersion: Number.isInteger(obj.demoVersion) ? obj.demoVersion : 0, base: ['CNY', 'USD'].includes(obj.base) ? obj.base : 'CNY', upRed: obj.upRed !== false,
     theme: ['auto', 'light', 'dark'].includes(obj.theme) ? obj.theme : 'auto', brokers: Array.isArray(obj.brokers) ? obj.brokers.filter(value => typeof value === 'string').slice(0, 12) : [], lastBroker: String(obj.lastBroker || ''), lastBackup: Number.isFinite(obj.lastBackup) ? obj.lastBackup : 0 };
   PnlHistory.normalizeBackup(obj.pnlHistory, state.trades, PnlHistory.dateAt());
   return { state, history: obj.pnlHistory || null };
@@ -822,6 +840,7 @@ function openSheet(tc, fromPop) {
      <div class="sh-px"><div class="p num" id="sh-px">--</div><div class="c num" id="sh-chg">--</div></div>
    </div>
    <div class="sh-body">
+     ${demoMarket() ? '<div class="banner">示例交易与现价为模拟数据；下方K线展示市场行情。</div>' : ''}
      <div class="card"><div class="qgrid" id="sh-qgrid"></div></div>
      <div class="card">
        <div class="chart-head"><h2 style="font-size:15px;margin:0">K线 · 前复权</h2>
@@ -860,7 +879,7 @@ function closeSheet(fromPop) {
 function renderSheetQuote() {
   if (!sheetTc) return;
   const g = $('#sh-qgrid'); if (!g) return;
-  const q = quotes[sheetTc];
+  const q = (demoMarket()?.quotes || quotes)[sheetTc];
   const cell = (l, v, c) => `<div><div class="l">${l}</div><div class="v num ${c || ''}">${v}</div></div>`;
   if (!q || !isFinite(q.px)) {
     g.innerHTML = cell('现价', '--') + cell('涨跌', '--') + cell('涨跌幅', '--') + cell('昨收', '--') + cell('今开', '--') + cell('最高', '--') + cell('最低', '--');
@@ -881,10 +900,11 @@ function renderSheetPos() {
   const elc = $('#sh-poscard'); if (!elc) return;
   const p = Core.calcPositions(S.trades).find(x => x.tc === sheetTc);
   if (!p) { elc.innerHTML = '<p class="footnote" style="padding:0">暂无交易记录</p>'; return; }
-  const q = quotes[p.tc]; const has = q && isFinite(q.px);
+  const market = demoMarket();
+  const q = (market?.quotes || quotes)[p.tc]; const has = q && isFinite(q.px);
   const mv = has ? p.shares * q.px : null;
   const pnl = (mv != null && p.shares > 0) ? mv - p.cost : null;
-  const F = fxInfo();
+  const F = market?.fx || fxInfo();
   const bNote = v => (p.cur !== S.base ? ' ≈ ' + fmtAmt(Core.toBase(v, p.cur, S.base, F), S.base) : '');
   const cell = (l, v, c) => `<div><div class="l">${l}</div><div class="v num ${c || ''}">${v}</div></div>`;
   elc.innerHTML = `
@@ -1204,22 +1224,23 @@ function openDivModal() {
 }
 
 /* ===== 示例数据 ===== */
+const DEMO_VERSION = 2;
 function demoTrades() {
   const t = (date, tc, mkt, code, name, cur, s2, px, qty, fee, broker) =>
     ({ id: uid(), date, tc, mkt, code, name, cur, side: s2, px, qty, fee, broker, note: '', ts: Date.now() - Math.round(Math.random() * 1e7), demo: true });
-  /* 价格取自各交易日实际收盘价(±0.5%), 确保B/S标记贴合K线 */
+  /* 虚构的盈利交易，用于演示记账与统计。 */
   return [
-    t('2026-07-15', 'sh600519', 'sh', '600519', '贵州茅台', 'CNY', 'B', 1253.00, 100, 5, '华泰证券'),
-    t('2026-08-12', 'sh600519', 'sh', '600519', '贵州茅台', 'CNY', 'B', 1345.00, 100, 5, '华泰证券'),
-    t('2026-09-10', 'sh600519', 'sh', '600519', '贵州茅台', 'CNY', 'S', 1283.00, 100, 5, '华泰证券'),
-    t('2026-10-09', 'sh600519', 'sh', '600519', '贵州茅台', 'CNY', 'B', 1265.00, 100, 5, '华泰证券'),
-    t('2026-07-22', 'usAAPL.OQ', 'us', 'AAPL.OQ', '苹果', 'USD', 'B', 326.00, 60, 1, '富途牛牛'),
-    t('2026-09-10', 'usAAPL.OQ', 'us', 'AAPL.OQ', '苹果', 'USD', 'B', 327.00, 40, 1, '富途牛牛'),
-    t('2026-08-20', 'hk00700', 'hk', '00700', '腾讯控股', 'HKD', 'B', 450.00, 200, 138, '长桥'),
-    t('2026-10-13', 'hk00700', 'hk', '00700', '腾讯控股', 'HKD', 'S', 424.00, 100, 138, '长桥'),
-    t('2026-09-25', 'sz000333', 'sz', '000333', '美的集团', 'CNY', 'B', 82.50, 300, 5, '华泰证券'),
-    t('2026-10-16', 'sz000333', 'sz', '000333', '美的集团', 'CNY', 'B', 84.50, 200, 5, '华泰证券'),
-    t('2026-10-20', 'sz000333', 'sz', '000333', '美的集团', 'CNY', 'S', 85.00, 100, 5, '华泰证券')
+    t('2026-07-15', 'sh600519', 'sh', '600519', '贵州茅台', 'CNY', 'B', 1000.00, 100, 5, '华泰证券'),
+    t('2026-08-12', 'sh600519', 'sh', '600519', '贵州茅台', 'CNY', 'B', 1050.00, 100, 5, '华泰证券'),
+    t('2026-09-10', 'sh600519', 'sh', '600519', '贵州茅台', 'CNY', 'S', 1200.00, 100, 5, '华泰证券'),
+    t('2026-10-09', 'sh600519', 'sh', '600519', '贵州茅台', 'CNY', 'B', 1080.00, 100, 5, '华泰证券'),
+    t('2026-07-22', 'usAAPL.OQ', 'us', 'AAPL.OQ', '苹果', 'USD', 'B', 140.00, 60, 1, '富途牛牛'),
+    t('2026-09-10', 'usAAPL.OQ', 'us', 'AAPL.OQ', '苹果', 'USD', 'B', 150.00, 40, 1, '富途牛牛'),
+    t('2026-08-20', 'hk00700', 'hk', '00700', '腾讯控股', 'HKD', 'B', 280.00, 200, 138, '长桥'),
+    t('2026-10-13', 'hk00700', 'hk', '00700', '腾讯控股', 'HKD', 'S', 350.00, 100, 138, '长桥'),
+    t('2026-09-25', 'sz000333', 'sz', '000333', '美的集团', 'CNY', 'B', 50.00, 300, 5, '华泰证券'),
+    t('2026-10-16', 'sz000333', 'sz', '000333', '美的集团', 'CNY', 'B', 55.00, 200, 5, '华泰证券'),
+    t('2026-10-20', 'sz000333', 'sz', '000333', '美的集团', 'CNY', 'S', 70.00, 100, 5, '华泰证券')
   ];
 }
 
@@ -1235,7 +1256,9 @@ async function boot() {
   }
   applyTheme();
   if (location.hash === '#dark') document.documentElement.dataset.theme = 'dark';
-  if (!S.seeded && !S.trades.length) { S.trades = demoTrades(); S.seeded = true; save(); }
+  if ((!S.seeded && !S.trades.length) || (S.trades.length && S.trades.every(trade => trade.demo) && S.demoVersion < DEMO_VERSION)) {
+    S.trades = demoTrades(); S.seeded = true; S.demoVersion = DEMO_VERSION; save();
+  }
   /* 数据迁移: v1.3~v1.8.1 期间经搜索保存的美股代码是小写(行情拉不到), 统一转大写 */
   let migrated = false;
   for (const t of S.trades) {

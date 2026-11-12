@@ -145,7 +145,7 @@ const PnlHistory = (() => {
       const demoQuotes = {};
       for (const position of Core.calcPositions(effectiveTrades)) {
         const phase = { CNY: 0, USD: 0.8, HKD: 1.5 }[position.cur] || 0;
-        const move = 0.045 * Math.sin(day * 0.25 + phase) + 0.025 * Math.cos(day * 0.11) + (day - 45) * 0.0002;
+        const move = 0.055 + day * 0.0008 + 0.015 * Math.sin(day * 0.25 + phase) + 0.008 * Math.cos(day * 0.11) + Math.max(0, day - 79) * 0.004;
         demoQuotes[position.tc] = { px: Math.max(0.01, Math.abs(position.avg) || 100) * (1 + move), ts: capturedAt };
       }
       const demoFx = { USDCNY: 7.1 + 0.04 * Math.sin(day / 17), HKDCNY: 0.91 + 0.006 * Math.cos(day / 11), ts: capturedAt, approx: false };

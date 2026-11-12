@@ -110,6 +110,18 @@ test('default demo ledger contains a multi-day sample curve in every period with
   const app = await open({ state: { ...fixture, seeded: false, trades: [] } });
   try {
     assert.ok(app.window.__cj.S.trades.every(trade => trade.demo));
+    assert.equal(app.window.__cj.S.demoVersion, 2);
+    assert.match(app.document.querySelector('#v-pos').textContent, /示例交易与模拟行情/);
+    assert.equal(app.document.querySelectorAll('#v-pos .down').length, 0);
+    assert.ok(app.evaluate('calcDailyPnL().pnl') > 0);
+    const quotesBefore = app.evaluate('JSON.stringify(quotes)');
+    assert.ok(app.evaluate('Core.calcPositions(S.trades).every(p => p.realized >= 0 && demoMarket().quotes[p.tc].px * p.shares > p.cost && demoMarket().quotes[p.tc].chg > 0)'));
+    assert.ok(app.evaluate('Core.calcPositions(S.trades).filter(p => p.trades.some(t => t.side === "S")).every(p => p.realized > 0)'));
+    app.evaluate('openSheet("sh600519", true)');
+    assert.equal(app.document.querySelectorAll('#sh-poscard .down, #sh-qgrid .down').length, 0);
+    assert.match(app.document.querySelector('#sheet').textContent, /现价为模拟数据/);
+    assert.equal(app.evaluate('JSON.stringify(quotes)'), quotesBefore, 'Demo display must not overwrite real quote cache');
+    app.evaluate('closeSheet(true)');
     assert.equal(app.evaluate('PnlHistory.state.snapshots.length'), 0);
     app.click('#tabs button[data-view="stats"]');
     assert.match(app.document.querySelector('#pnl-card').textContent, /示例/);
@@ -119,12 +131,42 @@ test('default demo ledger contains a multi-day sample curve in every period with
       const points = app.window.__cj.stPnl.getOption().series[0].data;
       assert.ok(points.length > 1);
       assert.ok(points.some(point => point[1] !== points[0][1]));
-      if (period === 'all') { assert.ok(points.some(point => point[1] > 0)); assert.ok(points.some(point => point[1] < 0)); }
+      assert.ok(points.every(point => point[1] > 0));
+      const result = app.evaluate(`PnlHistory.view(PnlHistory.demoHistory(S.trades).snapshots, '${period}', PnlHistory.dateAt(), S.base)`);
+      assert.ok(result.total > 0 && result.change > 0, period + ' must show a gain');
+      if (period === 'all') assert.ok(points.some((point, index) => index && point[1] < points[index - 1][1]), 'Profitable demo still has fluctuations');
     }
+    app.click('#btn-st-privacy');
+    assert.ok(app.window.__cj.stPnl.getOption().series[0].data.every(point => point[1] > 0));
+    assert.match(app.document.querySelector('#pnl-card').textContent, /\+¥/);
     await app.evaluate('PnlHistory.exportData()');
     assert.equal(app.evaluate('PnlHistory.state.snapshots.length'), 0);
     assert.deepEqual(app.errors, []);
   } finally { app.close(); }
+});
+
+test('old demo ledger upgrades once; current demo and real or mixed ledgers remain unchanged', async () => {
+  const sample = await open({ state: { ...fixture, seeded: false, trades: [] } });
+  const current = copy(sample.window.__cj.S);
+  sample.close();
+  const old = { ...current, demoVersion: 0, trades: current.trades.map(trade => ({ ...trade, px: trade.side === 'B' ? trade.px * 2 : trade.px })) };
+  const upgraded = await open({ state: old });
+  try {
+    assert.equal(upgraded.window.__cj.S.demoVersion, 2);
+    assert.ok(upgraded.evaluate('Core.calcPositions(S.trades).every(p => p.realized >= 0)'));
+    assert.notDeepEqual(copy(upgraded.window.__cj.S.trades), old.trades);
+    assert.equal(upgraded.evaluate('PnlHistory.state.snapshots.length'), 0);
+  } finally { upgraded.close(); }
+  for (const state of [current, fixture, { ...fixture, trades: [...fixture.trades, current.trades[0]] }]) {
+    const app = await open({ state });
+    try {
+      assert.deepEqual(copy(app.window.__cj.S.trades), state.trades);
+      if (state !== current) {
+        assert.equal(app.evaluate('demoMarket()'), null);
+        assert.equal(app.evaluate('quotes.sh600000.px'), 110);
+      }
+    } finally { app.close(); }
+  }
 });
 
 test('sample preview changes only the P&L panel and returns to unchanged real ledger and stored history', async () => {
@@ -301,7 +343,7 @@ test('existing iPhone safe-area configuration and diagnostic privacy are preserv
     assert.match(app.document.querySelector('meta[name="viewport"]').content, /viewport-fit=contain/);
     assert.equal(app.document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content, 'default');
     const report = JSON.parse(app.evaluate('LayoutDiagnostics.report()'));
-    assert.equal(report.version, 'v1.15.2'); assert.equal(report.build, 'layout-20261112-03');
+    assert.equal(report.version, 'v1.15.3'); assert.equal(report.build, 'layout-20261112-04');
     assert.equal(JSON.stringify(report).includes('测试股票'), false);
   } finally { app.close(); }
 });
