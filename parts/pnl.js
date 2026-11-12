@@ -60,6 +60,13 @@ const PnlHistory = (() => {
     if (validExchange && finite(exchange.USDCNY) && exchange.USDCNY > 0) rates.USD = exchange.USDCNY;
     if (validExchange && finite(exchange.HKDCNY) && exchange.HKDCNY > 0) rates.HKD = exchange.HKDCNY;
     const amounts = Object.fromEntries(currencies.map(currency => [currency, { realized: 0, unrealized: 0 }]));
+    const purchases = Object.fromEntries(currencies.map(currency => [currency, 0]));
+    for (const trade of effectiveTrades) {
+      if (trade.side !== 'B') continue;
+      const currency = trade.cur || ({ sh: 'CNY', sz: 'CNY', hk: 'HKD', us: 'USD' })[trade.mkt];
+      if (!currencies.includes(currency)) return { snapshot: null, reason: 'ledger' };
+      purchases[currency] += trade.px * trade.qty + (trade.fee || 0);
+    }
     const valuations = [];
     for (const position of positions) {
       if (!currencies.includes(position.cur) || !finite(position.realized) || !finite(position.cost) || !finite(position.shares)) return { snapshot: null, reason: 'ledger' };
@@ -72,18 +79,23 @@ const PnlHistory = (() => {
       amounts[position.cur].unrealized += position.shares * quote.px - position.cost;
       valuations.push({ tc: position.tc, cur: position.cur, shares: position.shares, cost: position.cost, px: quote.px, quoteAt: quote.ts });
     }
-    if (currencies.some(currency => !finite(amounts[currency].realized) || !finite(amounts[currency].unrealized))) return { snapshot: null, reason: 'ledger' };
-    return { snapshot: { date: today, capturedAt, amounts, rates, fxAt: validExchange ? exchange.ts : null, fxApprox: exchange?.approx === true, positions: valuations, invalidatedAt: null }, reason: '' };
+    if (currencies.some(currency => !finite(amounts[currency].realized) || !finite(amounts[currency].unrealized) || !finite(purchases[currency]) || purchases[currency] < 0)) return { snapshot: null, reason: 'ledger' };
+    return { snapshot: { date: today, capturedAt, amounts, purchases, rates, fxAt: validExchange ? exchange.ts : null, fxApprox: exchange?.approx === true, positions: valuations, invalidatedAt: null }, reason: '' };
   }
   function normalizeSnapshot(record) {
     if (!record || !validDate(record.date) || !timestamp(record.capturedAt) || dateAt(record.capturedAt) !== record.date || !Array.isArray(record.positions) || record.positions.length > 5000) return null;
     if (record.invalidatedAt != null && (!validDate(record.invalidatedAt) || record.invalidatedAt > record.date)) return null;
     const amounts = {};
+    const purchases = record.purchases == null ? null : {};
     const rates = { CNY: 1 };
     for (const currency of currencies) {
       const amount = record.amounts?.[currency];
       if (!amount || !finite(amount.realized) || !finite(amount.unrealized)) return null;
       amounts[currency] = { realized: amount.realized, unrealized: amount.unrealized };
+      if (purchases) {
+        if (!finite(record.purchases[currency]) || record.purchases[currency] < 0) return null;
+        purchases[currency] = record.purchases[currency];
+      }
       if (currency !== 'CNY') rates[currency] = finite(record.rates?.[currency]) && record.rates[currency] > 0 ? record.rates[currency] : null;
     }
     const positions = [];
@@ -97,14 +109,15 @@ const PnlHistory = (() => {
       const computed = positions.filter(position => position.cur === currency).reduce((total, position) => total + position.shares * position.px - position.cost, 0);
       if (!finite(computed) || Math.abs(computed - amounts[currency].unrealized) > Math.max(0.000001, Math.abs(computed) * 1e-10)) return null;
     }
-    return { date: record.date, capturedAt: record.capturedAt, amounts, rates, fxAt: finite(record.fxAt) ? record.fxAt : null, fxApprox: record.fxApprox === true, positions, invalidatedAt: validDate(record.invalidatedAt) ? record.invalidatedAt : null };
+    return { date: record.date, capturedAt: record.capturedAt, amounts, ...(purchases ? { purchases } : {}), rates, fxAt: finite(record.fxAt) ? record.fxAt : null, fxApprox: record.fxApprox === true, positions, invalidatedAt: validDate(record.invalidatedAt) ? record.invalidatedAt : null };
   }
   function value(record, base, component = 'total') {
     if (!record || record.invalidatedAt || !currencies.includes(base)) return null;
+    if (component === 'purchases' && !record.purchases) return null;
     let total = 0;
     for (const currency of currencies) {
       const amount = record.amounts[currency];
-      const native = component === 'realized' ? amount.realized : component === 'unrealized' ? amount.unrealized : amount.realized + amount.unrealized;
+      const native = component === 'purchases' ? record.purchases[currency] : component === 'realized' ? amount.realized : component === 'unrealized' ? amount.unrealized : amount.realized + amount.unrealized;
       if (!native) continue;
       if (currency === base) total += native;
       else {
@@ -114,13 +127,40 @@ const PnlHistory = (() => {
     }
     return finite(total) ? total : null;
   }
+  function percentage(record, base) {
+    const total = value(record, base);
+    const basis = value(record, base, 'purchases');
+    const result = total !== null && basis !== null && basis > 0 ? total / basis * 100 : null;
+    return finite(result) ? result : null;
+  }
+  function demoHistory(trades, now = Date.now()) {
+    if (!trades.length || !trades.every(trade => trade.demo)) return null;
+    const today = dateAt(now);
+    const cleanTrades = trades.map(({ demo, ...trade }) => trade);
+    const snapshots = [];
+    for (let day = 0; day < 90; day++) {
+      const date = shiftDate(today, day - 89);
+      const capturedAt = date === today ? now : Date.parse(date + 'T15:00:00+08:00');
+      const effectiveTrades = cleanTrades.filter(trade => trade.date <= date);
+      const demoQuotes = {};
+      for (const position of Core.calcPositions(effectiveTrades)) {
+        const phase = { CNY: 0, USD: 0.8, HKD: 1.5 }[position.cur] || 0;
+        const move = 0.045 * Math.sin(day * 0.25 + phase) + 0.025 * Math.cos(day * 0.11) + (day - 45) * 0.0002;
+        demoQuotes[position.tc] = { px: Math.max(0.01, Math.abs(position.avg) || 100) * (1 + move), ts: capturedAt };
+      }
+      const demoFx = { USDCNY: 7.1 + 0.04 * Math.sin(day / 17), HKDCNY: 0.91 + 0.006 * Math.cos(day / 11), ts: capturedAt, approx: false };
+      const result = buildSnapshot(effectiveTrades, demoQuotes, demoFx, { now: capturedAt });
+      if (result.snapshot) snapshots.push(result.snapshot);
+    }
+    return { status: 'ready', issue: '', snapshots, anchor: snapshots[0] || null, demo: true };
+  }
   function periodStart(period, today) {
     if (period === 'month') return today.slice(0, 7) + '-01';
     if (period === 'year') return today.slice(0, 4) + '-01-01';
     if (period === 'week') return shiftDate(today, -(new Date(today + 'T00:00:00Z').getUTCDay() + 6) % 7);
     return cutoffAt(today);
   }
-  function view(records, period, today, base, initialAnchor = null) {
+  function view(records, period, today, base, initialAnchor = null, mode = 'amount') {
     const start = [periodStart(period, today), cutoffAt(today)].sort().at(-1);
     const visible = records.filter(record => record.date >= start && record.date <= today).sort((first, second) => first.date.localeCompare(second.date));
     const prior = records.filter(record => record.date < start).sort((a, b) => a.date.localeCompare(b.date)).at(-1);
@@ -131,7 +171,7 @@ const PnlHistory = (() => {
     const baselineValue = value(reference, base);
     const points = [];
     const byDate = new Map(visible.map(record => [record.date, record]));
-    if (visible.length) for (let date = visible[0].date; date <= today; date = shiftDate(date, 1)) points.push([Date.parse(date + 'T00:00:00Z'), value(byDate.get(date), base)]);
+    if (visible.length) for (let date = visible[0].date; date <= today; date = shiftDate(date, 1)) points.push([Date.parse(date + 'T00:00:00Z'), mode === 'percent' ? percentage(byDate.get(date), base) : value(byDate.get(date), base)]);
     return { start, records: visible, reference, latest, total: latestValue, change: latestValue !== null && baselineValue !== null ? latestValue - baselineValue : null, completePeriod: reference === prior && prior?.date === shiftDate(start, -1) && baselineValue !== null, points };
   }
   function notify() { if (changeHandler) { try { changeHandler(); } catch (error) {} } }
@@ -248,7 +288,7 @@ const PnlHistory = (() => {
     return enqueue(async () => { await commit(prepared.snapshots, prepared.ledger, prepared.anchor); issue = ''; notify(); return true; });
   }
   return {
-    dateAt, cutoffAt, shiftDate, buildSnapshot, normalizeDate: validDate, normalizeSnapshot, retain, value, view, normalizeBackup, init, ledgerChanged, capture, exportData, replace,
+    dateAt, cutoffAt, shiftDate, buildSnapshot, normalizeDate: validDate, normalizeSnapshot, retain, value, percentage, demoHistory, view, normalizeBackup, init, ledgerChanged, capture, exportData, replace,
     get state() { return { status, issue, snapshots: copy(entries), anchor: anchor ? copy(anchor) : null }; },
     set onChange(handler) { changeHandler = handler; },
   };

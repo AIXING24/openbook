@@ -75,6 +75,44 @@ test('cash-flow conservation includes all fees when short positions are covered 
   }
 });
 
+test('percentage uses each snapshot cumulative purchase basis including fees and dividends only in P&L', () => {
+  const pnl = instance();
+  const trades = [trade('B', 100, 10, { fee: 2 }), trade('D', 0, 10, { id: 'div', date: '2026-11-11', amt: 30 })];
+  const held = pnl.buildSnapshot(trades, quotes(), fx, { now }).snapshot;
+  assert.equal(held.purchases.CNY, 1002);
+  assert.equal(pnl.percentage(held, 'CNY'), 128 / 1002 * 100);
+  assert.ok(Math.abs(pnl.percentage(held, 'USD') - 128 / 1002 * 100) < 1e-9);
+  const sold = pnl.buildSnapshot([...trades, trade('S', 110, 10, { id: 'sell', date: '2026-11-12', fee: 3 })], {}, fx, { now }).snapshot;
+  assert.equal(sold.purchases.CNY, 1002);
+  assert.ok(Math.abs(pnl.percentage(sold, 'CNY') - 125 / 1002 * 100) < 1e-9);
+  const loss = pnl.buildSnapshot([trade()], quotes(90), fx, { now }).snapshot;
+  assert.equal(pnl.percentage(loss, 'CNY'), -10);
+  const zero = pnl.buildSnapshot([trade()], quotes(100), fx, { now }).snapshot;
+  assert.equal(pnl.percentage(zero, 'CNY'), 0);
+  const onlyShort = pnl.buildSnapshot([trade('S', 120)], quotes(), fx, { now }).snapshot;
+  assert.equal(pnl.percentage(onlyShort, 'CNY'), null);
+  const legacy = plain(held); delete legacy.purchases;
+  assert.equal(pnl.percentage(pnl.normalizeSnapshot(legacy), 'CNY'), null);
+  assert.equal(pnl.value(pnl.normalizeSnapshot(legacy), 'CNY'), 128);
+  assert.equal(pnl.normalizeSnapshot({ ...plain(held), purchases: { CNY: -1, USD: 0, HKD: 0 } }), null);
+});
+
+test('new purchases update only the current percentage basis and percentage views preserve absolute zero and gaps', async () => {
+  const pnl = instance(), trades = [trade()];
+  await pnl.init(trades, now); await pnl.capture(trades, quotes(), fx, { now });
+  const future = now + 2 * 86400000;
+  const next = [...trades, trade('B', 110, 10, { id: 'add', date: '2026-11-14' })];
+  await pnl.ledgerChanged(next, future);
+  await pnl.capture(next, quotes(110, future), { ...fx, ts: future }, { now: future });
+  assert.equal(pnl.percentage(pnl.state.snapshots[0], 'CNY'), 10);
+  assert.equal(pnl.percentage(pnl.state.snapshots[1], 'CNY'), 100 / 2100 * 100);
+  const view = pnl.view(pnl.state.snapshots, 'month', '2026-11-14', 'CNY', pnl.state.anchor, 'percent');
+  assert.deepEqual(plain(view.points).map(point => point[1]), [10, null, 100 / 2100 * 100]);
+  assert.equal(view.total, 100);
+  const backup = await pnl.exportData();
+  assert.deepEqual(plain(pnl.normalizeBackup(backup, next, '2026-11-14').snapshots), plain(pnl.state.snapshots));
+});
+
 test('partial, stale, invalid and prior-refresh quotes never produce fake snapshots', () => {
   const pnl = instance();
   const trades = [trade(), trade('B', 50, 2, { id: 't2', tc: 'sz000001', mkt: 'sz' })];

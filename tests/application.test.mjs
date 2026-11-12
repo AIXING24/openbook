@@ -70,16 +70,26 @@ test('built HTML exactly matches six source parts and all scripts parse', () => 
   assert.doesNotThrow(() => new vm.Script(scripts.join('\n')));
 });
 
-test('actual boot and quote refresh record automatically; privacy removes financial curve and sign color', async () => {
+test('actual boot records automatically; privacy keeps only percentage chart data and hides amounts', async () => {
   const app = await open();
   try {
     assert.equal(app.window.__cj.S.trades.length, 1);
     assert.equal(app.evaluate('PnlHistory.state.snapshots[0].amounts.CNY.unrealized'), 100);
     app.click('#tabs button[data-view="stats"]');
-    assert.equal(app.document.querySelector('#st-pnl'), null);
+    assert.match(app.document.querySelector('#st-pnl').innerHTML, /<svg/);
+    const hiddenChart = app.window.__cj.stPnl;
+    const hiddenOption = hiddenChart.getOption();
+    assert.equal(hiddenOption.series[0].data[0][1], 10);
+    assert.equal(hiddenOption.yAxis[0].axisLabel.formatter(10), '10.00%');
+    assert.equal(hiddenOption.series[0].markLine.label.formatter, '0%');
+    const hiddenTooltip = hiddenOption.tooltip[0].formatter([{ value: hiddenOption.series[0].data[0] }]);
+    assert.match(hiddenTooltip, /10\.00%/);
+    assert.doesNotMatch(hiddenTooltip, /¥|HK\$|\$|100\.00|1000/);
+    assert.doesNotMatch(app.document.querySelector('#pnl-card').innerHTML, /¥|HK\$|\$100|\+100/);
     assert.equal(app.document.querySelectorAll('#pnl-card .up, #pnl-card .down').length, 0);
     assert.match(app.document.querySelector('#pnl-card').textContent, /\*\*\*\*/);
     app.click('#btn-st-privacy');
+    assert.equal(hiddenChart.isDisposed(), true);
     assert.match(app.document.querySelector('#st-pnl').innerHTML, /<svg/);
     assert.match(app.document.querySelector('#pnl-card').textContent, /\+¥100\.00/);
     const chart = app.window.__cj.stPnl;
@@ -89,9 +99,73 @@ test('actual boot and quote refresh record automatically; privacy removes financ
     assert.equal(option.series[0].data[0][1], 100);
     assert.match(chart.renderToSVGString(), /<path/);
     app.click('#btn-st-privacy');
-    assert.equal(app.window.__cj.stPnl, null); assert.equal(chart.isDisposed(), true);
-    assert.equal(app.document.querySelector('#st-pnl'), null);
+    assert.equal(chart.isDisposed(), true);
+    assert.equal(app.window.__cj.stPnl.getOption().series[0].data[0][1], 10);
+    assert.match(app.document.querySelector('#st-pnl').innerHTML, /<svg/);
     assert.deepEqual(app.errors, []);
+  } finally { app.close(); }
+});
+
+test('default demo ledger contains a multi-day sample curve in every period without saved demo snapshots', async () => {
+  const app = await open({ state: { ...fixture, seeded: false, trades: [] } });
+  try {
+    assert.ok(app.window.__cj.S.trades.every(trade => trade.demo));
+    assert.equal(app.evaluate('PnlHistory.state.snapshots.length'), 0);
+    app.click('#tabs button[data-view="stats"]');
+    assert.match(app.document.querySelector('#pnl-card').textContent, /示例/);
+    assert.match(app.document.querySelector('#pnl-card').textContent, /模拟近90天/);
+    for (const period of ['week', 'month', 'year', 'all']) {
+      app.click('#st-period button[data-p="' + period + '"]');
+      const points = app.window.__cj.stPnl.getOption().series[0].data;
+      assert.ok(points.length > 1);
+      assert.ok(points.some(point => point[1] !== points[0][1]));
+      if (period === 'all') { assert.ok(points.some(point => point[1] > 0)); assert.ok(points.some(point => point[1] < 0)); }
+    }
+    await app.evaluate('PnlHistory.exportData()');
+    assert.equal(app.evaluate('PnlHistory.state.snapshots.length'), 0);
+    assert.deepEqual(app.errors, []);
+  } finally { app.close(); }
+});
+
+test('sample preview changes only the P&L panel and returns to unchanged real ledger and stored history', async () => {
+  const app = await open();
+  try {
+    app.click('#tabs button[data-view="stats"]');
+    const stateBefore = app.window.localStorage.getItem('cj.v1');
+    const historyBefore = copy(app.evaluate('PnlHistory.state.snapshots'));
+    app.click('#btn-pnl-demo');
+    assert.match(app.document.querySelector('#pnl-card').textContent, /盈亏走势 · 示例/);
+    assert.ok(app.window.__cj.stPnl.getOption().series[0].data.length > 1);
+    assert.equal(app.window.localStorage.getItem('cj.v1'), stateBefore);
+    assert.deepEqual(copy(app.evaluate('PnlHistory.state.snapshots')), historyBefore);
+    app.click('#btn-st-privacy');
+    assert.match(app.document.querySelector('#pnl-card').textContent, /纵轴为累计盈亏金额/);
+    app.click('#btn-pnl-demo');
+    assert.doesNotMatch(app.document.querySelector('#pnl-card').textContent, /模拟近90天/);
+    assert.equal(app.window.__cj.stPnl.getOption().series[0].data[0][1], 100);
+    assert.equal(app.window.localStorage.getItem('cj.v1'), stateBefore);
+    assert.deepEqual(copy(app.evaluate('PnlHistory.state.snapshots')), historyBefore);
+    app.click('#btn-pnl-demo'); app.click('#tabs button[data-view="pos"]'); app.click('#tabs button[data-view="stats"]');
+    assert.equal(app.evaluate('pnlDemoPreview'), false);
+  } finally { app.close(); }
+});
+
+test('legacy records remain usable as amounts and never invent a missing percentage basis', async () => {
+  const app = await open();
+  try {
+    const history = await app.evaluate('PnlHistory.exportData()');
+    delete history.snapshots[0].purchases;
+    delete history.anchor.purchases;
+    app.window.legacyHistory = history;
+    assert.equal(await app.evaluate('PnlHistory.replace(legacyHistory, S.trades)'), true);
+    app.click('#tabs button[data-view="stats"]');
+    assert.equal(app.window.__cj.stPnl, null);
+    assert.match(app.document.querySelector('#pnl-card').textContent, /早期记录未保存买入基数/);
+    app.click('#btn-st-privacy');
+    assert.equal(app.window.__cj.stPnl.getOption().series[0].data[0][1], 100);
+    app.click('#btn-st-privacy');
+    await app.evaluate('refreshQuotes()'); await app.evaluate('PnlHistory.exportData()');
+    assert.equal(app.window.__cj.stPnl.getOption().series[0].data[0][1], 10);
   } finally { app.close(); }
 });
 
@@ -192,7 +266,7 @@ test('existing iPhone safe-area configuration and diagnostic privacy are preserv
     assert.match(app.document.querySelector('meta[name="viewport"]').content, /viewport-fit=contain/);
     assert.equal(app.document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content, 'default');
     const report = JSON.parse(app.evaluate('LayoutDiagnostics.report()'));
-    assert.equal(report.version, 'v1.15.0'); assert.equal(report.build, 'layout-20261112-01');
+    assert.equal(report.version, 'v1.15.1'); assert.equal(report.build, 'layout-20261112-02');
     assert.equal(JSON.stringify(report).includes('测试股票'), false);
   } finally { app.close(); }
 });

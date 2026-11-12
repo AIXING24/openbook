@@ -94,6 +94,7 @@ function showView(v, fromPop) {
     if (stChart) { stChart.dispose(); stChart = null; }
     if (stDonut) { stDonut.dispose(); stDonut = null; }
     if (stPnl) { stPnl.dispose(); stPnl = null; }
+    pnlDemoPreview = false;
   }
   if (v === 'pos') renderPos();
   else if (v === 'stats') renderStats();
@@ -374,7 +375,7 @@ function resetAddForm() {
 }
 
 /* ===== 统计页 ===== */
-let statPeriod = 'month', stChart = null, stDonut = null, stPnl = null, statsSlideDir = 0;   // 1=滑入自右侧(切下一个), -1=自左侧
+let statPeriod = 'month', stChart = null, stDonut = null, stPnl = null, statsSlideDir = 0, pnlDemoPreview = false;   // 1=滑入自右侧(切下一个), -1=自左侧
 /* 分类色板(环形图按股票身份编码), 取自已验证的参考调色板, 固定顺序不循环 */
 const CAT = {
   light: ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300'],
@@ -391,8 +392,10 @@ function renderStats() {
   const buyB = cvt(st.buy), sellB = cvt(st.sell), netB = buyB - sellB;
   const realB = Core.calcPositions(S.trades).reduce((a, p) => a + Core.toBase(p.realized, p.cur, S.base, F), 0);
   const rangeLabel = statPeriod === 'week' ? '本周（' + fmtDate(Core.weekStartStr()) + ' 起）' : statPeriod === 'month' ? '本月' : statPeriod === 'year' ? '本年' : '全部';
-  const historyState = PnlHistory.state;
-  const pnl = PnlHistory.view(historyState.snapshots, statPeriod, PnlHistory.dateAt(), S.base, historyState.anchor);
+  const demoLedger = S.trades.length > 0 && S.trades.every(trade => trade.demo);
+  const historyState = demoLedger || pnlDemoPreview ? PnlHistory.demoHistory(demoLedger ? S.trades : demoTrades()) : PnlHistory.state;
+  const pnlMode = privacyMasked ? 'percent' : 'amount';
+  const pnl = PnlHistory.view(historyState.snapshots, statPeriod, PnlHistory.dateAt(), S.base, historyState.anchor, pnlMode);
   const pnlAmount = value => maskAmt(value === null ? '—' : fmtAmtC(value, S.base, true));
   const periodName = { week: '本周盈亏', month: '本月盈亏', year: '本年盈亏', all: '近一年盈亏' }[statPeriod];
   const changeLabel = pnl.completePeriod ? periodName : '记录区间盈亏';
@@ -418,13 +421,14 @@ function renderStats() {
      <button data-p="all" class="${statPeriod === 'all' ? 'on' : ''}">全部</button>
    </div>
    <div class="card" id="pnl-card">
-     <div class="chart-head"><h2 style="font-size:15px;margin:0">盈亏走势</h2><button class="iconbtn" id="btn-st-privacy" aria-label="${privacyMasked ? '显示金额' : '隐藏金额'}">${privacyMasked ? ICO.eyeClosed : ICO.eyeOpen}</button></div>
+     <div class="chart-head"><h2 style="font-size:15px;margin:0">盈亏走势${historyState.demo ? ' · 示例' : ''}</h2><div style="display:flex;align-items:center;gap:8px">${demoLedger ? '' : `<button class="btn" id="btn-pnl-demo" style="padding:5px 8px;font-size:12px">${pnlDemoPreview ? '返回我的数据' : '看示例'}</button>`}<button class="iconbtn" id="btn-st-privacy" aria-label="${privacyMasked ? '显示金额' : '隐藏金额'}">${privacyMasked ? ICO.eyeClosed : ICO.eyeOpen}</button></div></div>
+     ${historyState.demo ? '<p class="footnote" style="padding:0 0 8px">模拟近90天的涨跌，仅用于演示。</p>' : ''}
      <div class="tile-row">
        <div class="tile"><div class="lbl">累计盈亏</div><div class="v num ${pnl.total === null ? '' : pcl(pnl.total)}">${pnlAmount(pnl.total)}</div><div class="s">已实现 + 浮动盈亏</div></div>
        <div class="tile"><div class="lbl">${changeLabel}</div><div class="v num ${pnl.change === null ? '' : pcl(pnl.change)}">${pnlAmount(pnl.change)}</div><div class="s">${esc(intervalLabel)}</div></div>
      </div>
-     ${privacyMasked ? '<div class="kerr" style="padding:32px 8px">金额与走势已隐藏 · 点击眼睛图标查看</div>' : '<div id="st-pnl" style="height:230px;margin-top:12px" role="img" aria-label="累计盈亏走势图，零线表示盈亏平衡"></div>'}
-     <p class="footnote" style="padding:8px 0 0">零线 = 盈亏平衡 · 每天保留最后一次完整行情记录${pnl.latest ? ' · 最新记录 ' + pnl.latest.date + ' ' + fmtTs(pnl.latest.capturedAt) : ''}<br>近一年记录，缺失日期留空；未打开应用时不自动采集。外币按各记录保存的汇率折算${pnl.records.some(record => record.fxApprox) ? '（部分为备用来源汇率）' : ''}。</p>
+     <div id="st-pnl" style="height:230px;margin-top:12px" role="img" aria-label="${privacyMasked ? '盈亏百分比走势图，金额已隐藏' : '累计盈亏金额走势图'}，零线表示盈亏平衡"></div>
+     <p class="footnote" style="padding:8px 0 0">${privacyMasked ? '金额已隐藏 · 纵轴为盈亏百分比' : '纵轴为累计盈亏金额'} · 零线 = 盈亏平衡${pnl.latest ? ' · 最新记录 ' + pnl.latest.date + ' ' + fmtTs(pnl.latest.capturedAt) : ''}<br>${historyState.demo ? '示例为模拟行情与汇率。' : '每天保留最后一次完整行情记录，近一年记录；缺失日期留空，未打开应用时不采集。外币按各记录保存的汇率折算' + (pnl.records.some(record => record.fxApprox) ? '（部分为备用来源汇率）' : '') + '。'}${privacyMasked ? '<br>百分比 = 累计盈亏 ÷ 截至当天累计买入金额（含手续费）；卖出不扣减分母。' : ''}${privacyMasked && pnl.records.some(record => !record.purchases) ? '<br>早期记录未保存买入基数，百分比从新版完整行情记录开始。' : ''}</p>
      ${pnlNotice || invalidCount ? `<p class="footnote" style="padding:8px 0 0">${esc(pnlNotice)}${pnlNotice && invalidCount ? '<br>' : ''}${invalidCount ? '账本变动影响了 ' + invalidCount + ' 个历史记录，已留空，原记录保留供核验。' : ''}</p>` : ''}
    </div>
    <div class="tile-row">
@@ -446,7 +450,8 @@ function renderStats() {
    <p class="footnote">外币金额按当前汇率折算${F.approx ? '（备用汇率，仅供参考）' : ''} · 金额满10万以「万」计 · 左右滑动可切换周期 · 点击股票行可查看K线与交易记录</p>`;
   bindSeg('#st-period', v => { statPeriod = v; renderStats(); }, 'p');
   $('#btn-st-privacy').onclick = togglePrivacy;
-  if (!privacyMasked) renderPnlChart(pnl);
+  const demoButton = $('#btn-pnl-demo'); if (demoButton) demoButton.onclick = () => { pnlDemoPreview = !pnlDemoPreview; renderStats(); };
+  renderPnlChart(pnl, pnlMode);
   el.querySelectorAll('#st-stocks tbody tr').forEach(tr => tr.onclick = () => openSheet(tr.dataset.tc));
   if (donutMode) renderStatsDonut(st, donutMode);
   if (statPeriod === 'year') renderStatsChart(st);
@@ -454,31 +459,34 @@ function renderStats() {
   el.classList.remove('from-r', 'from-l');
   if (statsSlideDir) { void el.offsetWidth; el.classList.add(statsSlideDir > 0 ? 'from-r' : 'from-l'); statsSlideDir = 0; }
 }
-function renderPnlChart(pnl) {
+function renderPnlChart(pnl, mode = 'amount') {
   const elm = $('#st-pnl'); if (!elm) return;
   if (!pnl.points.some(point => point[1] !== null)) {
-    elm.innerHTML = '<div class="kerr" style="padding:32px 8px">暂无有效记录 · 完整行情更新后自动记录</div>';
+    elm.innerHTML = `<div class="kerr" style="padding:32px 8px">${mode === 'percent' ? '暂无可计算百分比的记录 · 等待完整行情与有效买入基数' : '暂无有效记录 · 完整行情更新后自动记录'}</div>`;
     return;
   }
   if (!window.echarts) { elm.innerHTML = '<div class="kerr" style="padding:32px 8px">图表组件加载失败（需联网）</div>'; return; }
   stPnl = echarts.init(elm, null, { renderer: 'svg' });
+  const percentMode = mode === 'percent';
+  const percentLabel = value => (Math.abs(value) < 0.005 ? 0 : value).toFixed(2) + '%';
+  const seriesName = percentMode ? '盈亏占累计买入' : '累计盈亏';
   stPnl.setOption({
     animation: false, useUTC: true,
     grid: { left: 8, right: 38, top: 24, bottom: 8, containLabel: true },
     tooltip: { trigger: 'axis', backgroundColor: cssVar('--card'), borderColor: cssVar('--line'), textStyle: { color: cssVar('--fg'), fontSize: 12 },
       formatter: params => {
         const point = params[0]?.value;
-        return point && point[1] !== null ? new Date(point[0]).toISOString().slice(0, 10) + '<br>累计盈亏 ' + esc(fmtAmt(point[1], S.base, true)) : '当日无有效记录';
+        return point && point[1] != null ? new Date(point[0]).toISOString().slice(0, 10) + '<br>' + seriesName + ' ' + esc(percentMode ? percentLabel(point[1]) : fmtAmt(point[1], S.base, true)) : '当日无有效记录';
       }
     },
     xAxis: { type: 'time', min: pnl.points[0][0] - 43200000, max: pnl.points.at(-1)[0] + 43200000,
       axisLabel: { color: cssVar('--muted'), fontSize: 10, hideOverlap: true, formatter: value => { const date = new Date(value).toISOString().slice(0, 10); return +date.slice(5, 7) + '/' + +date.slice(8); } },
       axisLine: { lineStyle: { color: cssVar('--line') } }, splitLine: { show: false } },
     yAxis: { type: 'value', min: extent => Math.min(0, extent.min), max: extent => Math.max(0, extent.max),
-      axisLabel: { color: cssVar('--muted'), fontSize: 10, formatter: compactNum }, splitLine: { lineStyle: { color: cssVar('--line'), type: 'dashed' } } },
-    series: [{ type: 'line', name: '累计盈亏', data: pnl.points, connectNulls: false, smooth: false, showSymbol: true, symbolSize: 5,
+      axisLabel: { color: cssVar('--muted'), fontSize: 10, formatter: percentMode ? percentLabel : compactNum }, splitLine: { lineStyle: { color: cssVar('--line'), type: 'dashed' } } },
+    series: [{ type: 'line', name: seriesName, data: pnl.points, connectNulls: false, smooth: false, showSymbol: true, symbolSize: 5,
       itemStyle: { color: cssVar('--accent') || '#2a78d6' }, lineStyle: { width: 2 },
-      markLine: { silent: true, symbol: 'none', label: { show: true, formatter: '0', color: cssVar('--muted') }, lineStyle: { color: cssVar('--muted'), type: 'dashed' }, data: [{ yAxis: 0 }] }
+      markLine: { silent: true, symbol: 'none', label: { show: true, formatter: percentMode ? '0%' : '0', color: cssVar('--muted') }, lineStyle: { color: cssVar('--muted'), type: 'dashed' }, data: [{ yAxis: 0 }] }
     }]
   });
 }
