@@ -1,0 +1,28 @@
+tests/application.test.mjs
+  s_954afabfda404a::t_1d3d55d0f213c5 304
+  s_954afabfda404a::t_653ba533e18d51 153-187
+parts/p1.html
+  s_954afabfda404a::t_1d3d55d0f213c5 362-363
+README.md
+  s_954afabfda404a::t_1d3d55d0f213c5 11,100
+index.html
+  s_954afabfda404a::t_23da75e36b11a9 362-363,1286-1291,1729-1730
+parts/ui.js
+  s_954afabfda404a::t_1d3d55d0f213c5 48-53,491-492
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "bd843b5bbe6da9e2a117ffc8cac449fba85ea7e2",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
