@@ -494,6 +494,18 @@ function renderPnlChart(pnl, mode = 'amount') {
   const percentMode = mode === 'percent';
   const percentLabel = value => (Math.abs(value) < 0.005 ? 0 : value).toFixed(2) + '%';
   const seriesName = percentMode ? '盈亏占累计买入' : '累计盈亏';
+  const chart = stPnl, dayMs = 86400000;
+  const firstDay = pnl.points[0][0], lastDay = pnl.points.at(-1)[0];
+  const dayCount = Math.round((lastDay - firstDay) / dayMs) + 1;
+  // 自然日等距，跨月不额外插入刻度；缩放时也按固定天数显示标签。
+  const dateLabel = value => {
+    const day = (value - firstDay) / dayMs;
+    const slots = Math.max(2, Math.min(6, Math.floor(chart.getWidth() / 60)));
+    const step = Math.max(1, Math.ceil(dayCount / slots));
+    if (!Number.isInteger(day) || day < 0 || day >= dayCount || day % step) return '';
+    const date = new Date(value).toISOString().slice(0, 10);
+    return +date.slice(5, 7) + '/' + +date.slice(8);
+  };
   stPnl.setOption({
     animation: false, useUTC: true,
     grid: { left: 8, right: 38, top: 24, bottom: 8, containLabel: true },
@@ -503,9 +515,9 @@ function renderPnlChart(pnl, mode = 'amount') {
         return point && point[1] != null ? new Date(point[0]).toISOString().slice(0, 10) + '<br>' + seriesName + ' ' + esc(percentMode ? percentLabel(point[1]) : fmtAmt(point[1], S.base, true)) : '当日无有效记录';
       }
     },
-    xAxis: { type: 'time', min: pnl.points[0][0] - 43200000, max: pnl.points.at(-1)[0] + 43200000,
-      axisLabel: { color: cssVar('--muted'), fontSize: 10, hideOverlap: true, formatter: value => { const date = new Date(value).toISOString().slice(0, 10); return +date.slice(5, 7) + '/' + +date.slice(8); } },
-      axisLine: { lineStyle: { color: cssVar('--line') } }, splitLine: { show: false } },
+    xAxis: { type: 'value', min: firstDay - dayMs, max: lastDay + dayMs, interval: dayMs,
+      axisLabel: { color: cssVar('--muted'), fontSize: 10, hideOverlap: false, showMinLabel: false, showMaxLabel: false, formatter: dateLabel },
+      axisTick: { show: false }, axisLine: { lineStyle: { color: cssVar('--line') } }, splitLine: { show: false } },
     yAxis: { type: 'value', ...(percentMode ? { min: extent => Math.min(0, extent.min), max: extent => Math.max(0, extent.max) } : { scale: false }),
       axisLabel: { color: cssVar('--muted'), fontSize: 10, formatter: percentMode ? percentLabel : fmtPnlAxisAmount }, splitLine: { lineStyle: { color: cssVar('--line'), type: 'dashed' } } },
     series: [{ type: 'line', name: seriesName, data: pnl.points, connectNulls: false, smooth: false, showSymbol: true, symbolSize: 5,

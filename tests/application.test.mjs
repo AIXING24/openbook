@@ -227,6 +227,50 @@ test('amount chart tick labels match the exact scale used for mock point coordin
   } finally { app.close(); }
 });
 
+test('calendar date labels stay unique and equally spaced across month boundaries, gaps and resize', async () => {
+  const app = await open();
+  try {
+    app.click('#tabs button[data-view="stats"]');
+    const cases = [
+      ['2026-11-13', 1], ['2026-11-12', 2], ['2026-11-09', 5], ['2026-10-28', 10],
+      ['2026-10-01', 31], ['2024-02-01', 29], ['2026-08-16', 90], ['2025-11-14', 365],
+    ];
+    for (const [date, length] of cases) for (const mode of ['amount', 'percent']) {
+      const points = Array.from({ length }, (_, day) => [Date.parse(date) + day * 86400000, length > 10 && day >= 3 && day <= 5 ? null : (day % 7 - 2) * (mode === 'percent' ? 0.5 : 1000)]);
+      app.window.axisFixture = { points };
+      app.evaluate(`if (stPnl) stPnl.dispose(); renderPnlChart(axisFixture, '${mode}');`);
+      const chart = app.window.__cj.stPnl;
+      for (const width of [280, 320, 390, 560, 280]) {
+        chart.resize({ width, height: 230 });
+        const svgDom = new JSDOM(chart.renderToSVGString(), { contentType: 'image/svg+xml' });
+        const labels = Array.from(svgDom.window.document.querySelectorAll('text'))
+          .filter(node => /^\d{1,2}\/\d{1,2}$/.test(node.textContent))
+          .map(node => ({ text: node.textContent, pixel: Number(/translate\(([-\d.]+)/.exec(node.getAttribute('transform') || '')?.[1]) + Number(node.getAttribute('x') || 0) }))
+          .sort((a, b) => a.pixel - b.pixel);
+        svgDom.window.close();
+        const scenario = `${date}/${length}/${mode}/${width}`;
+        assert.equal(new Set(labels.map(label => label.text)).size, labels.length, scenario + ': repeated day labels');
+        assert.ok(labels.length >= (length === 1 ? 1 : 2) && labels.length <= 6, scenario + ': unsuitable label count');
+        const dates = new Map(points.map(point => { const day = new Date(point[0]).toISOString().slice(0, 10); return [+day.slice(5, 7) + '/' + +day.slice(8), point[0]]; }));
+        const dateAxis = chart.getModel().getComponent('xAxis').axis;
+        for (const label of labels) {
+          assert.ok(dates.has(label.text), scenario + ': date outside the recorded range');
+          const expected = chart.convertToPixel({ xAxisIndex: 0 }, dates.get(label.text));
+          assert.ok(Math.abs(expected - label.pixel) < 0.01, scenario + ': label does not match its date position');
+        }
+        for (let index = 2; index < labels.length; index++) {
+          assert.ok(Math.abs((labels[index].pixel - labels[index - 1].pixel) - (labels[1].pixel - labels[0].pixel)) < 0.01, scenario + ': uneven visible date spacing');
+          assert.equal(dates.get(labels[index].text) - dates.get(labels[index - 1].text), dates.get(labels[1].text) - dates.get(labels[0].text), scenario + ': unequal calendar intervals');
+        }
+        const dayPixels = points.map(point => dateAxis.toGlobalCoord(dateAxis.dataToCoord(point[0])));
+        for (let index = 2; index < dayPixels.length; index++) assert.ok(Math.abs((dayPixels[index] - dayPixels[index - 1]) - (dayPixels[1] - dayPixels[0])) < 0.01, scenario + ': missing days compressed time');
+        assert.deepEqual(copy(chart.getOption().series[0].data), points, scenario + ': chart altered the recorded values or gaps');
+      }
+    }
+    assert.deepEqual(app.errors, []);
+  } finally { app.close(); }
+});
+
 test('legacy records remain usable as amounts and never invent a missing percentage basis', async () => {
   const app = await open();
   try {
@@ -343,7 +387,7 @@ test('existing iPhone safe-area configuration and diagnostic privacy are preserv
     assert.match(app.document.querySelector('meta[name="viewport"]').content, /viewport-fit=contain/);
     assert.equal(app.document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content, 'default');
     const report = JSON.parse(app.evaluate('LayoutDiagnostics.report()'));
-    assert.equal(report.version, 'v1.15.3'); assert.equal(report.build, 'layout-20261112-04');
+    assert.equal(report.version, 'v1.15.4'); assert.equal(report.build, 'layout-20261113-01');
     assert.equal(JSON.stringify(report).includes('测试股票'), false);
   } finally { app.close(); }
 });
