@@ -1,0 +1,36 @@
+README.md
+  s_954afabfda404a::t_59b7d0b4b22c8e 10,101,108
+parts/data.js
+  s_954afabfda404a::t_1fc2091edda447 8-16,18,22,25
+index.html
+  s_954afabfda404a::t_38462ca368a16c 109-115,703-711,713,717,720,1426-1428,1430-1454,1456-1460,1475,1519-1520,2029,2085,2114,2127
+  s_954afabfda404a::t_e066735c81fc49 1455
+  s_954afabfda404a::t_ab960d9269e8db 369-370,1429
+parts/ui.js
+  s_954afabfda404a::t_1fc2091edda447 170-172,174-198,200-204,219,263-264,773,829,858,871
+  s_954afabfda404a::t_b0cc002b852374 199
+  s_954afabfda404a::t_59b7d0b4b22c8e 173
+parts/p1.html
+  s_954afabfda404a::t_59b7d0b4b22c8e 369-370
+  s_954afabfda404a::t_1fc2091edda447 109-115
+tests/application.test.mjs
+  s_954afabfda404a::t_25995c1b435ebd 108-111
+  s_954afabfda404a::t_b0cc002b852374 73-107,112-181
+  s_954afabfda404a::t_59b7d0b4b22c8e 499
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "fc3a72ac7e1bb10c309af92bf6797dda17531676",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
