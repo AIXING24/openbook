@@ -167,6 +167,41 @@ function calcDailyPnL(market = demoMarket()) {
 }
 
 /* ===== 持仓页 ===== */
+function positionList() {
+  const positions = Core.calcPositions(S.trades);
+  const rank = new Map(S.positionOrder.map((tc, index) => [tc, index]));
+  return positions.sort((a, b) => (rank.get(a.tc) ?? positions.length) - (rank.get(b.tc) ?? positions.length));
+}
+function openPositionSort() {
+  let draft = positionList(), custom = true;
+  openModal('调整持仓顺序',
+    '<p class="footnote" style="padding:0;margin:0 0 10px">用上下按钮调整，保存后记住顺序。新增股票排在末尾，清仓记录继续保留。</p><div id="pos-sort-list"></div><button class="btn" id="pos-sort-reset" style="margin-top:10px;width:100%">恢复按最近交易排序</button>',
+    [{ t: '取消' }, { t: '保存排序', primary: true, fn: () => {
+      S.positionOrder = custom ? draft.map(position => position.tc) : [];
+      const saved = save(); renderPos();
+      if (saved) showToast(custom ? '已保存自定义顺序' : '已恢复按最近交易排序');
+      return !saved;
+    } }]);
+  $('#modal').classList.add('pos-sort-modal');
+  const list = $('#pos-sort-list');
+  const draw = () => {
+    list.innerHTML = draft.map((position, index) => `<div class="pos-sort-row" data-tc="${esc(position.tc)}">
+      <div class="pr-l"><div class="pr-name"><span class="nm">${esc(position.name)}</span><span class="tag">${MKT_TAG[position.mkt] || ''}</span></div><div class="pr-sub">${position.shares === 0 ? '已清仓' : '持仓中'}</div></div>
+      <button class="iconbtn" data-move="-1" data-index="${index}" aria-label="上移 ${esc(position.name)}" ${index === 0 ? 'disabled' : ''}>↑</button>
+      <button class="iconbtn" data-move="1" data-index="${index}" aria-label="下移 ${esc(position.name)}" ${index === draft.length - 1 ? 'disabled' : ''}>↓</button></div>`).join('');
+  };
+  list.onclick = event => {
+    const button = event.target.closest('button[data-move]'); if (!button || button.disabled) return;
+    const from = +button.dataset.index, to = from + +button.dataset.move;
+    if (to < 0 || to >= draft.length) return;
+    [draft[from], draft[to]] = [draft[to], draft[from]]; custom = true; draw();
+    const row = list.children[to];
+    (row.querySelector(`button[data-move="${button.dataset.move}"]:not(:disabled)`) || row.querySelector('button:not(:disabled)'))?.focus({ preventScroll: true });
+    row.scrollIntoView?.({ block: 'nearest' });
+  };
+  $('#pos-sort-reset').onclick = () => { draft = Core.calcPositions(S.trades); custom = false; draw(); showToast('已恢复最近交易顺序，点保存后生效'); };
+  draw();
+}
 function netBadge() {
   if (net.ok === false) return '<span class="netbad">行情不可用</span>';
   return net.at ? fmtTs(net.at) + ' 更新' : '待获取行情';
@@ -181,7 +216,7 @@ function emptyHtml() {
 function renderPos() {
   const market = demoMarket();
   const el = $('#v-pos'); const F = market?.fx || fxInfo();
-  const poss = Core.calcPositions(S.trades);
+  const poss = positionList();
   let mktB = 0, costB = 0, realB = 0, noPx = 0;
   const rows = poss.map(p => {
     const q = (market?.quotes || quotes)[p.tc]; const has = q && isFinite(q.px);
@@ -225,7 +260,8 @@ function renderPos() {
      </div>
      <div class="fx-line num">1 USD = ${F.USDCNY.toFixed(4)} CNY · 1 HKD = ${F.HKDCNY.toFixed(4)} CNY${F.approx ? ' · 备用汇率' : ''}${noPx ? ` · ${noPx} 只无行情未计入总市值` : ''}</div>
    </div>
-   ${poss.length ? `<div class="pos-h"><h2>持仓明细</h2><span>${poss.length} 只 · 点击看K线</span></div><div class="poslist">${rows}</div>` : emptyHtml()}`;
+   ${poss.length ? `<div class="pos-h"><h2>持仓明细</h2><div class="pos-h-actions"><span>${poss.length} 只</span><button class="btn" id="btn-pos-sort">${S.positionOrder.length ? '自定义排序' : '排序'}</button></div></div><div class="poslist">${rows}</div>` : emptyHtml()}`;
+  const sortButton = $('#btn-pos-sort'); if (sortButton) sortButton.onclick = openPositionSort;
   const rb = $('#btn-refresh'); if (rb) rb.onclick = () => refreshQuotes();
   const pb = $('#btn-privacy'); if (pb) pb.onclick = togglePrivacy;
   const dib = $('#div-inbox-btn'); if (dib) dib.onclick = openDivModal;
@@ -734,7 +770,7 @@ function bindClear() {
   b.onclick = async () => {
     if (!S.trades.length && !PnlHistory.state.snapshots.length) { showToast('没有数据可清空'); return; }
     if (Date.now() - arm < 4000) {
-      const cleared = await restoreDataset({ ...S, trades: [], seeded: true }, null);
+      const cleared = await restoreDataset({ ...S, trades: [], positionOrder: [], seeded: true }, null);
       if (!cleared) { showToast('清空未完成，原数据保留或将在重开后恢复处理'); return; }
       rerender();
       if (!$('#sheet').hidden) closeSheet();
@@ -790,6 +826,7 @@ function prepareImport(obj) {
   });
   const state = { ...DEFAULT_STATE, trades, seeded: true, demoVersion: Number.isInteger(obj.demoVersion) ? obj.demoVersion : 0, base: ['CNY', 'USD'].includes(obj.base) ? obj.base : 'CNY', upRed: obj.upRed !== false,
     theme: ['auto', 'light', 'dark'].includes(obj.theme) ? obj.theme : 'auto', brokers: Array.isArray(obj.brokers) ? obj.brokers.filter(value => typeof value === 'string').slice(0, 12) : [], lastBroker: String(obj.lastBroker || ''), lastBackup: Number.isFinite(obj.lastBackup) ? obj.lastBackup : 0 };
+  state.positionOrder = normalizePositionOrder(obj.positionOrder, trades);
   PnlHistory.normalizeBackup(obj.pnlHistory, state.trades, PnlHistory.dateAt());
   return { state, history: obj.pnlHistory || null };
 }
@@ -818,6 +855,7 @@ function handleImport(file) {
   rd.readAsText(file);
 }
 function openModal(title, bodyHtml, acts) {
+  $('#modal').classList.remove('pos-sort-modal');
   $('#modal-title').textContent = title;
   $('#modal-body').innerHTML = bodyHtml;
   const ac = $('#modal-acts'); ac.innerHTML = '';
@@ -830,7 +868,7 @@ function openModal(title, bodyHtml, acts) {
   });
   $('#modal').hidden = false;
 }
-function closeModal() { $('#modal').hidden = true; }
+function closeModal() { $('#modal').hidden = true; $('#modal').classList.remove('pos-sort-modal'); }
 
 /* ===== 个股详情页 ===== */
 let sheetTc = null, kChart = null, kPeriod = 'day', kCache = {};

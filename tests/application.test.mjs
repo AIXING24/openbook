@@ -70,6 +70,115 @@ test('built HTML exactly matches six source parts and all scripts parse', () => 
   assert.doesNotThrow(() => new vm.Script(scripts.join('\n')));
 });
 
+function sortingState() {
+  const trade = (tc, date, side, id) => ({ ...fixture.trades[0], tc, code: tc.slice(2), mkt: tc.slice(0, 2), name: tc, date, side, id, px: side === 'B' ? 100 : 120 });
+  return { ...copy(fixture), trades: [copy(fixture.trades[0]),
+    trade('sh600001', '2026-11-08', 'B', 'b-buy'), trade('sh600001', '2026-11-12', 'S', 'b-sell'),
+    trade('sz000001', '2026-11-08', 'B', 'c-buy'), trade('sz000001', '2026-11-11', 'S', 'c-sell')] };
+}
+const positionRows = app => Array.from(app.document.querySelectorAll('#v-pos .pos-row'), row => row.dataset.tc);
+const sortRows = app => Array.from(app.document.querySelectorAll('#pos-sort-list .pos-sort-row'), row => row.dataset.tc);
+
+test('custom position sorting saves only on confirmation, survives refresh and reload, and preserves closed trades and history', async () => {
+  const database = new IDBFactory(), app = await open({ state: sortingState(), database });
+  let savedState;
+  try {
+    const originalTrades = copy(app.window.__cj.S.trades), originalHistory = copy(await app.evaluate('PnlHistory.exportData()'));
+    assert.ok(originalHistory.snapshots.length > 0);
+    assert.deepEqual(positionRows(app), ['sh600001', 'sz000001', 'sh600000']);
+    assert.match(app.document.querySelector('.pos-row[data-tc="sh600001"]').textContent, /已清仓/);
+    app.click('#btn-pos-sort');
+    assert.equal(app.document.querySelector('#pos-sort-list button[data-index="0"][data-move="-1"]').disabled, true);
+    assert.equal(app.document.querySelector('#pos-sort-list button[data-index="2"][data-move="1"]').disabled, true);
+    app.click('#pos-sort-list button[data-index="2"][data-move="-1"]');
+    app.click('#modal-acts button:first-child');
+    assert.deepEqual(positionRows(app), ['sh600001', 'sz000001', 'sh600000']);
+    assert.deepEqual(copy(app.window.__cj.S.positionOrder), []);
+    app.click('#btn-pos-sort');
+    app.click('#pos-sort-list button[data-index="2"][data-move="-1"]');
+    app.click('#pos-sort-list button[data-index="1"][data-move="-1"]');
+    await app.evaluate('refreshQuotes()');
+    assert.deepEqual(sortRows(app), ['sh600000', 'sh600001', 'sz000001']);
+    app.click('#modal-acts .btn-primary');
+    assert.equal(app.document.querySelector('#modal').hidden, true);
+    assert.deepEqual(positionRows(app), ['sh600000', 'sh600001', 'sz000001']);
+    assert.deepEqual(copy(app.window.__cj.S.trades), originalTrades);
+    assert.deepEqual(copy(await app.evaluate('PnlHistory.exportData()')), originalHistory);
+    app.click('.pos-row[data-tc="sh600001"]');
+    assert.equal(app.document.querySelectorAll('#sh-trades .trade-row').length, 2);
+    assert.equal(app.document.querySelector('#sh-trades .bs.B').textContent, 'B');
+    assert.equal(app.document.querySelector('#sh-trades .bs.S').textContent, 'S');
+    await until(() => app.document.querySelector('#kchart').textContent !== '加载中…');
+    savedState = JSON.parse(app.window.localStorage.getItem('cj.v1'));
+    assert.deepEqual(app.errors, []);
+  } finally { app.close(); }
+  const reopened = await open({ state: savedState, database });
+  try { assert.deepEqual(positionRows(reopened), ['sh600000', 'sh600001', 'sz000001']); }
+  finally { reopened.close(); }
+});
+
+test('custom position order stays fixed after sales, appends new stocks, and removes only fully deleted stock identities', async () => {
+  const app = await open({ state: { ...sortingState(), positionOrder: ['sh600000', 'sz000001', 'sh600001'] } });
+  try {
+    const originalOrder = positionRows(app);
+    app.evaluate('S.trades.push({ ...S.trades[0], id:"a-sell", side:"S", date:"2026-11-12", px:120 }); save(); renderPos();');
+    assert.deepEqual(positionRows(app), originalOrder);
+    assert.match(app.document.querySelector('.pos-row[data-tc="sh600000"]').textContent, /已清仓/);
+    for (const code of ['600002', '600003']) {
+      app.evaluate(`S.trades.push({ ...S.trades[0], id:"${code}-buy", tc:"sh${code}", code:"${code}", date:"2026-11-12" }, { ...S.trades[0], id:"${code}-sell", tc:"sh${code}", code:"${code}", side:"S", date:"2026-11-12", ts:2 }); save(); renderPos();`);
+    }
+    assert.deepEqual(positionRows(app), [...originalOrder, 'sh600002', 'sh600003']);
+    app.evaluate('S.trades = S.trades.filter(trade => trade.tc !== "sh600001"); save(); renderPos();');
+    assert.deepEqual(positionRows(app), ['sh600000', 'sz000001', 'sh600002', 'sh600003']);
+    assert.deepEqual(JSON.parse(app.window.localStorage.getItem('cj.v1')).positionOrder, positionRows(app));
+    assert.deepEqual(app.errors, []);
+  } finally { app.close(); }
+});
+
+test('position order roundtrips in backups, accepts legacy backups, resets on request and clears with the ledger', async () => {
+  const app = await open({ state: { ...sortingState(), positionOrder: ['sh600000', 'sh600000', null, 'missing', 'sz000001'] } });
+  try {
+    const customOrder = ['sh600000', 'sz000001', 'sh600001'];
+    assert.deepEqual(positionRows(app), customOrder);
+    app.click('#tabs button[data-view="set"]'); await app.evaluate('doExport()');
+    const backup = JSON.parse(app.document.querySelector('#exp-ta').value);
+    assert.deepEqual(backup.positionOrder, customOrder);
+    app.window.sortBackup = backup;
+    const prepared = app.evaluate('prepareImport(sortBackup)');
+    assert.deepEqual(copy(prepared.state.positionOrder), customOrder);
+    app.window.sortRestore = prepared;
+    assert.equal(await app.evaluate('restoreDataset(sortRestore.state, sortRestore.history)'), true);
+    const legacy = copy(backup); delete legacy.positionOrder; app.window.legacySortBackup = legacy;
+    assert.deepEqual(copy(app.evaluate('prepareImport(legacySortBackup).state.positionOrder')), []);
+    app.evaluate('closeModal()'); app.click('#tabs button[data-view="pos"]');
+    app.click('#btn-pos-sort'); app.click('#pos-sort-reset'); app.click('#modal-acts button:first-child');
+    assert.deepEqual(positionRows(app), customOrder);
+    app.click('#btn-pos-sort'); app.click('#pos-sort-reset'); app.click('#modal-acts .btn-primary');
+    assert.deepEqual(copy(app.window.__cj.S.positionOrder), []);
+    assert.deepEqual(positionRows(app), ['sh600001', 'sz000001', 'sh600000']);
+    assert.equal(app.window.__cj.S.trades.length, backup.trades.length);
+    app.evaluate('S.positionOrder = ["sh600000", "sz000001", "sh600001"]; save();');
+    app.click('#tabs button[data-view="set"]'); app.click('#btn-clear'); app.click('#btn-clear');
+    await until(() => app.window.__cj.S.trades.length === 0);
+    assert.deepEqual(copy(app.window.__cj.S.positionOrder), []);
+    assert.deepEqual(app.errors, []);
+  } finally { app.close(); }
+});
+
+test('failed position order save leaves the stored order and transactions intact and reports failure', async () => {
+  const app = await open({ state: sortingState(), blockStateWrite: true });
+  try {
+    const before = app.window.localStorage.getItem('cj.v1');
+    app.click('#btn-pos-sort'); app.click('#pos-sort-list button[data-index="2"][data-move="-1"]');
+    app.click('#modal-acts .btn-primary');
+    assert.equal(app.window.localStorage.getItem('cj.v1'), before);
+    assert.deepEqual(positionRows(app), ['sh600001', 'sz000001', 'sh600000']);
+    assert.equal(app.document.querySelector('#modal').hidden, false);
+    assert.match(app.document.querySelector('#toast').textContent, /数据未保存/);
+    assert.deepEqual(app.errors, []);
+  } finally { app.close(); }
+});
+
 test('actual boot records automatically; privacy keeps only percentage chart data and hides amounts', async () => {
   const app = await open();
   try {
@@ -387,7 +496,7 @@ test('existing iPhone safe-area configuration and diagnostic privacy are preserv
     assert.match(app.document.querySelector('meta[name="viewport"]').content, /viewport-fit=contain/);
     assert.equal(app.document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]').content, 'default');
     const report = JSON.parse(app.evaluate('LayoutDiagnostics.report()'));
-    assert.equal(report.version, 'v1.15.4'); assert.equal(report.build, 'layout-20261113-01');
+    assert.equal(report.version, 'v1.16.0'); assert.equal(report.build, 'layout-20261115-01');
     assert.equal(JSON.stringify(report).includes('测试股票'), false);
   } finally { app.close(); }
 });

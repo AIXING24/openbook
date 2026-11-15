@@ -106,6 +106,13 @@ input,textarea{font:inherit;color:inherit}
 .pos-h{display:flex;justify-content:space-between;align-items:baseline;padding:2px 4px}
 .pos-h h2{font-size:16px;font-weight:600;margin:0}
 .pos-h span{font-size:11px;color:var(--faint)}
+.pos-h-actions{display:flex;align-items:center;gap:8px}
+.pos-h-actions .btn{font-size:12px;padding:6px 10px;min-height:36px}
+.pos-sort-modal #modal-body{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.pos-sort-modal h3,.pos-sort-modal .modal-acts{flex-shrink:0}
+.pos-sort-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.pos-sort-row .iconbtn{width:44px;height:44px;font-size:20px}
+.pos-sort-row .iconbtn:disabled{opacity:.3}
 .pos-row{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left;
   background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;box-shadow:var(--shadow)}
 .pr-l{flex:1;min-width:0}
@@ -359,8 +366,8 @@ html.openbook-standalone #main{padding-bottom:calc(70px + env(safe-area-inset-bo
 <div id="modal" hidden><div class="modal-card"><h3 id="modal-title"></h3><div id="modal-body"></div><div class="modal-acts" id="modal-acts"></div></div></div>
 <script id="layout-diagnostics">
 const LayoutDiagnostics = (() => {
-  const version = 'v1.15.4';
-  const build = 'layout-20261113-01';
+  const version = 'v1.16.0';
+  const build = 'layout-20261115-01';
   const storageKey = 'cj.layout-debug.v1';
   const maxStoredCharacters = 400000;
   const maxSamples = 60;

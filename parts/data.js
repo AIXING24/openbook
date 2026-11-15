@@ -5,13 +5,24 @@ function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e
 function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { storageDead = true; return false; } }
 const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 't' + Date.now() + Math.random().toString(36).slice(2, 8));
 
-const DEFAULT_STATE = { v: 1, base: 'CNY', upRed: true, theme: 'auto', brokers: [], trades: [], lastBackup: 0, seeded: false, demoVersion: 0, lastBroker: '' };
+function normalizePositionOrder(order, trades) {
+  if (!Array.isArray(order) || !order.length) return [];
+  const stocks = new Set(trades.map(trade => trade.tc));
+  const kept = [...new Set(order.filter(tc => typeof tc === 'string' && stocks.has(tc)))];
+  if (!kept.length) return [];
+  const known = new Set(kept);
+  return kept.concat([...stocks].filter(tc => !known.has(tc)));
+}
+const DEFAULT_STATE = { v: 1, base: 'CNY', upRed: true, theme: 'auto', brokers: [], trades: [], lastBackup: 0, seeded: false, demoVersion: 0, lastBroker: '', positionOrder: [] };
 let S = Object.assign({}, DEFAULT_STATE, lsGet(LS_STATE) || {});
+S.positionOrder = normalizePositionOrder(S.positionOrder, S.trades);
 let historyStarted = false, datasetRestoring = false, restorePending = false;
 const LS_RESTORE = 'cj.pnl-restore.v1';
 function save() {
+  S.positionOrder = normalizePositionOrder(S.positionOrder, S.trades);
   if (datasetRestoring || restorePending || !lsSet(LS_STATE, S)) {
     S = Object.assign({}, DEFAULT_STATE, lsGet(LS_STATE) || {});
+    S.positionOrder = normalizePositionOrder(S.positionOrder, S.trades);
     showToast('数据未保存，请检查存储空间或重新打开后再试');
     return false;
   }
