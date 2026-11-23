@@ -1,0 +1,56 @@
+{
+  "version": "backend v0.3.2",
+  "startedAt": "2026-11-23T09:16:02.988Z",
+  "endpoint": "https://gaintrace-batch-api.pages.dev",
+  "readOnly": true,
+  "checks": [
+    {
+      "name": "Public connection page",
+      "status": 200,
+      "dns": "system-dns"
+    },
+    {
+      "name": "Account and admin authorization enforced",
+      "unauthorizedStatus": 401
+    },
+    {
+      "name": "Deployed backend version",
+      "version": "backend v0.3.2"
+    },
+    {
+      "name": "Ledger pagination ALICE",
+      "revision": 4,
+      "trades": 1001,
+      "history": 9
+    },
+    {
+      "name": "Ledger pagination BOB",
+      "revision": 1,
+      "trades": 100,
+      "history": 4
+    },
+    {
+      "name": "Distinct synthetic accounts"
+    },
+    {
+      "name": "Pages and Worker share identical synthetic D1 state",
+      "workerDns": "diagnostic Cloudflare DNS-over-HTTPS"
+    },
+    {
+      "name": "Official Pages production configuration",
+      "subdomain": "gaintrace-batch-api.pages.dev",
+      "productionBranch": "dev/gaintrace-backend",
+      "deploymentId": "73c3c9fe-b73e-4c49-bb05-f37aae754d0d",
+      "deploymentUrl": "https://73c3c9fe.gaintrace-batch-api.pages.dev",
+      "d1Binding": "DB",
+      "mode": "mock-only",
+      "secretCount": 3
+    },
+    {
+      "name": "Temporary Cron remains disabled",
+      "schedules": []
+    }
+  ],
+  "phoneAccessProven": false,
+  "completedAt": "2026-11-23T09:16:27.917Z"
+}

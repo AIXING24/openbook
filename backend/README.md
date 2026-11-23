@@ -25,4 +25,8 @@
 
 ## 免费地址备用部署
 
-`npm run build:pages` 生成忽略提交的 `.pages-output`，含连接测试页和同一模拟接口的 `_worker.js`。`wrangler.pages.example.json` 提供 Pages 配置样例；实际数据库绑定与测试密钥仅在本机/云端配置。Pages 仅提供备用 API 域名，日终 Cron 仍由 Worker 执行。当前 Pages 官方授权需要额外 pages:write，现有权限访问返回403；在用户完成授权前不宣称已部署。
+`npm run build:pages` 生成忽略提交的 `.pages-output`，含连接测试页和同一模拟接口的 `_worker.js`。`wrangler.pages.example.json` 提供 Pages 配置样例；实际数据库绑定与测试密钥仅在本机/云端配置。Pages 仅提供备用 API 域名，日终 Cron 仍由 Worker 执行。
+
+2026-11-23已部署 https://gaintrace-batch-api.pages.dev/ ，用户确认手机蜂窝可打开；Wi-Fi仍待补测。标准浏览器OAuth成功补充pages:write；设备验证码在新页面及有效期内也失败，未确定Cloudflare设备接口的根因。Wrangler 4.166首次创建须按官方提示加`--force`以直接使用Pages；后续部署无需此参数。Pages配置不支持Worker的account_id/observability字段，账户可用CLOUDFLARE_ACCOUNT_ID设置。
+
+只读验收使用`NODE_EXTRA_CA_CERTS=/etc/ssl/cert.pem node scripts/cloud-pages-check.mjs`（在本目录运行）。它检查普通系统DNS下页面与鉴权、两个模拟账户分页与Worker数据一致性、官方D1绑定和测试密钥类型，以及测试Cron仍为空；测试密钥只在内存中读取，不输出。证据见cloud-pages-verification-v0.3.2.json。该验证不改变账本，也不代表生产认证或真实前端迁移已完成。
