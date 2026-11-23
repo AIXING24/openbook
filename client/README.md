@@ -28,3 +28,5 @@
 现有save()是同步localStorage写入；云模式应由交易/设置入口await enqueue后更新S和提示，不能先改S、异步fetch失败仍声称成功。云模式下不要另写一份localStorage账本冒充与队列原子提交。迁移入口仍需在原存储实例内冻结源备份、分批核验激活，再初始化此模块，保留旧数据。
 
 后续必须补齐生产身份验证、迁移状态与迁移期间队列、冲突核对UI、分页历史/旧证据适配，以及移动端关闭重开、离线与免费额度实测。用户已选择通用邮箱/手机验证码，优先评估邮箱；不使用GitHub登录作为既定方案。
+
+auth v0.1.0的email-session.mjs已提供PKCE开始/返回兑换/内存短期会话/登出接口，与backend/email-auth.mjs做本地验证。此模块尚未由生产页面调用，仍需Cloudflare Access OTP配置与手机实测。详见docs/backend/email-auth-validation-v0.1.0.md。
