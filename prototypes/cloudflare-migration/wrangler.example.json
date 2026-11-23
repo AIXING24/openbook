@@ -1,0 +1,24 @@
+{
+  "name": "gaintrace-free-validation",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "vars": {
+    "PROTOTYPE_MODE": "mock-only"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gaintrace-free-validation-db",
+      "database_id": "REPLACE_WITH_TEST_DATABASE_ID"
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "triggers": {
+    "crons": []
+  },
+  "preview_urls": false
+}

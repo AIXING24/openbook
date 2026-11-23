@@ -1,2 +1,9 @@
 node_modules/
 .DS_Store
+.wrangler/
+.dev.vars
+.dev.vars.*
+.env
+.env.*
+*.local.json
+.validation-secrets.json

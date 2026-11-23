@@ -1,0 +1,234 @@
+{
+  "version": "prototype v0.2.1",
+  "checkedAt": "2026-11-23T07:24:34.144Z",
+  "transport": {
+    "mode": "diagnostic Cloudflare DNS-over-HTTPS",
+    "host": "gaintrace-free-validation.aixing24-gaintrace.workers.dev",
+    "addresses": [
+      "104.21.2.144",
+      "172.67.129.77"
+    ],
+    "certificateValidation": "enabled; original hostname preserved",
+    "productionBrowserAccessProven": false
+  },
+  "events": [
+    {
+      "name": "raw state reads preserve full ledger and historical evidence",
+      "startedAt": "2026-11-23T07:24:15.111Z",
+      "finishedAt": "2026-11-23T07:24:18.927Z"
+    },
+    {
+      "name": "small SQL mutations and response-loss replay preserve past P&L",
+      "startedAt": "2026-11-23T07:24:20.928Z",
+      "finishedAt": "2026-11-23T07:24:25.150Z"
+    },
+    {
+      "name": "daily calculation without loading history",
+      "startedAt": "2026-11-23T07:24:27.152Z",
+      "finishedAt": "2026-11-23T07:24:31.864Z"
+    },
+    {
+      "name": "next synthetic date staged for real Cron",
+      "startedAt": "2026-11-23T07:24:33.865Z",
+      "finishedAt": "2026-11-23T07:24:34.144Z"
+    }
+  ],
+  "requests": [
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:12.383Z",
+      "finishedAt": "2026-11-23T07:24:13.111Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:15.112Z",
+      "finishedAt": "2026-11-23T07:24:15.433Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:15.436Z",
+      "finishedAt": "2026-11-23T07:24:15.750Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:15.750Z",
+      "finishedAt": "2026-11-23T07:24:16.274Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:16.276Z",
+      "finishedAt": "2026-11-23T07:24:16.773Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:16.775Z",
+      "finishedAt": "2026-11-23T07:24:17.078Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:17.079Z",
+      "finishedAt": "2026-11-23T07:24:17.401Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:17.401Z",
+      "finishedAt": "2026-11-23T07:24:17.702Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:17.703Z",
+      "finishedAt": "2026-11-23T07:24:18.231Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:18.233Z",
+      "finishedAt": "2026-11-23T07:24:18.577Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:18.579Z",
+      "finishedAt": "2026-11-23T07:24:18.925Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/operation",
+      "startedAt": "2026-11-23T07:24:20.931Z",
+      "finishedAt": "2026-11-23T07:24:21.468Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/operation",
+      "startedAt": "2026-11-23T07:24:21.468Z",
+      "finishedAt": "2026-11-23T07:24:21.926Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/operation",
+      "startedAt": "2026-11-23T07:24:21.926Z",
+      "finishedAt": "2026-11-23T07:24:22.306Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/operation",
+      "startedAt": "2026-11-23T07:24:22.306Z",
+      "finishedAt": "2026-11-23T07:24:22.800Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/operation",
+      "startedAt": "2026-11-23T07:24:22.800Z",
+      "finishedAt": "2026-11-23T07:24:23.129Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/operation",
+      "startedAt": "2026-11-23T07:24:23.130Z",
+      "finishedAt": "2026-11-23T07:24:23.558Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/operation",
+      "startedAt": "2026-11-23T07:24:23.558Z",
+      "finishedAt": "2026-11-23T07:24:23.982Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/operation",
+      "startedAt": "2026-11-23T07:24:23.982Z",
+      "finishedAt": "2026-11-23T07:24:24.462Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/operation",
+      "startedAt": "2026-11-23T07:24:24.462Z",
+      "finishedAt": "2026-11-23T07:24:24.859Z",
+      "status": 200
+    },
+    {
+      "role": "ALICE",
+      "path": "/state",
+      "startedAt": "2026-11-23T07:24:24.859Z",
+      "finishedAt": "2026-11-23T07:24:25.148Z",
+      "status": 200
+    },
+    {
+      "role": "ADMIN",
+      "path": "/validation/seed",
+      "startedAt": "2026-11-23T07:24:27.152Z",
+      "finishedAt": "2026-11-23T07:24:27.411Z",
+      "status": 200
+    },
+    {
+      "role": "ADMIN",
+      "path": "/validation/run",
+      "startedAt": "2026-11-23T07:24:27.412Z",
+      "finishedAt": "2026-11-23T07:24:28.664Z",
+      "status": 200
+    },
+    {
+      "role": "ADMIN",
+      "path": "/validation/seed",
+      "startedAt": "2026-11-23T07:24:28.664Z",
+      "finishedAt": "2026-11-23T07:24:28.959Z",
+      "status": 200
+    },
+    {
+      "role": "ADMIN",
+      "path": "/validation/run",
+      "startedAt": "2026-11-23T07:24:28.959Z",
+      "finishedAt": "2026-11-23T07:24:30.207Z",
+      "status": 200
+    },
+    {
+      "role": "ADMIN",
+      "path": "/validation/seed",
+      "startedAt": "2026-11-23T07:24:30.207Z",
+      "finishedAt": "2026-11-23T07:24:30.479Z",
+      "status": 200
+    },
+    {
+      "role": "ADMIN",
+      "path": "/validation/run",
+      "startedAt": "2026-11-23T07:24:30.479Z",
+      "finishedAt": "2026-11-23T07:24:31.864Z",
+      "status": 200
+    },
+    {
+      "role": "ADMIN",
+      "path": "/validation/seed",
+      "startedAt": "2026-11-23T07:24:33.866Z",
+      "finishedAt": "2026-11-23T07:24:34.144Z",
+      "status": 200
+    }
+  ]
+}

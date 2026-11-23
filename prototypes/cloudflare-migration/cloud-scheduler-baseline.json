@@ -1,0 +1,46 @@
+{
+  "observedAt": "2026-11-23T07:21:51.579Z",
+  "transport": {
+    "mode": "diagnostic Cloudflare DNS-over-HTTPS",
+    "host": "gaintrace-free-validation.aixing24-gaintrace.workers.dev",
+    "addresses": [
+      "172.67.129.77",
+      "104.21.2.144"
+    ],
+    "certificateValidation": "enabled; original hostname preserved",
+    "productionBrowserAccessProven": false
+  },
+  "clock": {
+    "scheduledTime": 1795418412388,
+    "cron": "*/2 * * * *",
+    "observedAt": 1795418415443
+  },
+  "scheduledResult": "[{\"account\":\"alice\",\"status\":\"already-confirmed\"},{\"account\":\"bob\",\"status\":\"already-confirmed\"}]",
+  "states": [
+    {
+      "account": "alice",
+      "revision": 4,
+      "tradeCount": 1002,
+      "point": {
+        "date": "2026-11-23",
+        "status": "confirmed",
+        "source": "SYNTHETIC_CONFIRMED_CLOSE",
+        "generatedAt": 1795418295207,
+        "ledgerRevision": 4
+      }
+    },
+    {
+      "account": "bob",
+      "revision": 1,
+      "tradeCount": 100,
+      "point": {
+        "date": "2026-11-23",
+        "status": "confirmed",
+        "source": "SYNTHETIC_CONFIRMED_CLOSE",
+        "generatedAt": 1795418296405,
+        "ledgerRevision": 1
+      }
+    }
+  ],
+  "actualCronPersisted": true
+}

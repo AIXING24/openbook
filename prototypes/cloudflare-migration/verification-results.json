@@ -1,0 +1,218 @@
+{
+  "checkedAt": "2026-11-23T08:03:02.982Z",
+  "miniflareVersion": "4.20260730.0",
+  "passed": 17,
+  "environment": "local Miniflare/workerd + in-memory D1; synthetic ledger and synthetic prices only",
+  "limitations": "Not deployed to Cloudflare; does not establish free-plan CPU compliance, real provider reachability, production authentication, mobile-network behavior, production frontend integration or broker trade synchronization.",
+  "events": [
+    {
+      "name": "incomplete migration does not activate cloud",
+      "details": {
+        "mode": "local",
+        "offline": false,
+        "localTrades": 1000,
+        "revision": 0,
+        "pending": 0,
+        "migrationId": "409f8346-ca74-401b-9d66-0cab69c77b15",
+        "chunks": 35,
+        "sourceUnchanged": true
+      }
+    },
+    {
+      "name": "migration chunks are account scoped",
+      "details": {
+        "status": 404
+      }
+    },
+    {
+      "name": "resume and duplicate upload; changed chunk rejected",
+      "details": {
+        "received": [
+          0,
+          1
+        ],
+        "duplicate": true,
+        "changedStatus": 409
+      }
+    },
+    {
+      "name": "verified cutover preserves trades, costs, realized P&L, closed positions and preferences",
+      "details": {
+        "mode": "cloud-with-local-cache",
+        "offline": false,
+        "localTrades": 1000,
+        "revision": 1,
+        "pending": 0,
+        "migrationId": "409f8346-ca74-401b-9d66-0cab69c77b15",
+        "chunks": 35,
+        "sourceUnchanged": true,
+        "closedStocks": 1,
+        "legacySnapshots": 2
+      }
+    },
+    {
+      "name": "commit retry is idempotent",
+      "details": {
+        "trades": 1000
+      }
+    },
+    {
+      "name": "existing cloud account is not overwritten by another dataset",
+      "details": {
+        "existingTrades": 1000,
+        "newLocalTrades": 100
+      }
+    },
+    {
+      "name": "invalid legacy data never becomes active",
+      "details": {
+        "status": 422
+      }
+    },
+    {
+      "name": "second account remains isolated",
+      "details": {
+        "aliceTrades": 1000,
+        "bobTrades": 100
+      }
+    },
+    {
+      "name": "actual scheduled handler writes a daily point without any frontend refresh",
+      "details": {
+        "scheduled": [
+          {
+            "account": "alice",
+            "status": "confirmed"
+          },
+          {
+            "account": "bob",
+            "status": "confirmed"
+          }
+        ],
+        "repeat": [
+          {
+            "account": "alice",
+            "status": "already-confirmed"
+          },
+          {
+            "account": "bob",
+            "status": "already-confirmed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missing prices stay pending; retry fills date without altering imported legacy evidence",
+      "details": {
+        "missing": [
+          {
+            "account": "alice",
+            "status": "pending",
+            "reason": "quotes"
+          },
+          {
+            "account": "bob",
+            "status": "pending",
+            "reason": "quotes"
+          }
+        ],
+        "dates": [
+          "2026-11-16",
+          "2026-11-17",
+          "2026-11-18"
+        ],
+        "legacyDates": [
+          "2026-11-12",
+          "2026-11-13"
+        ]
+      }
+    },
+    {
+      "name": "missing historical FX does not create a fake record",
+      "details": {
+        "missingFx": [
+          {
+            "account": "alice",
+            "status": "pending",
+            "reason": "fx"
+          },
+          {
+            "account": "bob",
+            "status": "pending",
+            "reason": "fx"
+          }
+        ]
+      }
+    },
+    {
+      "name": "unfinalized prices cannot become a confirmed daily point",
+      "details": {
+        "intraday": [
+          {
+            "account": "alice",
+            "status": "pending",
+            "reason": "quotes"
+          },
+          {
+            "account": "bob",
+            "status": "pending",
+            "reason": "quotes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "offline edit remains in local outbox; server sees only synchronized ledger",
+      "details": {
+        "mode": "cloud-with-local-cache",
+        "offline": true,
+        "localTrades": 1001,
+        "revision": 1,
+        "pending": 1,
+        "migrationId": "409f8346-ca74-401b-9d66-0cab69c77b15",
+        "chunks": 35,
+        "sourceUnchanged": true
+      }
+    },
+    {
+      "name": "response-loss retry creates no duplicate and new-day purchase preserves past confirmed records",
+      "details": {
+        "mode": "cloud-with-local-cache",
+        "offline": false,
+        "localTrades": 1001,
+        "revision": 2,
+        "pending": 0,
+        "migrationId": "409f8346-ca74-401b-9d66-0cab69c77b15",
+        "chunks": 35,
+        "sourceUnchanged": true
+      }
+    },
+    {
+      "name": "stale revision and reused operation IDs cannot overwrite data",
+      "details": {
+        "staleStatus": 409,
+        "reusedStatus": 409
+      }
+    },
+    {
+      "name": "two devices racing on one revision commit only one operation",
+      "details": {
+        "statuses": [
+          200,
+          409
+        ]
+      }
+    },
+    {
+      "name": "backdated correction invalidates affected points; recomputation archives old confirmed value",
+      "details": {
+        "invalidated": [
+          "2026-11-16",
+          "2026-11-17",
+          "2026-11-18"
+        ],
+        "archivedPoints": 1
+      }
+    }
+  ]
+}

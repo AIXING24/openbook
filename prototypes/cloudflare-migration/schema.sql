@@ -1,0 +1,10 @@
+CREATE TABLE accounts (id TEXT PRIMARY KEY, revision INTEGER NOT NULL DEFAULT 0, migration_id TEXT, payload TEXT, last_operation TEXT);
+CREATE TABLE migrations (id TEXT PRIMARY KEY, account_id TEXT NOT NULL, fingerprint TEXT NOT NULL, chunks INTEGER NOT NULL, status TEXT NOT NULL, UNIQUE(account_id,fingerprint));
+CREATE TABLE chunks (migration_id TEXT NOT NULL, number INTEGER NOT NULL, text TEXT NOT NULL, hash TEXT NOT NULL, PRIMARY KEY(migration_id,number));
+CREATE TABLE operations (account_id TEXT NOT NULL, id TEXT NOT NULL, hash TEXT NOT NULL, revision INTEGER NOT NULL, PRIMARY KEY(account_id,id));
+CREATE TABLE daily (account_id TEXT NOT NULL, date TEXT NOT NULL, revision INTEGER NOT NULL, status TEXT NOT NULL, payload TEXT NOT NULL, PRIMARY KEY(account_id,date));
+CREATE TABLE daily_archive (account_id TEXT NOT NULL, date TEXT NOT NULL, revision INTEGER NOT NULL, payload TEXT NOT NULL, PRIMARY KEY(account_id,date,revision));
+CREATE TABLE jobs (account_id TEXT NOT NULL, date TEXT NOT NULL, status TEXT NOT NULL, reason TEXT, PRIMARY KEY(account_id,date));
+CREATE TABLE control (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE TABLE prices (date TEXT NOT NULL, tc TEXT NOT NULL, px REAL NOT NULL, finalized INTEGER NOT NULL, PRIMARY KEY(date,tc));
+CREATE TABLE rates (date TEXT PRIMARY KEY, payload TEXT NOT NULL);

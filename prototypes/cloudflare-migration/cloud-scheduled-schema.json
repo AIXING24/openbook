@@ -1,0 +1,93 @@
+{
+  "data": {
+    "__type": {
+      "fields": [
+        {
+          "description": "CPU time - microseconds",
+          "name": "cpuTimeUs",
+          "type": {
+            "kind": "NON_NULL",
+            "name": "",
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "uint32"
+            }
+          }
+        },
+        {
+          "description": "The cron string of the schedule",
+          "name": "cron",
+          "type": {
+            "kind": "NON_NULL",
+            "name": "",
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "string"
+            }
+          }
+        },
+        {
+          "description": "Request datetime",
+          "name": "datetime",
+          "type": {
+            "kind": "NON_NULL",
+            "name": "",
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "Time"
+            }
+          }
+        },
+        {
+          "description": "The name of the script environment",
+          "name": "environmentName",
+          "type": {
+            "kind": "NON_NULL",
+            "name": "",
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "string"
+            }
+          }
+        },
+        {
+          "description": "Scheduled datetime",
+          "name": "scheduledDatetime",
+          "type": {
+            "kind": "NON_NULL",
+            "name": "",
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "Time"
+            }
+          }
+        },
+        {
+          "description": "The name of the script",
+          "name": "scriptName",
+          "type": {
+            "kind": "NON_NULL",
+            "name": "",
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "string"
+            }
+          }
+        },
+        {
+          "description": "Status of the worker invocation",
+          "name": "status",
+          "type": {
+            "kind": "NON_NULL",
+            "name": "",
+            "ofType": {
+              "kind": "SCALAR",
+              "name": "string"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "errors": null
+}

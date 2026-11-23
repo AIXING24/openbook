@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-11-23T07:31:17.161Z",
+  "worker": "gaintrace-free-validation",
+  "status": 200,
+  "remoteSchedules": [],
+  "temporaryCronRemoved": true,
+  "workerAndSyntheticDatabaseRetained": true,
+  "errors": []
+}

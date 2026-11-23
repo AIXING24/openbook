@@ -1,0 +1,76 @@
+{
+  "status": 200,
+  "fields": [
+    {
+      "type": "AccountWorkersInvocationsAdaptiveMax",
+      "description": "Maximum CPU time for one request - microseconds",
+      "name": "cpuTime"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveMin",
+      "description": "Minimum CPU time for one request - microseconds",
+      "name": "cpuTime"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveQuantiles",
+      "description": "CPU time 25th percentile - microseconds",
+      "name": "cpuTimeP25"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveQuantiles",
+      "description": "CPU time 50th percentile - microseconds",
+      "name": "cpuTimeP50"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveQuantiles",
+      "description": "CPU time 75th percentile - microseconds",
+      "name": "cpuTimeP75"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveQuantiles",
+      "description": "CPU time 90th percentile - microseconds",
+      "name": "cpuTimeP90"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveQuantiles",
+      "description": "CPU time 95th percentile - microseconds",
+      "name": "cpuTimeP95"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveQuantiles",
+      "description": "CPU time 99th percentile - microseconds",
+      "name": "cpuTimeP99"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveQuantiles",
+      "description": "CPU time 99.9th percentile - microseconds",
+      "name": "cpuTimeP999"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveSum",
+      "description": "Sum of cpu time in us",
+      "name": "cpuTimeUs"
+    },
+    {
+      "type": "AccountWorkersInvocationsAdaptiveSumConfidence",
+      "description": "Confidence interval for the corresponding point estimate",
+      "name": "cpuTimeUs"
+    },
+    {
+      "type": "AccountWorkersInvocationsByOwnerAndScriptGroupsSum",
+      "description": "Sum of cpu time in us",
+      "name": "cpuTimeUs"
+    },
+    {
+      "type": "AccountWorkersInvocationsByOwnerAndScriptGroupsSumConfidence",
+      "description": "Confidence interval for the corresponding point estimate",
+      "name": "cpuTimeUs"
+    },
+    {
+      "type": "AccountWorkersInvocationsScheduled",
+      "description": "CPU time - microseconds",
+      "name": "cpuTimeUs"
+    }
+  ],
+  "errors": null
+}

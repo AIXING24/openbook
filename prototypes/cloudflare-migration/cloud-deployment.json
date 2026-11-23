@@ -1,0 +1,12 @@
+{
+  "url": "https://gaintrace-free-validation.aixing24-gaintrace.workers.dev",
+  "version": "prototype v0.2.1",
+  "versionId": "ddf9f474-6ce8-4ab6-9860-ba0ae0e4ab86",
+  "databaseId": "d37407d3-8c05-46d8-af9b-a687f8a53222",
+  "deployedAt": "2026-11-23T07:10:49.747Z",
+  "temporaryCron": null,
+  "previousVersionId": "1d6a9597-c43c-404f-8820-71ae9d1d53c4",
+  "optimizedAt": "2026-11-23T07:23:28.995Z",
+  "measuredOptimizedVersionId": "273fbe25-86d0-4c37-92de-24f038fe5404",
+  "cronRemovalDeployedAt": "2026-11-23T07:31:15.679Z"
+}
