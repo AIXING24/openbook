@@ -1,0 +1,39 @@
+client/email-session.mjs
+  s_954afabfda404a::t_0e946447526b36 1-39
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_e752ed9a6c0dc5 41-42
+backend/email-auth.mjs
+  s_954afabfda404a::t_0e946447526b36 69,94
+  s_954afabfda404a::t_c831b644c036d7 18-19,83-86
+  s_954afabfda404a::t_9b4163294d7388 1-17,20-68,70-82,87-93,95-104
+docs/backend/email-auth-validation-v0.1.0.md
+  s_954afabfda404a::t_e752ed9a6c0dc5 1-28
+backend/tests/email-auth.test.mjs
+  s_954afabfda404a::t_37159a82fa7020 1-47,55-107
+  s_954afabfda404a::t_c831b644c036d7 48-54
+client/README.md
+  s_954afabfda404a::t_e752ed9a6c0dc5 31-32
+docs/backend/email-auth-feasibility.md
+  s_954afabfda404a::t_c9a3d811f763c9 69-70,93
+  s_954afabfda404a::t_e752ed9a6c0dc5 5
+  s_954afabfda404a::t_c041dc55ee147d 1-4,6-68,71-92,94-95
+backend/schema-auth.sql
+  s_954afabfda404a::t_9b4163294d7388 1-3,5-7
+  s_954afabfda404a::t_0e946447526b36 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "feca2661c0453ff007d3b4f9954fa86d830e2bd0",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
