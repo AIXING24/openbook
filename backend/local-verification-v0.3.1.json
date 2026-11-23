@@ -1,0 +1,18 @@
+{
+  "version": "backend v0.3.1",
+  "checkedAt": "2026-11-23T08:50:42.574029+00:00",
+  "backendTests": {
+    "passed": 13,
+    "failed": 0
+  },
+  "frontendTests": {
+    "passed": 34,
+    "failed": 0
+  },
+  "frontendBuildUnchanged": true,
+  "mockOnly": true,
+  "realLedgerReadOrUploaded": false,
+  "note": "Backend runner count includes nested tests; full run output is stored locally. Current results do not certify production authentication, market calendars or yearly load.",
+  "pagesProbeVerified": true,
+  "pagesBundleBuilt": true
+}

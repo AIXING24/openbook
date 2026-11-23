@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS gt_validation(generation TEXT PRIMARY KEY, cursor INTEGER NOT NULL DEFAULT 0, token TEXT);

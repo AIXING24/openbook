@@ -1,0 +1,12 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {configureValidationDns} from '../../prototypes/cloudflare-migration/cloud-transport.mjs';
+const secrets=JSON.parse(readFileSync(new URL('../.validation-secrets.json',import.meta.url),'utf8'));
+const endpoint='https://gaintrace-batch-validation.aixing24-gaintrace.workers.dev';
+await configureValidationDns(new URL(endpoint).hostname);
+const call=async(role,path)=>{const r=await fetch(endpoint+path,{headers:{authorization:'Bearer '+secrets['TEST_'+role+'_TOKEN']},signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error('Observation failed');return r.json();};
+const status=await call('ADMIN','/validation/status');
+const states=await Promise.all(['ALICE','BOB'].map(role=>call(role,'/state')));
+const report={observedAt:new Date().toISOString(),version:status.version,control:status.control,jobs:status.jobs,accounts:states.map((s,i)=>({account:i?'bob':'alice',revision:s.revision,point:s.confirmedHistory.find(p=>p.date==='2026-11-24')})),syntheticFutureDate:true};
+report.bothConfirmed=report.accounts.every(a=>a.point?.status==='confirmed');
+writeFileSync(new URL('../cloud-cron-v0.2.1.json',import.meta.url),JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify({observedAt:report.observedAt,bothConfirmed:report.bothConfirmed,lastScheduled:status.control.find(c=>c.key==='last-scheduled'),jobs:status.jobs.filter(j=>j.date==='2026-11-24')}));

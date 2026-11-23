@@ -1,0 +1,12 @@
+import {mkdir,writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {resolve} from 'node:path';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
+import pages from '../pages.mjs';
+const directory=process.argv[2]?resolve(process.argv[2]):fileURLToPath(new URL('../.pages-output/',import.meta.url));
+await mkdir(directory,{recursive:true});
+await promisify(execFile)(fileURLToPath(new URL('../node_modules/.bin/esbuild',import.meta.url)),[fileURLToPath(new URL('../pages.mjs',import.meta.url)),'--bundle','--format=esm','--platform=browser','--target=es2022','--outfile='+directory+'/_worker.js']);
+const response=await pages.fetch(new Request('https://probe.invalid/'),{},{});
+await writeFile(directory+'/index.html',await response.text());
+console.log(JSON.stringify({directory,bundle:'_worker.js',mockOnly:true}));

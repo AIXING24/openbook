@@ -1,0 +1,7 @@
+{
+  "name": "gaintrace-batch-api",
+  "pages_build_output_dir": ".pages-output",
+  "compatibility_date": "2026-08-06",
+  "vars": {"VALIDATION_MODE": "mock-only"},
+  "d1_databases": [{"binding": "DB", "database_name": "gaintrace-free-validation-db", "database_id": "REPLACE_WITH_TEST_DATABASE_ID"}]
+}

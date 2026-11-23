@@ -1,0 +1,240 @@
+{
+  "version": "backend v0.3.1",
+  "startedAt": "2026-11-23T08:48:19.689Z",
+  "calls": [
+    {
+      "path": "/validation/status",
+      "startedAt": "2026-11-23T08:48:19.690Z",
+      "endedAt": "2026-11-23T08:48:20.241Z",
+      "status": 200
+    },
+    {
+      "path": "/state",
+      "startedAt": "2026-11-23T08:48:20.241Z",
+      "endedAt": "2026-11-23T08:48:20.740Z",
+      "status": 200
+    },
+    {
+      "path": "/validation/seed",
+      "startedAt": "2026-11-23T08:48:20.740Z",
+      "endedAt": "2026-11-23T08:48:20.963Z",
+      "status": 200
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:20.963Z",
+      "endedAt": "2026-11-23T08:48:21.506Z",
+      "status": 200,
+      "result": {
+        "status": "started",
+        "previousDate": "2026-11-24"
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:21.506Z",
+      "endedAt": "2026-11-23T08:48:21.922Z",
+      "status": 200,
+      "result": {
+        "status": "valuing"
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:21.922Z",
+      "endedAt": "2026-11-23T08:48:22.408Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:22.408Z",
+      "endedAt": "2026-11-23T08:48:22.892Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:22.892Z",
+      "endedAt": "2026-11-23T08:48:23.406Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:23.406Z",
+      "endedAt": "2026-11-23T08:48:23.958Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:23.958Z",
+      "endedAt": "2026-11-23T08:48:24.502Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:24.502Z",
+      "endedAt": "2026-11-23T08:48:24.983Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:24.983Z",
+      "endedAt": "2026-11-23T08:48:25.453Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:25.454Z",
+      "endedAt": "2026-11-23T08:48:25.969Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:25.969Z",
+      "endedAt": "2026-11-23T08:48:26.508Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:26.508Z",
+      "endedAt": "2026-11-23T08:48:26.983Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:26.983Z",
+      "endedAt": "2026-11-23T08:48:27.372Z",
+      "status": 200,
+      "result": {
+        "status": "finalizing"
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:27.372Z",
+      "endedAt": "2026-11-23T08:48:27.980Z",
+      "status": 200,
+      "result": {
+        "status": "confirmed"
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:27.980Z",
+      "endedAt": "2026-11-23T08:48:28.363Z",
+      "status": 200,
+      "result": {
+        "status": "started",
+        "previousDate": "2026-11-24"
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:28.363Z",
+      "endedAt": "2026-11-23T08:48:28.764Z",
+      "status": 200,
+      "result": {
+        "status": "valuing"
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:28.764Z",
+      "endedAt": "2026-11-23T08:48:29.244Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:29.244Z",
+      "endedAt": "2026-11-23T08:48:29.731Z",
+      "status": 200,
+      "result": {
+        "status": "progress",
+        "phase": "value",
+        "processed": 5
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:29.731Z",
+      "endedAt": "2026-11-23T08:48:30.169Z",
+      "status": 200,
+      "result": {
+        "status": "finalizing"
+      }
+    },
+    {
+      "path": "/validation/step",
+      "startedAt": "2026-11-23T08:48:30.169Z",
+      "endedAt": "2026-11-23T08:48:30.533Z",
+      "status": 200,
+      "result": {
+        "status": "confirmed"
+      }
+    },
+    {
+      "path": "/state",
+      "startedAt": "2026-11-23T08:48:30.533Z",
+      "endedAt": "2026-11-23T08:48:30.860Z",
+      "status": 200
+    }
+  ],
+  "date": "2026-11-25",
+  "syntheticFutureDate": true,
+  "completedAt": "2026-11-23T08:48:30.864Z",
+  "passed": true
+}

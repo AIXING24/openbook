@@ -1,0 +1,657 @@
+{
+  "observedAt": "2026-11-23T08:44:14.534Z",
+  "version": "backend v0.3.0",
+  "control": [
+    {
+      "key": "valuation-date",
+      "value": "2026-11-24"
+    },
+    {
+      "key": "last-account",
+      "value": "alice"
+    },
+    {
+      "key": "last-scheduled",
+      "value": "{\"account\":\"alice\",\"date\":\"2026-11-24\",\"result\":{\"status\":\"confirmed\"},\"scheduledTime\":1795422960306,\"cron\":\"* * * * *\"}"
+    }
+  ],
+  "jobs": [
+    {
+      "account": "alice",
+      "date": "2026-11-16",
+      "phase": "done",
+      "revision": 4,
+      "previous_date": null
+    },
+    {
+      "account": "alice",
+      "date": "2026-11-17",
+      "phase": "done",
+      "revision": 4,
+      "previous_date": null
+    },
+    {
+      "account": "alice",
+      "date": "2026-11-18",
+      "phase": "done",
+      "revision": 3,
+      "previous_date": null
+    },
+    {
+      "account": "alice",
+      "date": "2026-11-20",
+      "phase": "done",
+      "revision": 3,
+      "previous_date": null
+    },
+    {
+      "account": "alice",
+      "date": "2026-11-21",
+      "phase": "done",
+      "revision": 1,
+      "previous_date": "2026-11-20"
+    },
+    {
+      "account": "alice",
+      "date": "2026-11-22",
+      "phase": "done",
+      "revision": 2,
+      "previous_date": "2026-11-21"
+    },
+    {
+      "account": "alice",
+      "date": "2026-11-23",
+      "phase": "done",
+      "revision": 2,
+      "previous_date": "2026-11-22"
+    },
+    {
+      "account": "alice",
+      "date": "2026-11-24",
+      "phase": "done",
+      "revision": 4,
+      "previous_date": "2026-11-20"
+    },
+    {
+      "account": "bob",
+      "date": "2026-11-20",
+      "phase": "done",
+      "revision": 1,
+      "previous_date": null
+    },
+    {
+      "account": "bob",
+      "date": "2026-11-21",
+      "phase": "done",
+      "revision": 1,
+      "previous_date": "2026-11-20"
+    },
+    {
+      "account": "bob",
+      "date": "2026-11-24",
+      "phase": "done",
+      "revision": 1,
+      "previous_date": "2026-11-21"
+    }
+  ],
+  "accounts": [
+    {
+      "account": "alice",
+      "revision": 4,
+      "point": {
+        "date": "2026-11-24",
+        "capturedAt": 1795535940000,
+        "amounts": {
+          "CNY": {
+            "realized": 8983.999999999995,
+            "unrealized": 12036.9
+          },
+          "USD": {
+            "realized": 7975.999999999995,
+            "unrealized": 11992
+          },
+          "HKD": {
+            "realized": 8474.499999999995,
+            "unrealized": 12741.5
+          }
+        },
+        "purchases": {
+          "CNY": 170307.10000000003,
+          "USD": 160016.00000000003,
+          "HKD": 170017.00000000003
+        },
+        "rates": {
+          "CNY": 1,
+          "USD": 7,
+          "HKD": 0.9
+        },
+        "fxAt": 1795535940000,
+        "fxApprox": false,
+        "positions": [
+          {
+            "tc": "hk100001",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100004",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100007",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100010",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100013",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100016",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100019",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100022",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100025",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100028",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100031",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100034",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100037",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100040",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100043",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100046",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100049",
+            "cur": "HKD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100000",
+            "cur": "CNY",
+            "shares": 3,
+            "cost": 300.1,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100003",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100006",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100009",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100012",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100015",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100018",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100021",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100024",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100027",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100030",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100033",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100036",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100039",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100042",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100045",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100048",
+            "cur": "CNY",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100002",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100005",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100008",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100011",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100014",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100017",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100020",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100023",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100026",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100029",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100032",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100035",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100038",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100041",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100044",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100047",
+            "cur": "USD",
+            "shares": 50,
+            "cost": 5000.5,
+            "px": 115,
+            "quoteAt": 1795535940000
+          }
+        ],
+        "invalidatedAt": null,
+        "valuationDate": "2026-11-24",
+        "generatedAt": 1795422962947,
+        "source": "SYNTHETIC_CONFIRMED_CLOSE",
+        "ledgerRevision": 4,
+        "status": "confirmed"
+      }
+    },
+    {
+      "account": "bob",
+      "revision": 1,
+      "point": {
+        "date": "2026-11-24",
+        "capturedAt": 1795535940000,
+        "amounts": {
+          "CNY": {
+            "realized": 1246.749999999999,
+            "unrealized": 1124.25
+          },
+          "USD": {
+            "realized": 747.7499999999994,
+            "unrealized": 1124.25
+          },
+          "HKD": {
+            "realized": 747.7499999999994,
+            "unrealized": 1124.25
+          }
+        },
+        "purchases": {
+          "CNY": 20002,
+          "USD": 15001.5,
+          "HKD": 15001.5
+        },
+        "rates": {
+          "CNY": 1,
+          "USD": 7,
+          "HKD": 0.9
+        },
+        "fxAt": 1795535940000,
+        "fxApprox": false,
+        "positions": [
+          {
+            "tc": "hk100001",
+            "cur": "HKD",
+            "shares": 25,
+            "cost": 2500.25,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100004",
+            "cur": "HKD",
+            "shares": 25,
+            "cost": 2500.25,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "hk100007",
+            "cur": "HKD",
+            "shares": 25,
+            "cost": 2500.25,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100003",
+            "cur": "CNY",
+            "shares": 25,
+            "cost": 2500.25,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100006",
+            "cur": "CNY",
+            "shares": 25,
+            "cost": 2500.25,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "sh100009",
+            "cur": "CNY",
+            "shares": 25,
+            "cost": 2500.25,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100002",
+            "cur": "USD",
+            "shares": 25,
+            "cost": 2500.25,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100005",
+            "cur": "USD",
+            "shares": 25,
+            "cost": 2500.25,
+            "px": 115,
+            "quoteAt": 1795535940000
+          },
+          {
+            "tc": "us100008",
+            "cur": "USD",
+            "shares": 25,
+            "cost": 2500.25,
+            "px": 115,
+            "quoteAt": 1795535940000
+          }
+        ],
+        "invalidatedAt": null,
+        "valuationDate": "2026-11-24",
+        "generatedAt": 1795422916709,
+        "source": "SYNTHETIC_CONFIRMED_CLOSE",
+        "ledgerRevision": 1,
+        "status": "confirmed"
+      }
+    }
+  ],
+  "syntheticFutureDate": true,
+  "bothConfirmed": true
+}

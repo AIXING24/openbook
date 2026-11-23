@@ -1,0 +1,2378 @@
+{
+  "queriedAt": "2026-11-23T08:31:16.534Z",
+  "timeRange": {
+    "start": "2026-11-23T08:26:57.877Z",
+    "end": "2026-11-23T08:31:16.534Z"
+  },
+  "analytics": {
+    "status": 200,
+    "data": {
+      "data": {
+        "viewer": {
+          "accounts": [
+            {
+              "workersInvocationsAdaptive": [
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:24Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5444
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5444,
+                    "cpuTimeP99": 5444
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5444,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:13Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3332
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3332,
+                    "cpuTimeP99": 3332
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3332,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:37Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3638
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3638,
+                    "cpuTimeP99": 3638
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3638,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:25Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5306
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4116,
+                    "cpuTimeP99": 5306
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9422,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:49Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4183
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3552,
+                    "cpuTimeP99": 4183
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7735,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:02Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4395
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4294,
+                    "cpuTimeP99": 4395
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8689,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:09Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6160
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2484,
+                    "cpuTimeP99": 6160
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8644,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:26Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5031
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5031,
+                    "cpuTimeP99": 5031
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5031,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:15Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5645
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4222,
+                    "cpuTimeP99": 5645
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9867,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:43Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3993
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3209,
+                    "cpuTimeP99": 3993
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7202,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:18Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6521
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 6521,
+                    "cpuTimeP99": 6521
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6521,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:33Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4703
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4703,
+                    "cpuTimeP99": 4703
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4703,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:44Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3903
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3409,
+                    "cpuTimeP99": 3903
+                  },
+                  "sum": {
+                    "cpuTimeUs": 37993,
+                    "errors": 0,
+                    "requests": 11,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:14Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5273
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3707,
+                    "cpuTimeP99": 5273
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8980,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:28Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3932
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3932,
+                    "cpuTimeP99": 3932
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3932,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:42Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 9433
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 9433,
+                    "cpuTimeP99": 9433
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9433,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:32Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4314
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3800,
+                    "cpuTimeP99": 4314
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8114,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:11Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5224
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5224,
+                    "cpuTimeP99": 5224
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5224,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:39Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3863
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3863,
+                    "cpuTimeP99": 3863
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3863,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:16Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3213
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3213,
+                    "cpuTimeP99": 3213
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3213,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:18Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6535
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 6535,
+                    "cpuTimeP99": 6535
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6535,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:06Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3782
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3782,
+                    "cpuTimeP99": 3782
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3782,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:08Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5620
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3867,
+                    "cpuTimeP99": 5620
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9487,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:29Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3767
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3767,
+                    "cpuTimeP99": 3767
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3767,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:46Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 9034
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 9034,
+                    "cpuTimeP99": 9034
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9034,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:48Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3793
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3097,
+                    "cpuTimeP99": 3793
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6890,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:03Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4884
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4884,
+                    "cpuTimeP99": 4884
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4884,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:45Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4539
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3028,
+                    "cpuTimeP99": 4539
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7567,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:56Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4555
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4555,
+                    "cpuTimeP99": 4555
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4555,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:14Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3689
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3689,
+                    "cpuTimeP99": 3689
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3689,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:32Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5946
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4598,
+                    "cpuTimeP99": 5946
+                  },
+                  "sum": {
+                    "cpuTimeUs": 10544,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:50Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3462
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3462,
+                    "cpuTimeP99": 3462
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3462,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:47Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 7143
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4057,
+                    "cpuTimeP99": 7143
+                  },
+                  "sum": {
+                    "cpuTimeUs": 14236,
+                    "errors": 0,
+                    "requests": 3,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:55Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4019
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2621,
+                    "cpuTimeP99": 4019
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6640,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:46Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3053
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3053,
+                    "cpuTimeP99": 3053
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3053,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:26:59Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3556
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3418,
+                    "cpuTimeP99": 3556
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6974,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:01Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6057
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 6057,
+                    "cpuTimeP99": 6057
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6057,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:13Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3675
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3675,
+                    "cpuTimeP99": 3675
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3675,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:23Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3494
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3494,
+                    "cpuTimeP99": 3494
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3494,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:34Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3751
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3007,
+                    "cpuTimeP99": 3751
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6758,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:04Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6705
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 6705,
+                    "cpuTimeP99": 6705
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6705,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:19Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5495
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3708,
+                    "cpuTimeP99": 5495
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9203,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:07Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5905
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5905,
+                    "cpuTimeP99": 5905
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5905,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:00Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 10888
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5646,
+                    "cpuTimeP99": 10888
+                  },
+                  "sum": {
+                    "cpuTimeUs": 16534,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:11Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 2888
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2888,
+                    "cpuTimeP99": 2888
+                  },
+                  "sum": {
+                    "cpuTimeUs": 2888,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:41Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 2469
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2469,
+                    "cpuTimeP99": 2469
+                  },
+                  "sum": {
+                    "cpuTimeUs": 2469,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:51Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3738
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3738,
+                    "cpuTimeP99": 3738
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3738,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:12Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 7492
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3370,
+                    "cpuTimeP99": 7492
+                  },
+                  "sum": {
+                    "cpuTimeUs": 10862,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:27Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4765
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3503,
+                    "cpuTimeP99": 4765
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8268,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:44Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3318
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3318,
+                    "cpuTimeP99": 3318
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3318,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:36Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4418
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3114,
+                    "cpuTimeP99": 4418
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7532,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:24Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4673
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4673,
+                    "cpuTimeP99": 4673
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4673,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:40Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4515
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2824,
+                    "cpuTimeP99": 4515
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7339,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:43Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4216
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4216,
+                    "cpuTimeP99": 4216
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4216,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:00Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3924
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3019,
+                    "cpuTimeP99": 3924
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6943,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:38Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4299
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4299,
+                    "cpuTimeP99": 4299
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4299,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:25Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4641
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2996,
+                    "cpuTimeP99": 4641
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7637,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:31Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4699
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4699,
+                    "cpuTimeP99": 4699
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4699,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:10Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4324
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3375,
+                    "cpuTimeP99": 4324
+                  },
+                  "sum": {
+                    "cpuTimeUs": 13495,
+                    "errors": 0,
+                    "requests": 4,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:23Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5283
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3222,
+                    "cpuTimeP99": 5283
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8505,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:45Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 2849
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2495,
+                    "cpuTimeP99": 2849
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5344,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:35Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4113
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4113,
+                    "cpuTimeP99": 4113
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4113,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:28Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4702
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4702,
+                    "cpuTimeP99": 4702
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4702,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:29Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3375
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3337,
+                    "cpuTimeP99": 3375
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6712,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:20Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 2947
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2947,
+                    "cpuTimeP99": 2947
+                  },
+                  "sum": {
+                    "cpuTimeUs": 2947,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:01Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3723
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3723,
+                    "cpuTimeP99": 3723
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3723,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:12Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5622
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3431,
+                    "cpuTimeP99": 5622
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9053,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:52Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4387
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3981,
+                    "cpuTimeP99": 4387
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8368,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:03Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3663
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2792,
+                    "cpuTimeP99": 3663
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6455,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:40Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5581
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4302,
+                    "cpuTimeP99": 5581
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9883,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:34Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6555
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3711,
+                    "cpuTimeP99": 6555
+                  },
+                  "sum": {
+                    "cpuTimeUs": 10266,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:37Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3585
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2442,
+                    "cpuTimeP99": 3585
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6027,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:33Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5001
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5001,
+                    "cpuTimeP99": 5001
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5001,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:19Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4408
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4170,
+                    "cpuTimeP99": 4408
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8578,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:30Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 2799
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2799,
+                    "cpuTimeP99": 2799
+                  },
+                  "sum": {
+                    "cpuTimeUs": 2799,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:53Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3900
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3177,
+                    "cpuTimeP99": 3900
+                  },
+                  "sum": {
+                    "cpuTimeUs": 10147,
+                    "errors": 0,
+                    "requests": 3,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:52Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3387
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3235,
+                    "cpuTimeP99": 3387
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6622,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:42Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4423
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4423,
+                    "cpuTimeP99": 4423
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4423,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:58Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4313
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2693,
+                    "cpuTimeP99": 4313
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7006,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:49Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3998
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3945,
+                    "cpuTimeP99": 3998
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7943,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:17Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3666
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3660,
+                    "cpuTimeP99": 3666
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7326,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:16Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5446
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5446,
+                    "cpuTimeP99": 5446
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5446,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:07Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6670
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3348,
+                    "cpuTimeP99": 6670
+                  },
+                  "sum": {
+                    "cpuTimeUs": 10018,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:04Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4596
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3562,
+                    "cpuTimeP99": 4596
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8158,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:10Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4241
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4241,
+                    "cpuTimeP99": 4241
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4241,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:26Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4034
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4034,
+                    "cpuTimeP99": 4034
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4034,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:21Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5326
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5326,
+                    "cpuTimeP99": 5326
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5326,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:35Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4294
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4294,
+                    "cpuTimeP99": 4294
+                  },
+                  "sum": {
+                    "cpuTimeUs": 4294,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:39Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4167
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3937,
+                    "cpuTimeP99": 4167
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8104,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:27Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5390
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4397,
+                    "cpuTimeP99": 5390
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9787,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:59Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3942
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2768,
+                    "cpuTimeP99": 3942
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6710,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:51Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3824
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3824,
+                    "cpuTimeP99": 3824
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3824,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:30Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5046
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3810,
+                    "cpuTimeP99": 5046
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8856,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:22Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5132
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4421,
+                    "cpuTimeP99": 5132
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9553,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:38Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3812
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3741,
+                    "cpuTimeP99": 3812
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7553,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:54Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4183
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2695,
+                    "cpuTimeP99": 4183
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6878,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:09Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6565
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 6443,
+                    "cpuTimeP99": 6565
+                  },
+                  "sum": {
+                    "cpuTimeUs": 13008,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:05Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4214
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3112,
+                    "cpuTimeP99": 4214
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7326,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:17Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 7283
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4971,
+                    "cpuTimeP99": 7283
+                  },
+                  "sum": {
+                    "cpuTimeUs": 12254,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:26:58Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4498
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2690,
+                    "cpuTimeP99": 4498
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7188,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:05Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5710
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3891,
+                    "cpuTimeP99": 5710
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9601,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:57Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3761
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2816,
+                    "cpuTimeP99": 3761
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6577,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:47Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3784
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2654,
+                    "cpuTimeP99": 3784
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6438,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:48Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4373
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3053,
+                    "cpuTimeP99": 4373
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7426,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:08Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5471
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5471,
+                    "cpuTimeP99": 5471
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5471,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:41Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3850
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3306,
+                    "cpuTimeP99": 3850
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7156,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:31Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5534
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5534,
+                    "cpuTimeP99": 5534
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5534,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:50Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4157
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2868,
+                    "cpuTimeP99": 4157
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7025,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:20Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3137
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3137,
+                    "cpuTimeP99": 3137
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3137,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:02Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6908
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4298,
+                    "cpuTimeP99": 6908
+                  },
+                  "sum": {
+                    "cpuTimeUs": 11206,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:36Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5637
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2979,
+                    "cpuTimeP99": 5637
+                  },
+                  "sum": {
+                    "cpuTimeUs": 8616,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:22Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3441
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3441,
+                    "cpuTimeP99": 3441
+                  },
+                  "sum": {
+                    "cpuTimeUs": 3441,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:21Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4727
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4382,
+                    "cpuTimeP99": 4727
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9109,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:15Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 6203
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 6203,
+                    "cpuTimeP99": 6203
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6203,
+                    "errors": 0,
+                    "requests": 1,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:28:06Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5016
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4900,
+                    "cpuTimeP99": 5016
+                  },
+                  "sum": {
+                    "cpuTimeUs": 11143,
+                    "errors": 0,
+                    "requests": 3,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:27:53Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5484
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3705,
+                    "cpuTimeP99": 5484
+                  },
+                  "sum": {
+                    "cpuTimeUs": 9189,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                }
+              ],
+              "workersInvocationsScheduled": []
+            }
+          ]
+        }
+      },
+      "errors": null
+    }
+  },
+  "settings": {
+    "status": 200,
+    "data": {
+      "result": {
+        "default_usage_model": "standard",
+        "green_compute": false
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }
+  },
+  "database": {
+    "status": 200,
+    "data": {
+      "result": {
+        "uuid": "d37407d3-8c05-46d8-af9b-a687f8a53222",
+        "name": "gaintrace-free-validation-db",
+        "created_at": "2026-11-23T07:06:07.752Z",
+        "version": "production",
+        "num_tables": 22,
+        "file_size": 3858432,
+        "running_in_region": "APAC",
+        "read_replication": {
+          "mode": "disabled"
+        },
+        "jurisdiction": null
+      },
+      "errors": [],
+      "messages": [],
+      "success": true
+    }
+  },
+  "units": "CPU microseconds, verified using official GraphQL schema; divide by 1000 for ms. Network elapsed is not CPU."
+}

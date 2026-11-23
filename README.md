@@ -1,8 +1,10 @@
 # OPEN BOOK
 
-## 后端开发（backend v0.1.0）
+## 后端开发（backend v0.3.1）
 
-后端开发在 `dev/gaintrace-backend` 分支持续迭代。当前前端 v1.16.0 保持本地存储行为；已有隔离云端验证原型位于 `prototypes/cloudflare-migration/`，正式后端实现将位于 `backend/`。[实施计划](docs/backend/implementation-plan.md)说明阶段顺序和发布验收；[云端验证报告](docs/backend/cloud-validation-2026-11-23.md)记录实际免费额度边界。
+后端开发在 `dev/gaintrace-backend` 分支持续迭代。当前前端 v1.16.0 保持本地存储行为；已有隔离云端验证原型位于 `prototypes/cloudflare-migration/`，分批存储与增量计算实现位于 `backend/`（仍仅用于模拟验证）。[实施计划](docs/backend/implementation-plan.md)说明阶段顺序和发布验收；[云端验证报告](docs/backend/cloud-validation-2026-11-23.md)记录实际免费额度边界。
+
+新后端本地验证：在仓库根目录 `npm ci`，再在 `backend` 执行 `npm ci`、`npm test`。详见[后端说明](backend/README.md)。
 
 原型本地验证：先在仓库根目录 `npm ci`，再在 `prototypes/cloudflare-migration` 执行 `npm ci` 和 `npm run verify`。云端本机配置使用忽略提交的 `wrangler.local.json`；`wrangler.example.json` 仅提供配置样例。真实账户认证、行情收盘口径和迁移仍须正式实现。
 

@@ -1,0 +1,258 @@
+{
+  "queriedAt": "2026-11-23T08:49:49.244Z",
+  "timeRange": {
+    "start": "2026-11-23T08:48:19.689Z",
+    "end": "2026-11-23T08:49:49.244Z"
+  },
+  "analytics": {
+    "status": 200,
+    "data": {
+      "data": {
+        "viewer": {
+          "accounts": [
+            {
+              "workersInvocationsAdaptive": [
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:21Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4423
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4350,
+                    "cpuTimeP99": 4423
+                  },
+                  "sum": {
+                    "cpuTimeUs": 12914,
+                    "errors": 0,
+                    "requests": 3,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:22Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 5828
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 5828,
+                    "cpuTimeP99": 5828
+                  },
+                  "sum": {
+                    "cpuTimeUs": 14592,
+                    "errors": 0,
+                    "requests": 3,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:20Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 7282
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4626,
+                    "cpuTimeP99": 7282
+                  },
+                  "sum": {
+                    "cpuTimeUs": 11908,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:28Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 2857
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2371,
+                    "cpuTimeP99": 2857
+                  },
+                  "sum": {
+                    "cpuTimeUs": 5228,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:23Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4531
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 4531,
+                    "cpuTimeP99": 4531
+                  },
+                  "sum": {
+                    "cpuTimeUs": 13078,
+                    "errors": 0,
+                    "requests": 3,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:25Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3730
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3730,
+                    "cpuTimeP99": 3730
+                  },
+                  "sum": {
+                    "cpuTimeUs": 7460,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:30Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 8788
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2799,
+                    "cpuTimeP99": 8788
+                  },
+                  "sum": {
+                    "cpuTimeUs": 14190,
+                    "errors": 0,
+                    "requests": 3,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:26Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3226
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 3226,
+                    "cpuTimeP99": 3226
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6452,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:24Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 3788
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2966,
+                    "cpuTimeP99": 3788
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6754,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                },
+                {
+                  "dimensions": {
+                    "datetime": "2026-11-23T08:48:27Z",
+                    "scriptName": "gaintrace-batch-validation",
+                    "status": "success"
+                  },
+                  "max": {
+                    "cpuTime": 4546
+                  },
+                  "quantiles": {
+                    "cpuTimeP50": 2271,
+                    "cpuTimeP99": 4546
+                  },
+                  "sum": {
+                    "cpuTimeUs": 6817,
+                    "errors": 0,
+                    "requests": 2,
+                    "subrequests": 0
+                  }
+                }
+              ],
+              "workersInvocationsScheduled": []
+            }
+          ]
+        }
+      },
+      "errors": null
+    }
+  },
+  "settings": {
+    "status": 200,
+    "data": {
+      "result": {
+        "default_usage_model": "standard",
+        "green_compute": false
+      },
+      "success": true,
+      "errors": [],
+      "messages": []
+    }
+  },
+  "database": {
+    "status": 200,
+    "data": {
+      "result": {
+        "uuid": "d37407d3-8c05-46d8-af9b-a687f8a53222",
+        "name": "gaintrace-free-validation-db",
+        "created_at": "2026-11-23T07:06:07.752Z",
+        "version": "production",
+        "num_tables": 23,
+        "file_size": 6680576,
+        "running_in_region": "APAC",
+        "read_replication": {
+          "mode": "disabled"
+        },
+        "jurisdiction": null
+      },
+      "errors": [],
+      "messages": [],
+      "success": true
+    }
+  },
+  "units": "CPU microseconds, verified using official GraphQL schema; divide by 1000 for ms. Network elapsed is not CPU."
+}

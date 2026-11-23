@@ -1,0 +1,11 @@
+{
+  "name": "gaintrace-batch-validation",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-08-06",
+  "workers_dev": true,
+  "preview_urls": false,
+  "vars": {"VALIDATION_MODE": "mock-only"},
+  "d1_databases": [{"binding": "DB", "database_name": "gaintrace-free-validation-db", "database_id": "REPLACE_WITH_TEST_DATABASE_ID"}],
+  "observability": {"enabled": true, "head_sampling_rate": 1},
+  "triggers": {"crons": []}
+}

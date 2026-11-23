@@ -1,0 +1,2107 @@
+{
+  "version": "backend v0.2.2",
+  "endpoint": "https://gaintrace-batch-validation.aixing24-gaintrace.workers.dev",
+  "dns": {
+    "mode": "diagnostic Cloudflare DNS-over-HTTPS",
+    "host": "gaintrace-batch-validation.aixing24-gaintrace.workers.dev",
+    "addresses": [
+      "172.67.129.77",
+      "104.21.2.144"
+    ],
+    "certificateValidation": "enabled; original hostname preserved",
+    "productionBrowserAccessProven": false
+  },
+  "startedAt": "2026-11-23T08:32:11.147Z",
+  "stages": [
+    {
+      "name": "optimized-first-invocations",
+      "startedAt": "2026-11-23T08:32:11.148Z",
+      "endedAt": "2026-11-23T08:32:11.646Z",
+      "passed": true
+    },
+    {
+      "name": "optimized-staged-1000-50-without-overwriting-active",
+      "startedAt": "2026-11-23T08:32:11.646Z",
+      "importId": "901d1ea7-b37c-4443-9abb-9448b0c8383a",
+      "parts": 154,
+      "activeLedgerUnchanged": true,
+      "endedAt": "2026-11-23T08:33:53.192Z",
+      "passed": true
+    },
+    {
+      "name": "optimized-bounded-1000-trade-replay",
+      "startedAt": "2026-11-23T08:33:53.193Z",
+      "fragments": 109,
+      "processedTrades": 1000,
+      "endedAt": "2026-11-23T08:35:05.679Z",
+      "passed": true
+    },
+    {
+      "name": "optimized-read-and-operation-retry",
+      "startedAt": "2026-11-23T08:35:05.680Z",
+      "endedAt": "2026-11-23T08:35:10.543Z",
+      "passed": true
+    },
+    {
+      "name": "prepare-current-version-cron",
+      "startedAt": "2026-11-23T08:35:10.544Z",
+      "endedAt": "2026-11-23T08:35:16.782Z",
+      "passed": true
+    }
+  ],
+  "calls": [
+    {
+      "stage": "optimized-first-invocations",
+      "path": "/validation/status",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:11.148Z",
+      "endedAt": "2026-11-23T08:32:11.646Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:11.647Z",
+      "endedAt": "2026-11-23T08:32:12.066Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/start",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:12.110Z",
+      "endedAt": "2026-11-23T08:32:12.504Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:12.504Z",
+      "endedAt": "2026-11-23T08:32:12.877Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:12.877Z",
+      "endedAt": "2026-11-23T08:32:13.695Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:13.695Z",
+      "endedAt": "2026-11-23T08:32:14.356Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:14.356Z",
+      "endedAt": "2026-11-23T08:32:15.099Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:15.099Z",
+      "endedAt": "2026-11-23T08:32:15.750Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:15.750Z",
+      "endedAt": "2026-11-23T08:32:16.464Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:16.464Z",
+      "endedAt": "2026-11-23T08:32:17.107Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:17.107Z",
+      "endedAt": "2026-11-23T08:32:17.767Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:17.767Z",
+      "endedAt": "2026-11-23T08:32:18.384Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:18.384Z",
+      "endedAt": "2026-11-23T08:32:19.095Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:19.095Z",
+      "endedAt": "2026-11-23T08:32:19.744Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:19.744Z",
+      "endedAt": "2026-11-23T08:32:20.427Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:20.427Z",
+      "endedAt": "2026-11-23T08:32:21.155Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:21.155Z",
+      "endedAt": "2026-11-23T08:32:21.811Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:21.811Z",
+      "endedAt": "2026-11-23T08:32:22.418Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:22.418Z",
+      "endedAt": "2026-11-23T08:32:23.128Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:23.128Z",
+      "endedAt": "2026-11-23T08:32:23.746Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:23.746Z",
+      "endedAt": "2026-11-23T08:32:24.456Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:24.456Z",
+      "endedAt": "2026-11-23T08:32:25.087Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:25.087Z",
+      "endedAt": "2026-11-23T08:32:25.759Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:25.761Z",
+      "endedAt": "2026-11-23T08:32:26.360Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:26.360Z",
+      "endedAt": "2026-11-23T08:32:27.089Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:27.089Z",
+      "endedAt": "2026-11-23T08:32:27.726Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:27.726Z",
+      "endedAt": "2026-11-23T08:32:28.445Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:28.445Z",
+      "endedAt": "2026-11-23T08:32:29.087Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:29.087Z",
+      "endedAt": "2026-11-23T08:32:29.780Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:29.780Z",
+      "endedAt": "2026-11-23T08:32:30.434Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:30.434Z",
+      "endedAt": "2026-11-23T08:32:31.128Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:31.128Z",
+      "endedAt": "2026-11-23T08:32:31.782Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:31.782Z",
+      "endedAt": "2026-11-23T08:32:32.490Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:32.490Z",
+      "endedAt": "2026-11-23T08:32:33.138Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:33.138Z",
+      "endedAt": "2026-11-23T08:32:33.856Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:33.856Z",
+      "endedAt": "2026-11-23T08:32:34.479Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:34.479Z",
+      "endedAt": "2026-11-23T08:32:35.533Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:35.533Z",
+      "endedAt": "2026-11-23T08:32:36.178Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:36.178Z",
+      "endedAt": "2026-11-23T08:32:36.849Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:36.849Z",
+      "endedAt": "2026-11-23T08:32:37.481Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:37.481Z",
+      "endedAt": "2026-11-23T08:32:38.302Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:38.302Z",
+      "endedAt": "2026-11-23T08:32:38.924Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:38.924Z",
+      "endedAt": "2026-11-23T08:32:39.618Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:39.619Z",
+      "endedAt": "2026-11-23T08:32:40.242Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:40.242Z",
+      "endedAt": "2026-11-23T08:32:41.003Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:41.003Z",
+      "endedAt": "2026-11-23T08:32:41.658Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:41.658Z",
+      "endedAt": "2026-11-23T08:32:42.361Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:42.361Z",
+      "endedAt": "2026-11-23T08:32:42.999Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:42.999Z",
+      "endedAt": "2026-11-23T08:32:43.731Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:43.731Z",
+      "endedAt": "2026-11-23T08:32:44.398Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:44.398Z",
+      "endedAt": "2026-11-23T08:32:45.220Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:45.220Z",
+      "endedAt": "2026-11-23T08:32:45.894Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:45.894Z",
+      "endedAt": "2026-11-23T08:32:46.625Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:46.625Z",
+      "endedAt": "2026-11-23T08:32:47.241Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:47.241Z",
+      "endedAt": "2026-11-23T08:32:47.989Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:47.989Z",
+      "endedAt": "2026-11-23T08:32:48.624Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:48.624Z",
+      "endedAt": "2026-11-23T08:32:49.346Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:49.346Z",
+      "endedAt": "2026-11-23T08:32:49.979Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:49.979Z",
+      "endedAt": "2026-11-23T08:32:50.684Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:50.684Z",
+      "endedAt": "2026-11-23T08:32:51.338Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:51.338Z",
+      "endedAt": "2026-11-23T08:32:52.030Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:52.030Z",
+      "endedAt": "2026-11-23T08:32:52.706Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:52.706Z",
+      "endedAt": "2026-11-23T08:32:53.417Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:53.418Z",
+      "endedAt": "2026-11-23T08:32:54.061Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:54.061Z",
+      "endedAt": "2026-11-23T08:32:54.792Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:54.792Z",
+      "endedAt": "2026-11-23T08:32:55.402Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:55.403Z",
+      "endedAt": "2026-11-23T08:32:56.165Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:56.165Z",
+      "endedAt": "2026-11-23T08:32:56.821Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:56.821Z",
+      "endedAt": "2026-11-23T08:32:57.580Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:57.580Z",
+      "endedAt": "2026-11-23T08:32:58.222Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:58.222Z",
+      "endedAt": "2026-11-23T08:32:58.911Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:58.911Z",
+      "endedAt": "2026-11-23T08:32:59.557Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:32:59.557Z",
+      "endedAt": "2026-11-23T08:33:00.425Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:00.425Z",
+      "endedAt": "2026-11-23T08:33:01.074Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:01.074Z",
+      "endedAt": "2026-11-23T08:33:01.765Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:01.765Z",
+      "endedAt": "2026-11-23T08:33:02.407Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:02.407Z",
+      "endedAt": "2026-11-23T08:33:03.114Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:03.114Z",
+      "endedAt": "2026-11-23T08:33:03.736Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:03.736Z",
+      "endedAt": "2026-11-23T08:33:04.493Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:04.493Z",
+      "endedAt": "2026-11-23T08:33:05.165Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:05.165Z",
+      "endedAt": "2026-11-23T08:33:05.864Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:05.864Z",
+      "endedAt": "2026-11-23T08:33:06.511Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:06.511Z",
+      "endedAt": "2026-11-23T08:33:07.213Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:07.214Z",
+      "endedAt": "2026-11-23T08:33:07.850Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:07.850Z",
+      "endedAt": "2026-11-23T08:33:08.593Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:08.593Z",
+      "endedAt": "2026-11-23T08:33:09.252Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:09.252Z",
+      "endedAt": "2026-11-23T08:33:09.995Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:09.995Z",
+      "endedAt": "2026-11-23T08:33:10.641Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:10.641Z",
+      "endedAt": "2026-11-23T08:33:11.353Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:11.353Z",
+      "endedAt": "2026-11-23T08:33:12.015Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:12.015Z",
+      "endedAt": "2026-11-23T08:33:12.819Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:12.819Z",
+      "endedAt": "2026-11-23T08:33:13.482Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:13.482Z",
+      "endedAt": "2026-11-23T08:33:14.285Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:14.285Z",
+      "endedAt": "2026-11-23T08:33:14.947Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:14.947Z",
+      "endedAt": "2026-11-23T08:33:15.692Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:15.692Z",
+      "endedAt": "2026-11-23T08:33:16.326Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:16.326Z",
+      "endedAt": "2026-11-23T08:33:17.025Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:17.025Z",
+      "endedAt": "2026-11-23T08:33:17.726Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:17.726Z",
+      "endedAt": "2026-11-23T08:33:18.461Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:18.461Z",
+      "endedAt": "2026-11-23T08:33:19.117Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:19.117Z",
+      "endedAt": "2026-11-23T08:33:19.813Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:19.813Z",
+      "endedAt": "2026-11-23T08:33:20.454Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:20.454Z",
+      "endedAt": "2026-11-23T08:33:21.145Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:21.146Z",
+      "endedAt": "2026-11-23T08:33:21.778Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:21.778Z",
+      "endedAt": "2026-11-23T08:33:22.266Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:22.266Z",
+      "endedAt": "2026-11-23T08:33:22.875Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:22.875Z",
+      "endedAt": "2026-11-23T08:33:23.566Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:23.566Z",
+      "endedAt": "2026-11-23T08:33:24.093Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:24.093Z",
+      "endedAt": "2026-11-23T08:33:24.690Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:24.690Z",
+      "endedAt": "2026-11-23T08:33:25.216Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:25.216Z",
+      "endedAt": "2026-11-23T08:33:25.876Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:25.876Z",
+      "endedAt": "2026-11-23T08:33:26.423Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:26.423Z",
+      "endedAt": "2026-11-23T08:33:26.987Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:26.987Z",
+      "endedAt": "2026-11-23T08:33:27.510Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:27.510Z",
+      "endedAt": "2026-11-23T08:33:28.085Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:28.085Z",
+      "endedAt": "2026-11-23T08:33:28.612Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:28.612Z",
+      "endedAt": "2026-11-23T08:33:29.208Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:29.208Z",
+      "endedAt": "2026-11-23T08:33:29.740Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:29.740Z",
+      "endedAt": "2026-11-23T08:33:30.368Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:30.368Z",
+      "endedAt": "2026-11-23T08:33:30.913Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:30.913Z",
+      "endedAt": "2026-11-23T08:33:31.491Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:31.491Z",
+      "endedAt": "2026-11-23T08:33:32.000Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:32.000Z",
+      "endedAt": "2026-11-23T08:33:32.570Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:32.572Z",
+      "endedAt": "2026-11-23T08:33:33.095Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:33.095Z",
+      "endedAt": "2026-11-23T08:33:33.665Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:33.665Z",
+      "endedAt": "2026-11-23T08:33:34.190Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:34.190Z",
+      "endedAt": "2026-11-23T08:33:34.776Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:34.776Z",
+      "endedAt": "2026-11-23T08:33:35.326Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:35.326Z",
+      "endedAt": "2026-11-23T08:33:36.236Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:36.236Z",
+      "endedAt": "2026-11-23T08:33:36.774Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:36.774Z",
+      "endedAt": "2026-11-23T08:33:37.373Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:37.373Z",
+      "endedAt": "2026-11-23T08:33:37.899Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:37.899Z",
+      "endedAt": "2026-11-23T08:33:38.491Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:38.491Z",
+      "endedAt": "2026-11-23T08:33:39.013Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:39.013Z",
+      "endedAt": "2026-11-23T08:33:39.594Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:39.594Z",
+      "endedAt": "2026-11-23T08:33:40.149Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:40.149Z",
+      "endedAt": "2026-11-23T08:33:40.758Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:40.758Z",
+      "endedAt": "2026-11-23T08:33:41.277Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:41.277Z",
+      "endedAt": "2026-11-23T08:33:42.058Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:42.058Z",
+      "endedAt": "2026-11-23T08:33:42.595Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:42.595Z",
+      "endedAt": "2026-11-23T08:33:43.200Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:43.200Z",
+      "endedAt": "2026-11-23T08:33:43.744Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:43.744Z",
+      "endedAt": "2026-11-23T08:33:44.352Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:44.353Z",
+      "endedAt": "2026-11-23T08:33:44.906Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:44.906Z",
+      "endedAt": "2026-11-23T08:33:45.491Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:45.491Z",
+      "endedAt": "2026-11-23T08:33:46.028Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:46.028Z",
+      "endedAt": "2026-11-23T08:33:46.616Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:46.616Z",
+      "endedAt": "2026-11-23T08:33:47.162Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:47.162Z",
+      "endedAt": "2026-11-23T08:33:47.794Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:47.794Z",
+      "endedAt": "2026-11-23T08:33:48.337Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:48.337Z",
+      "endedAt": "2026-11-23T08:33:48.896Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:48.896Z",
+      "endedAt": "2026-11-23T08:33:49.438Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:49.438Z",
+      "endedAt": "2026-11-23T08:33:50.025Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:50.025Z",
+      "endedAt": "2026-11-23T08:33:50.581Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:50.582Z",
+      "endedAt": "2026-11-23T08:33:51.191Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:51.191Z",
+      "endedAt": "2026-11-23T08:33:51.626Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/part",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:51.626Z",
+      "endedAt": "2026-11-23T08:33:52.135Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/import/verify",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:52.135Z",
+      "endedAt": "2026-11-23T08:33:52.694Z"
+    },
+    {
+      "stage": "optimized-staged-1000-50-without-overwriting-active",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:52.694Z",
+      "endedAt": "2026-11-23T08:33:53.185Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:53.194Z",
+      "endedAt": "2026-11-23T08:33:53.992Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/seed",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:53.992Z",
+      "endedAt": "2026-11-23T08:33:54.171Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:54.171Z",
+      "endedAt": "2026-11-23T08:33:54.776Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:54.776Z",
+      "endedAt": "2026-11-23T08:33:55.608Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:55.608Z",
+      "endedAt": "2026-11-23T08:33:56.240Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:56.240Z",
+      "endedAt": "2026-11-23T08:33:56.859Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:56.859Z",
+      "endedAt": "2026-11-23T08:33:57.517Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:57.517Z",
+      "endedAt": "2026-11-23T08:33:58.128Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:58.128Z",
+      "endedAt": "2026-11-23T08:33:58.759Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:58.759Z",
+      "endedAt": "2026-11-23T08:33:59.385Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:33:59.385Z",
+      "endedAt": "2026-11-23T08:34:00.008Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:00.008Z",
+      "endedAt": "2026-11-23T08:34:00.647Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:00.647Z",
+      "endedAt": "2026-11-23T08:34:01.284Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:01.284Z",
+      "endedAt": "2026-11-23T08:34:01.917Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:01.917Z",
+      "endedAt": "2026-11-23T08:34:02.551Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:02.551Z",
+      "endedAt": "2026-11-23T08:34:03.264Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:03.264Z",
+      "endedAt": "2026-11-23T08:34:03.883Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:03.883Z",
+      "endedAt": "2026-11-23T08:34:04.509Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:04.509Z",
+      "endedAt": "2026-11-23T08:34:05.126Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:05.126Z",
+      "endedAt": "2026-11-23T08:34:05.762Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:05.762Z",
+      "endedAt": "2026-11-23T08:34:06.363Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:06.363Z",
+      "endedAt": "2026-11-23T08:34:06.975Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:06.976Z",
+      "endedAt": "2026-11-23T08:34:07.605Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:07.605Z",
+      "endedAt": "2026-11-23T08:34:08.234Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:08.234Z",
+      "endedAt": "2026-11-23T08:34:08.834Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:08.834Z",
+      "endedAt": "2026-11-23T08:34:09.450Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:09.450Z",
+      "endedAt": "2026-11-23T08:34:10.069Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:10.069Z",
+      "endedAt": "2026-11-23T08:34:10.689Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:10.689Z",
+      "endedAt": "2026-11-23T08:34:11.316Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:11.316Z",
+      "endedAt": "2026-11-23T08:34:12.058Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:12.058Z",
+      "endedAt": "2026-11-23T08:34:12.682Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:12.682Z",
+      "endedAt": "2026-11-23T08:34:13.274Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:13.274Z",
+      "endedAt": "2026-11-23T08:34:14.011Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:14.011Z",
+      "endedAt": "2026-11-23T08:34:14.681Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:14.681Z",
+      "endedAt": "2026-11-23T08:34:15.302Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:15.302Z",
+      "endedAt": "2026-11-23T08:34:15.904Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:15.904Z",
+      "endedAt": "2026-11-23T08:34:16.536Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:16.536Z",
+      "endedAt": "2026-11-23T08:34:17.158Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:17.158Z",
+      "endedAt": "2026-11-23T08:34:17.787Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:17.787Z",
+      "endedAt": "2026-11-23T08:34:18.409Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:18.409Z",
+      "endedAt": "2026-11-23T08:34:19.002Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:19.002Z",
+      "endedAt": "2026-11-23T08:34:19.642Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:19.644Z",
+      "endedAt": "2026-11-23T08:34:20.241Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:20.241Z",
+      "endedAt": "2026-11-23T08:34:20.848Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:20.848Z",
+      "endedAt": "2026-11-23T08:34:21.458Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:21.458Z",
+      "endedAt": "2026-11-23T08:34:22.053Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:22.053Z",
+      "endedAt": "2026-11-23T08:34:22.677Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:22.677Z",
+      "endedAt": "2026-11-23T08:34:23.298Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:23.298Z",
+      "endedAt": "2026-11-23T08:34:23.924Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:23.924Z",
+      "endedAt": "2026-11-23T08:34:24.561Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:24.561Z",
+      "endedAt": "2026-11-23T08:34:25.212Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:25.212Z",
+      "endedAt": "2026-11-23T08:34:25.838Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:25.838Z",
+      "endedAt": "2026-11-23T08:34:26.445Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:26.445Z",
+      "endedAt": "2026-11-23T08:34:27.041Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:27.041Z",
+      "endedAt": "2026-11-23T08:34:27.651Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:27.651Z",
+      "endedAt": "2026-11-23T08:34:28.252Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:28.252Z",
+      "endedAt": "2026-11-23T08:34:28.838Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:28.838Z",
+      "endedAt": "2026-11-23T08:34:29.465Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:29.465Z",
+      "endedAt": "2026-11-23T08:34:30.112Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:30.112Z",
+      "endedAt": "2026-11-23T08:34:30.727Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:30.727Z",
+      "endedAt": "2026-11-23T08:34:31.949Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:31.949Z",
+      "endedAt": "2026-11-23T08:34:32.565Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:32.567Z",
+      "endedAt": "2026-11-23T08:34:33.195Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:33.195Z",
+      "endedAt": "2026-11-23T08:34:33.890Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:33.890Z",
+      "endedAt": "2026-11-23T08:34:34.507Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:34.507Z",
+      "endedAt": "2026-11-23T08:34:35.146Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:35.146Z",
+      "endedAt": "2026-11-23T08:34:35.766Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:35.766Z",
+      "endedAt": "2026-11-23T08:34:36.410Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:36.410Z",
+      "endedAt": "2026-11-23T08:34:37.110Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:37.110Z",
+      "endedAt": "2026-11-23T08:34:37.729Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:37.729Z",
+      "endedAt": "2026-11-23T08:34:38.345Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:38.345Z",
+      "endedAt": "2026-11-23T08:34:38.994Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:38.994Z",
+      "endedAt": "2026-11-23T08:34:39.632Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:39.632Z",
+      "endedAt": "2026-11-23T08:34:40.250Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:40.250Z",
+      "endedAt": "2026-11-23T08:34:40.879Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:40.879Z",
+      "endedAt": "2026-11-23T08:34:41.498Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:41.498Z",
+      "endedAt": "2026-11-23T08:34:42.127Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:42.127Z",
+      "endedAt": "2026-11-23T08:34:43.083Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:43.083Z",
+      "endedAt": "2026-11-23T08:34:43.728Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:43.728Z",
+      "endedAt": "2026-11-23T08:34:44.370Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:44.370Z",
+      "endedAt": "2026-11-23T08:34:45.003Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:45.003Z",
+      "endedAt": "2026-11-23T08:34:45.652Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:45.654Z",
+      "endedAt": "2026-11-23T08:34:46.268Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:46.268Z",
+      "endedAt": "2026-11-23T08:34:46.915Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:46.915Z",
+      "endedAt": "2026-11-23T08:34:47.558Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:47.560Z",
+      "endedAt": "2026-11-23T08:34:48.203Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:48.203Z",
+      "endedAt": "2026-11-23T08:34:48.829Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:48.829Z",
+      "endedAt": "2026-11-23T08:34:49.471Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:49.471Z",
+      "endedAt": "2026-11-23T08:34:50.110Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:50.110Z",
+      "endedAt": "2026-11-23T08:34:50.720Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:50.720Z",
+      "endedAt": "2026-11-23T08:34:51.336Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:51.336Z",
+      "endedAt": "2026-11-23T08:34:51.969Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:51.969Z",
+      "endedAt": "2026-11-23T08:34:52.589Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:52.589Z",
+      "endedAt": "2026-11-23T08:34:53.228Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:53.228Z",
+      "endedAt": "2026-11-23T08:34:53.837Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:53.837Z",
+      "endedAt": "2026-11-23T08:34:54.453Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:54.453Z",
+      "endedAt": "2026-11-23T08:34:55.069Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:55.069Z",
+      "endedAt": "2026-11-23T08:34:55.684Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:55.684Z",
+      "endedAt": "2026-11-23T08:34:56.275Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:56.275Z",
+      "endedAt": "2026-11-23T08:34:56.925Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:56.925Z",
+      "endedAt": "2026-11-23T08:34:57.883Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:57.883Z",
+      "endedAt": "2026-11-23T08:34:58.485Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:58.488Z",
+      "endedAt": "2026-11-23T08:34:59.097Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:59.097Z",
+      "endedAt": "2026-11-23T08:34:59.646Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:34:59.646Z",
+      "endedAt": "2026-11-23T08:35:00.568Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:00.568Z",
+      "endedAt": "2026-11-23T08:35:01.220Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:01.220Z",
+      "endedAt": "2026-11-23T08:35:01.862Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:01.862Z",
+      "endedAt": "2026-11-23T08:35:02.488Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:02.488Z",
+      "endedAt": "2026-11-23T08:35:03.484Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:03.484Z",
+      "endedAt": "2026-11-23T08:35:04.031Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:04.031Z",
+      "endedAt": "2026-11-23T08:35:04.865Z"
+    },
+    {
+      "stage": "optimized-bounded-1000-trade-replay",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:04.865Z",
+      "endedAt": "2026-11-23T08:35:05.672Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:05.681Z",
+      "endedAt": "2026-11-23T08:35:06.163Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/operation",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:06.163Z",
+      "endedAt": "2026-11-23T08:35:06.429Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/operation",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:06.429Z",
+      "endedAt": "2026-11-23T08:35:06.763Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:06.763Z",
+      "endedAt": "2026-11-23T08:35:07.105Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:07.105Z",
+      "endedAt": "2026-11-23T08:35:07.500Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:07.500Z",
+      "endedAt": "2026-11-23T08:35:07.838Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:07.838Z",
+      "endedAt": "2026-11-23T08:35:08.172Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:08.172Z",
+      "endedAt": "2026-11-23T08:35:08.644Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:08.644Z",
+      "endedAt": "2026-11-23T08:35:09.069Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:09.069Z",
+      "endedAt": "2026-11-23T08:35:09.548Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:09.548Z",
+      "endedAt": "2026-11-23T08:35:09.885Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:09.885Z",
+      "endedAt": "2026-11-23T08:35:10.225Z"
+    },
+    {
+      "stage": "optimized-read-and-operation-retry",
+      "path": "/state",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:10.225Z",
+      "endedAt": "2026-11-23T08:35:10.543Z"
+    },
+    {
+      "stage": "prepare-current-version-cron",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:10.545Z",
+      "endedAt": "2026-11-23T08:35:11.265Z"
+    },
+    {
+      "stage": "prepare-current-version-cron",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:11.265Z",
+      "endedAt": "2026-11-23T08:35:11.797Z"
+    },
+    {
+      "stage": "prepare-current-version-cron",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:11.797Z",
+      "endedAt": "2026-11-23T08:35:12.648Z"
+    },
+    {
+      "stage": "prepare-current-version-cron",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:12.648Z",
+      "endedAt": "2026-11-23T08:35:13.270Z"
+    },
+    {
+      "stage": "prepare-current-version-cron",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:13.270Z",
+      "endedAt": "2026-11-23T08:35:13.888Z"
+    },
+    {
+      "stage": "prepare-current-version-cron",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:13.888Z",
+      "endedAt": "2026-11-23T08:35:14.819Z"
+    },
+    {
+      "stage": "prepare-current-version-cron",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:14.819Z",
+      "endedAt": "2026-11-23T08:35:15.539Z"
+    },
+    {
+      "stage": "prepare-current-version-cron",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:15.539Z",
+      "endedAt": "2026-11-23T08:35:16.060Z"
+    },
+    {
+      "stage": "prepare-current-version-cron",
+      "path": "/validation/step",
+      "status": 200,
+      "startedAt": "2026-11-23T08:35:16.060Z",
+      "endedAt": "2026-11-23T08:35:16.782Z"
+    }
+  ],
+  "completedAt": "2026-11-23T08:35:16.784Z",
+  "passed": true
+}
