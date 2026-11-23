@@ -44,3 +44,5 @@ auth v0.1.0已建立独立邮箱身份验签、PKCE/一次性交接和应用会�
 2026-11-23用户明确暂不提供付款信息，不再等待Zero Trust启用，也不再重复请求付款授权。账号实际停在Free付款页，付款字段/条款未提交。下一步筛选无需付款信息且无需自有域名、可以正式向一般邮箱发送OTP的服务；保留已完成的离线队列、会话与身份隔离机制，提供方相关验签/交接按新方案适配。Cloudflare Workers/Pages/D1既有模拟部署继续保留，不接入个人数据。
 
 免付款信息候选收敛到Kinde Free：官方列出无需信用卡、10,500MAU、默认kinde.com域名及邮箱OTP；默认邮件在production的许可措辞、发信额度/限速/无卡超额行为仍需实际账号核对，默认OTP有效期2小时且Free不含自定义期限。不能据此宣布已适合生产。下一步由用户注册Free账号（不填付款方式），核定production默认sender并完成邮箱/手机网络验证，之后按新提供方适配认证。见[候选调研](auth-without-payment-info.md)与[验收条件](auth-acceptance-criteria.md)。
+
+auth v0.1.2：用户已完成Kinde账号/业务注册。实际Free/10500MAU/2环境、Production Not live、Email Code单应用启用、Kinde default sender、无secret公共应用已核实。现有允许回调仍localhost:3000；本机隔离探针的5项请求防护检查通过并成功进入官方登录。测试邮箱没有应用用户记录，等待用户确认测试用户注册并输入验证码；尚未完成兑换/Live发信/手机网络/云端认证适配。详见[账号验证准备](kinde-account-validation-v0.1.2.md)和[OIDC合同](kinde-oidc-contract.md)。
