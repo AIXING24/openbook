@@ -1,0 +1,38 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GainTrace 同步存储验证</title>
+<style>body{font:16px system-ui;color:#163b2b;max-width:540px;margin:12vh auto;padding:24px;line-height:1.7}h1{font-size:25px}pre{white-space:pre-wrap;background:#f0f5f1;padding:16px;border-radius:12px}</style>
+<h1>GainTrace 同步存储验证</h1><p>独立本地模拟，不连接账户或线上账本。</p><pre id="result">正在验证浏览器存储…</pre>
+<script type="module">
+import {indexedDbStore} from '/client/indexeddb-store.mjs';
+import {cloudSync} from '/client/sync.mjs';
+const result=document.querySelector('#result');
+const assert=(condition,message)=>{if(!condition)throw Error(message);};
+const key='browser-mock|local';
+const store=indexedDbStore({name:'gaintrace-sync-browser-validation-v1'});
+let remote={generation:'browser-generation',revision:1,state:{v:1,seeded:true,demoVersion:0,base:'USD',upRed:false,theme:'auto',brokers:['Mock HSBC'],lastBroker:'Mock HSBC',lastBackup:0,positionOrder:[],trades:[]}};
+let offline=true;
+const api={identityKey:key,readSnapshot:async()=>structuredClone(remote),operation:async wire=>{
+  if(offline)throw Error('Simulated offline');
+  assert(wire.expectedRevision===remote.revision,'Wire revision changed on reload');
+  remote.state.trades.push(structuredClone(wire.trade));remote.revision++;return {status:200,body:{revision:remote.revision}};
+}};
+try{
+  const client=cloudSync({store,identityKey:key,api});const prior=await store.read(key);
+  if(!prior){
+    await client.initialize(remote);
+    await client.enqueue({kind:'upsert-trade',trade:{id:'browser-retained',date:'2026-11-18',tc:'us100000',mkt:'us',cur:'USD',code:'100000',name:'Mock stock 0',side:'B',px:100,qty:1,fee:0,broker:'Mock HSBC',note:'模拟数据',ts:1}},{id:'browser-offline-edit'});
+    const saved=await client.flush();assert(saved.pending===1 && saved.mode==='offline','Offline edit was not retained');
+    result.textContent='第一阶段通过\n本地已保存：1笔模拟交易\n待同步：1笔\n模拟断网后仍保留原操作与版本号。\n刷新页面验证存储恢复。';
+  }else if(prior.queue.length){
+    const restored=await client.snapshot();assert(restored.pending===1 && restored.state.trades.length===1,'Reload lost pending data');
+    assert(prior.queue[0].wire.expectedRevision===1,'Reload lost immutable operation');
+    offline=false;
+    const synced=await client.flush();assert(synced.pending===0 && synced.mode==='synced' && synced.confirmedRevision===2,'Resumed sync failed');
+    result.textContent='浏览器验证全部通过\n页面刷新后恢复：1笔待同步交易\n恢复网络后：成功同步1次\n待同步：0笔\n云端确认版本：2\n使用真实IndexedDB，未使用内存存储替代。';
+  }else{
+    assert(prior.confirmed.revision===2 && prior.confirmed.state.trades.length===1,'Unexpected test state');
+    result.textContent='浏览器验证全部通过\n成功同步的缓存也已持久化。\n待同步：0笔\n云端确认版本：2';
+  }
+}catch(error){result.textContent='验证失败：'+error.message;}
+finally{await store.close();}
+</script></html>
