@@ -1,0 +1,30 @@
+backend/scripts/serve-kinde-validation.mjs
+  s_954afabfda404a::t_445d2db8e7055d 37,70-72
+  s_954afabfda404a::t_0f5d19c0e68beb 1-16,18-36,38-69,73-74,79-82,84-98
+  s_954afabfda404a::t_35da126e451784 17,83
+  s_954afabfda404a::t_7a521c578552ab 75-78
+docs/backend/auth-without-payment-info.md
+  s_954afabfda404a::t_7ce959ccea31e0 7-8
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_7ce959ccea31e0 47-48
+docs/backend/kinde-oidc-contract.md
+  s_954afabfda404a::t_85d6af9d50067c 1-161
+docs/backend/kinde-account-validation-v0.1.2.md
+  s_954afabfda404a::t_7ce959ccea31e0 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "f7ed9dd2735284f013ba80cc7f08ecd8e655f0f1",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
