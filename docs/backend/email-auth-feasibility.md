@@ -4,10 +4,12 @@
 约束由用户提供：前端保留 https://aixing24.github.io/openbook/；Workers + D1 Free API 使用 https://gaintrace-batch-api.pages.dev/，用户蜂窝网络可访问，workers.dev 不可访问；无自有域名、无 Resend／短信服务账号。
 下文“已核实”指官方文档能力，不代表当前项目已配置或手机已完成登录实测；“提案”中的云端设置尚未实施。调研后auth v0.1.0已实现独立的验签/PKCE/一次性会话交接并完成本地验证，仍未接入公开路由，见[email-auth-validation-v0.1.0.md](email-auth-validation-v0.1.0.md)。
 
-## 唯一推荐
+## 当时建议与最新约束
+
+2026-11-23用户明确暂不提供付款信息，因此下述Cloudflare Access建议当前不采用。保留它的官方能力与实现证据，后续免付款信息选型另见auth-without-payment-info.md；不会反复要求用户启用Zero Trust。
 
 **小规模第一版采用 Cloudflare Access 邮箱 OTP，只保护生产 Pages 的 `/auth` 登录入口；后端验签后交接为 GainTrace 自己的短期会话，账本 API 验证 Bearer 会话。** 无须购买域名或另开邮件发送账号，保留现有前端和 Pages API 地址。
-这是有条件可行：必须完成 Zero Trust 激活并提供付款信息，用户规模受 50 席限制，还需实现会话交接和账本隔离。若拒绝任何付款信息，或要求无限开放注册，此推荐受阻；本次核查的 Supabase／Clerk／Firebase 没有完整满足原约束的生产数字邮箱 OTP 替代方案。
+这是有条件可行：必须完成 Zero Trust 激活并提供付款信息，用户规模受 50 席限制，还需实现会话交接和账本隔离。当前用户不接受付款信息步骤，因此不继续该流程；本次已核查的 Supabase／Clerk／Firebase没有完整满足原约束的生产数字邮箱 OTP方案，仍可进一步查其他供应商，不能把这三个候选的限制扩大成所有服务都不可行。
 
 ## Cloudflare Access：已核实
 
