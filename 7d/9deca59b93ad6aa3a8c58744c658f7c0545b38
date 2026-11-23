@@ -1,0 +1,35 @@
+client/sync.mjs
+  s_954afabfda404a::t_0e6943b7a34595 4-8,11,14,20,107
+  s_954afabfda404a::t_9f35884ae28d86 1-3,9-10,12-13,15-19,21-106,108-125,127-130
+backend/scripts/serve-client-validation.mjs
+  s_954afabfda404a::t_092f741e458cdc 1-12
+client/tests/browser.html
+  s_954afabfda404a::t_092f741e458cdc 1-38
+backend/tests/client-sync.test.mjs
+  s_954afabfda404a::t_0e6943b7a34595 72-84
+  s_954afabfda404a::t_1ac8cc7e10aaca 85-99
+docs/backend/client-sync-validation-v0.1.0.md
+  s_954afabfda404a::t_569344caac8000 1-31
+client/README.md
+  s_954afabfda404a::t_569344caac8000 1-30
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_569344caac8000 39-40
+client/indexeddb-store.mjs
+  s_954afabfda404a::t_9f35884ae28d86 1-41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "7d9deca59b93ad6aa3a8c58744c658f7c0545b38",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
