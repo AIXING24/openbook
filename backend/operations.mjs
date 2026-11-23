@@ -25,7 +25,7 @@ export async function operation(db,account,b) {
     if(!validMetadata(b.preferences))return {status:422,body:{error:'Complete valid metadata required'}};
     writes.push(q(db,`UPDATE gt_accounts SET metadata=? WHERE generation=? AND ${guard}`,JSON.stringify(b.preferences),a.generation,account,revision,b.id));
   }
-  if(since)writes.push(q(db,`UPDATE gt_daily SET status='invalidated' WHERE account=? AND date>=? AND ${guard}`,account,since,account,revision,b.id));
+  if(since)writes.push(q(db,`UPDATE gt_daily SET status='invalidated',payload=json_set(payload,'$.invalidatedAt',?) WHERE account=? AND date>=? AND ${guard}`,since,account,since,account,revision,b.id));
   writes.push(q(db,`UPDATE gt_accounts SET metadata=json_set(metadata,'$.positionOrder',json(CASE WHEN json_array_length(metadata,'$.positionOrder')=0 THEN '[]' ELSE (SELECT json_group_array(tc) FROM (SELECT j.value tc,CAST(j.key AS INTEGER) n FROM json_each(gt_accounts.metadata,'$.positionOrder') j WHERE EXISTS(SELECT 1 FROM gt_trades t WHERE t.generation=gt_accounts.generation AND t.tc=j.value) UNION ALL SELECT t.tc,100000+min(t.ordinal) n FROM gt_trades t WHERE t.generation=gt_accounts.generation AND t.tc NOT IN (SELECT value FROM json_each(gt_accounts.metadata,'$.positionOrder')) GROUP BY t.tc ORDER BY n)) END)) WHERE generation=? AND ${guard}`,a.generation,account,revision,b.id));
   const result=await db.batch([
     q(db,'UPDATE gt_accounts SET revision=?,last_operation=? WHERE id=? AND revision=?',revision,b.id,account,a.revision),

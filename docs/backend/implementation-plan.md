@@ -1,6 +1,6 @@
 # 后端实施计划
 
-版本：backend v0.3.1，2026-11-23。前端当前发布 v1.16.0。
+版本：backend v0.3.2，2026-11-23。前端当前发布 v1.16.0。
 
 前后端在 AIXING24/openbook 仓库维护。当前工作分支 dev/gaintrace-backend；前端仍由 GitHub Pages 发布，后端在隔离 Cloudflare 环境验证。原型保留在 prototypes/cloudflare-migration，正式实现放 backend，实施和验收证据放 docs/backend。
 

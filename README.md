@@ -1,6 +1,6 @@
 # OPEN BOOK
 
-## 后端开发（backend v0.3.1）
+## 后端开发（backend v0.3.2）
 
 后端开发在 `dev/gaintrace-backend` 分支持续迭代。当前前端 v1.16.0 保持本地存储行为；已有隔离云端验证原型位于 `prototypes/cloudflare-migration/`，分批存储与增量计算实现位于 `backend/`（仍仅用于模拟验证）。[实施计划](docs/backend/implementation-plan.md)说明阶段顺序和发布验收；[云端验证报告](docs/backend/cloud-validation-2026-11-23.md)记录实际免费额度边界。
 

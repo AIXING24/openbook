@@ -72,7 +72,7 @@ test('normalized migration, durable daily jobs and historical invariants',async 
   });
   await t.test('backdated correction restarts an in-flight job, invalidates only affected days and archives old points',async()=>{
     const trade={...prepared.state.trades[0],px:98};assert.equal((await r.call('alice','/operation',{id:'backdated',expectedRevision:revision,kind:'upsert-trade',trade})).status,200);revision++;
-    assert.ok((await r.call('alice','/state')).body.confirmedHistory.every(p=>p.status==='invalidated'));
+    assert.ok((await r.call('alice','/state')).body.confirmedHistory.every(p=>p.status==='invalidated' && old.PnlHistory.value(p,'USD')===null));
     await finishDate(r,'alice','2026-11-15');
     const state=(await r.call('alice','/state')).body;compareSnapshot(state.confirmedHistory[0],reference(state.state.trades,'2026-11-15'));
     assert.equal((await r.db.prepare('SELECT count(*) n FROM gt_archive').first()).n,1);
