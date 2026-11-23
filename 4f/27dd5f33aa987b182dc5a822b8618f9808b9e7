@@ -1,0 +1,29 @@
+backend/README.md
+  s_954afabfda404a::t_05aa7139cf2306 28-32
+docs/backend/pages-validation-v0.3.2.md
+  s_954afabfda404a::t_05aa7139cf2306 1-37
+backend/cloud-pages-verification-v0.3.2.json
+  s_954afabfda404a::t_025db473e4a2d8 1-56
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_05aa7139cf2306 33,37-38
+backend/scripts/cloud-pages-check.mjs
+  s_954afabfda404a::t_0c85d6f3a1df3b 1-63
+docs/backend/cloud-validation-v0.3.1.md
+  s_954afabfda404a::t_05aa7139cf2306 36,38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "4f27dd5f33aa987b182dc5a822b8618f9808b9e7",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
