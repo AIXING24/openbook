@@ -1,0 +1,29 @@
+docs/backend/auth-without-payment-info.md
+  s_954afabfda404a::t_63d55255131e99 1-32,34-38,40-63
+  s_954afabfda404a::t_9d222b746e040c 33,39
+docs/backend/auth-acceptance-criteria.md
+  s_954afabfda404a::t_9e5cd48b9ca7c6 1-23
+docs/backend/email-auth-feasibility.md
+  s_954afabfda404a::t_7dee13fbd1b4fc 7-9,12
+docs/backend/email-auth-validation-v0.1.0.md
+  s_954afabfda404a::t_7dee13fbd1b4fc 28-29
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_7dee13fbd1b4fc 43-44
+  s_954afabfda404a::t_9d222b746e040c 45-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "71d86dd98ce8e38842b59e6900378f7c3b4c117c",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
