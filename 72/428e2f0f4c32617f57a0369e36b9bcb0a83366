@@ -1,0 +1,35 @@
+backend/worker.mjs
+  s_954afabfda404a::t_68fe4cc5f573aa 22
+docs/backend/cloud-validation-v0.3.1.md
+  s_954afabfda404a::t_68fe4cc5f573aa 39-42
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_68fe4cc5f573aa 3
+README.md
+  s_954afabfda404a::t_68fe4cc5f573aa 3
+backend/tests/backend.test.mjs
+  s_954afabfda404a::t_68fe4cc5f573aa 75
+backend/README.md
+  s_954afabfda404a::t_68fe4cc5f573aa 1
+backend/operations.mjs
+  s_954afabfda404a::t_68fe4cc5f573aa 28
+backend/package.json
+  s_954afabfda404a::t_68fe4cc5f573aa 3
+backend/package-lock.json
+  s_954afabfda404a::t_4d11a0a0dfded9 3,9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "72428e2f0f4c32617f57a0369e36b9bcb0a83366",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
