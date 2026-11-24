@@ -48,3 +48,5 @@ auth v0.1.0已建立独立邮箱身份验签、PKCE/一次性交接和应用会�
 auth v0.1.2：用户已完成Kinde账号/业务注册。实际Free/10500MAU/2环境、Production Not live、Email Code单应用启用、Kinde default sender、无secret公共应用已核实。现有允许回调仍localhost:3000；本机隔离探针的5项请求防护检查通过并成功进入官方登录。测试邮箱没有应用用户记录，等待用户确认测试用户注册并输入验证码；尚未完成兑换/Live发信/手机网络/云端认证适配。详见[账号验证准备](kinde-account-validation-v0.1.2.md)和[OIDC合同](kinde-oidc-contract.md)。
 
 2026-11-24 auth v0.1.3：用户完成测试注册/OTP，本机public PKCE兑换与ID签名/issuer/clientaud/nonce/邮箱匹配/boolean verified通过，报告已脱敏归档，本机服务关闭。独立Kinde适配、一次性交接/会话、Pages模拟登录入口和候选构建已实现，完整43项检查通过。尚未改Kinde云回调、传送测试身份到Cloudflare或部署候选；下一步确认精确云回调和测试身份存储后，执行云端登录/退出/网络/CPU验收。默认sender的Live许可、邮件额度和无卡超额策略仍待核实。见[登录验证](kinde-auth-validation-v0.1.3.md)。
+
+2026-11-24 auth v0.1.4：用户已明确授权精确云回调及测试身份存储，Kinde保存/重载核实、隔离D1认证表和Pages候选部署完成。7组云端基础验收通过；旧模拟secret隐藏值回写问题已恢复并以实际账户200核验。Pages基础入口23次请求、0运行时错误、最高分钟桶P99 5.125ms，非逐请求峰值且不覆盖完整登录。已发送指定测试邮箱OTP，待用户页面输入；真实云端callback、应用会话、退出、手机完整认证和全流程CPU尚未完成。详见[云端模拟验证](kinde-cloud-validation-v0.1.4.md)。

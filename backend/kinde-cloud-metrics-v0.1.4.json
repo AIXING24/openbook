@@ -1,0 +1,54 @@
+{
+  "version": "auth v0.1.4",
+  "queriedAt": "2026-11-24T02:56:19.572Z",
+  "timeRange": {
+    "start": "2026-11-24T02:52:39.711Z",
+    "end": "2026-11-24T02:56:19.572Z"
+  },
+  "deployment": {
+    "id": "815f1aeb-0033-4650-bb63-2704067870a3",
+    "url": "https://815f1aeb.gaintrace-batch-api.pages.dev",
+    "commit": "30de881504c5dafb3e1121e86706ee276c4e7e67"
+  },
+  "scriptName": "pages-worker--24757550-production",
+  "units": "CPU time 99th percentile - microseconds",
+  "rows": [
+    {
+      "dimensions": {
+        "datetimeMinute": "2026-11-24T02:52:00Z",
+        "scriptName": "pages-worker--24757550-production",
+        "status": "success"
+      },
+      "quantiles": {
+        "cpuTimeP50": 671,
+        "cpuTimeP99": 5125,
+        "cpuTimeP999": 5125
+      },
+      "sum": {
+        "errors": 0,
+        "requests": 19
+      }
+    },
+    {
+      "dimensions": {
+        "datetimeMinute": "2026-11-24T02:53:00Z",
+        "scriptName": "pages-worker--24757550-production",
+        "status": "success"
+      },
+      "quantiles": {
+        "cpuTimeP50": 755,
+        "cpuTimeP99": 2537,
+        "cpuTimeP999": 2537
+      },
+      "sum": {
+        "errors": 0,
+        "requests": 4
+      }
+    }
+  ],
+  "requests": 23,
+  "runtimeErrors": 0,
+  "highestBucketP99Ms": 5.125,
+  "fullAuthenticatedFlowProven": false,
+  "limitations": "Adaptive minute-bucket quantiles, not exact per-request maximum or path-level CPU. Full callback/exchange/exit coverage still pending; zero runtime errors does not prove stable Free CPU headroom."
+}
