@@ -46,14 +46,18 @@ export function kindeAuth({db,issuer,clientId,apiOrigin,allowedOrigin,returnUrl,
     return {subject:claims.sub,email:verifiedEmail,expiresAt:Math.floor(claims.exp*1000)};
   };
   const identity=async proof=>{
-    const lookup=()=>db.prepare('SELECT i.user_id,u.email FROM gt_auth_identities i JOIN gt_auth_users u ON u.id=i.user_id WHERE i.issuer=? AND i.subject=?').bind(issuer,proof.subject).first();
-    const existing=await lookup();if(existing){if(existing.email!==proof.email)throw Error('Identity change requires review');return existing.user_id;}
     const id=crypto.randomUUID();
-    await db.batch([
-      db.prepare('INSERT OR IGNORE INTO gt_auth_users SELECT ?,?,? WHERE (SELECT count(*) FROM gt_auth_users)<50').bind(id,proof.email,now()),
+    // One atomic batch: an existing subject reuses its owner; a new subject can
+    // only bind the freshly inserted UUID, never an unrelated same-email user.
+    const results=await db.batch([
+      db.prepare('INSERT OR IGNORE INTO gt_auth_users SELECT ?,?,? WHERE (SELECT count(*) FROM gt_auth_users)<50 AND NOT EXISTS(SELECT 1 FROM gt_auth_identities WHERE issuer=? AND subject=?)').bind(id,proof.email,now(),issuer,proof.subject),
       db.prepare('INSERT OR IGNORE INTO gt_auth_identities SELECT ?,?,id FROM gt_auth_users WHERE id=? AND email=?').bind(issuer,proof.subject,id,proof.email),
+      db.prepare('SELECT i.user_id,u.email FROM gt_auth_identities i JOIN gt_auth_users u ON u.id=i.user_id WHERE i.issuer=? AND i.subject=?').bind(issuer,proof.subject),
     ]);
-    const linked=await lookup();if(!linked||linked.email!==proof.email)throw Error('Account linking requires review');return linked.user_id;
+    const linked=results[2].results[0];
+    if(!linked)throw Error('Account linking requires review');
+    if(linked.email!==proof.email)throw Error('Identity change requires review');
+    return linked.user_id;
   };
   const authenticate=async request=>{
     const token=request.headers.get('authorization')?.match(/^Bearer ([A-Za-z0-9_-]{43})$/)?.[1];if(!token)return null;
@@ -69,8 +73,14 @@ export function kindeAuth({db,issuer,clientId,apiOrigin,allowedOrigin,returnUrl,
       const state=url.searchParams.get('state'),challenge=url.searchParams.get('challenge');
       if(url.searchParams.getAll('state').length!==1||url.searchParams.getAll('challenge').length!==1||!opaque(state)||!opaque(challenge))return json(request,{error:'Invalid login start'},400);
       const binding=random(),oauthState=random(),nonce=random(),verifier=random();
-      await db.prepare('DELETE FROM gt_kinde_logins WHERE expires_at<=?').bind(now()).run();
-      const inserted=await db.prepare('INSERT INTO gt_kinde_logins SELECT ?,?,?,?,?,?,?,NULL WHERE (SELECT count(*) FROM gt_kinde_logins)<100').bind(await hash(binding),oauthState,nonce,verifier,state,challenge,now()+600000).run();
+      const stamp=now(),bindingHash=await hash(binding);
+      const started=await db.batch([
+        db.prepare('DELETE FROM gt_kinde_logins WHERE expires_at<=?').bind(stamp),
+        db.prepare('DELETE FROM gt_auth_handoffs WHERE expires_at<=?').bind(stamp),
+        db.prepare('DELETE FROM gt_auth_sessions WHERE expires_at<=?').bind(stamp),
+        db.prepare('INSERT INTO gt_kinde_logins SELECT ?,?,?,?,?,?,?,NULL WHERE (SELECT count(*) FROM gt_kinde_logins)<100').bind(bindingHash,oauthState,nonce,verifier,state,challenge,stamp+600000),
+      ]);
+      const inserted=started[3];
       if(!inserted.meta.changes)return json(request,{error:'Login capacity reached; retry later'},429);
       const authorize=new URL(issuer+'/oauth2/auth');authorize.search=new URLSearchParams({client_id:clientId,redirect_uri:callback,response_type:'code',scope:'openid email',state:oauthState,nonce,code_challenge:await hash(verifier),code_challenge_method:'S256',prompt:'login'}).toString();
       return new Response(null,{status:303,headers:{...safeHeaders,location:authorize.href,'set-cookie':cookie(binding)}});
@@ -85,13 +95,17 @@ export function kindeAuth({db,issuer,clientId,apiOrigin,allowedOrigin,returnUrl,
         db.prepare('SELECT * FROM gt_kinde_logins WHERE binding_hash=? AND consumed=?').bind(bindingHash,claimToken),
       ]);
       const transaction=results[1].results[0];if(!transaction)return reject();
+      let transactionRemoved=false;
       try{
         const tokens=await providerJson(issuer+'/oauth2/token',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'authorization_code',client_id:clientId,redirect_uri:callback,code,code_verifier:transaction.verifier})});
         const proof=await verifyIdentity(tokens.id_token,transaction.nonce),userId=await identity(proof),handoff=random();
-        await db.prepare('INSERT INTO gt_auth_handoffs VALUES(?,?,?,?,?,?,NULL)').bind(await hash(handoff),userId,transaction.client_state,transaction.client_challenge,Math.min(now()+60000,proof.expiresAt),proof.expiresAt).run();
+        await db.batch([
+          db.prepare('INSERT INTO gt_auth_handoffs VALUES(?,?,?,?,?,?,NULL)').bind(await hash(handoff),userId,transaction.client_state,transaction.client_challenge,Math.min(now()+60000,proof.expiresAt),proof.expiresAt),
+          db.prepare('DELETE FROM gt_kinde_logins WHERE binding_hash=? AND consumed=?').bind(bindingHash,claimToken),
+        ]);transactionRemoved=true;
         const destination=new URL(returnUrl);destination.hash=new URLSearchParams({gt_code:handoff,gt_state:transaction.client_state}).toString();return redirect(destination.href);
       }catch{return reject();}
-      finally{await db.prepare('DELETE FROM gt_kinde_logins WHERE binding_hash=? AND consumed=?').bind(bindingHash,claimToken).run();}
+      finally{if(!transactionRemoved)await db.prepare('DELETE FROM gt_kinde_logins WHERE binding_hash=? AND consumed=?').bind(bindingHash,claimToken).run();}
     }
     if(request.headers.get('origin')!==allowedOrigin)return json(request,{error:'Origin rejected'},403);
     if(request.method==='OPTIONS')return new Response(null,{status:204,headers:{...safeHeaders,...cors(request)}});

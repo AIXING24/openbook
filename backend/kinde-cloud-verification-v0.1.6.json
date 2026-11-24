@@ -1,0 +1,48 @@
+{
+  "version": "auth v0.1.6",
+  "functionalRuntimeVersion": "v0.1.5",
+  "baselineReport": "kinde-cloud-verification-v0.1.5.json",
+  "deployment": {
+    "id": "684f5081-ceb7-40ae-ba9e-74141a938996",
+    "url": "https://684f5081.gaintrace-batch-api.pages.dev",
+    "commit": "ae25a64"
+  },
+  "startedAt": "2026-11-24T05:06:49.348Z",
+  "metricsWindowBasis": "First identity creation minus the 10-minute login transaction TTL; includes successful initial auth flow.",
+  "realLogin": {
+    "passed": true,
+    "runtimeVersion": "v0.1.5",
+    "pageConfirmed": true,
+    "signedIdentityAccepted": true,
+    "sessionApiConfirmed": true,
+    "users": 1,
+    "identities": 1,
+    "activeSessionsBeforeLogout": 1,
+    "maxObservedInitialSessionTtlMs": 3598652
+  },
+  "logout": {
+    "pageConfirmed": true,
+    "activeSessionsAfterLogout": 0,
+    "identityMappingsRetained": 1
+  },
+  "refreshAfterLogout": {
+    "loginEntryShown": true,
+    "directCloudOldTokenReplayTested": false,
+    "oldTokenDenialCoveredByLocalRegression": true
+  },
+  "baselineCpu": {
+    "file": "kinde-cloud-metrics-v0.1.5-login.json",
+    "highestBucketP99Ms": 10.924,
+    "freeCpuHeadroomProven": false
+  },
+  "optimizationCandidate": {
+    "localChecksPassed": 49,
+    "deployed": false,
+    "realFlowCpuVerified": false
+  },
+  "phone": {
+    "fullLoginProven": false,
+    "wifiProven": false
+  },
+  "productionFrontendIntegrated": false
+}

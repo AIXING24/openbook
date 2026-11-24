@@ -1,0 +1,71 @@
+{
+  "version": "auth v0.1.5",
+  "queriedAt": "2026-11-24T05:22:20.234Z",
+  "timeRange": {
+    "start": "2026-11-24T05:06:49.348Z",
+    "end": "2026-11-24T05:22:20.234Z"
+  },
+  "deployment": {
+    "id": "684f5081-ceb7-40ae-ba9e-74141a938996",
+    "url": "https://684f5081.gaintrace-batch-api.pages.dev",
+    "commit": "ae25a64"
+  },
+  "scriptName": "pages-worker--24757550-production",
+  "units": "CPU time 99th percentile - microseconds",
+  "rows": [
+    {
+      "dimensions": {
+        "datetimeMinute": "2026-11-24T05:16:00Z",
+        "scriptName": "pages-worker--24757550-production",
+        "status": "success"
+      },
+      "quantiles": {
+        "cpuTimeP50": 729,
+        "cpuTimeP99": 10924,
+        "cpuTimeP999": 10924
+      },
+      "sum": {
+        "errors": 0,
+        "requests": 6
+      }
+    },
+    {
+      "dimensions": {
+        "datetimeMinute": "2026-11-24T05:13:00Z",
+        "scriptName": "pages-worker--24757550-production",
+        "status": "success"
+      },
+      "quantiles": {
+        "cpuTimeP50": 1158,
+        "cpuTimeP99": 4396,
+        "cpuTimeP999": 4396
+      },
+      "sum": {
+        "errors": 0,
+        "requests": 4
+      }
+    },
+    {
+      "dimensions": {
+        "datetimeMinute": "2026-11-24T05:20:00Z",
+        "scriptName": "pages-worker--24757550-production",
+        "status": "success"
+      },
+      "quantiles": {
+        "cpuTimeP50": 1821,
+        "cpuTimeP99": 1821,
+        "cpuTimeP999": 1821
+      },
+      "sum": {
+        "errors": 0,
+        "requests": 1
+      }
+    }
+  ],
+  "requests": 11,
+  "runtimeErrors": 0,
+  "highestBucketP99Ms": 10.924,
+  "fullAuthenticatedFlowProven": true,
+  "limitations": "Successful real login/callback/exchange/session confirmation and logout occurred in this window. Adaptive minute-bucket quantiles are not exact per-request maxima or path-level CPU; highest P99 exceeds Free 10ms and does not establish stable headroom.",
+  "freeCpuHeadroomProven": false
+}

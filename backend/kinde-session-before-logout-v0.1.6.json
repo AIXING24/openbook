@@ -1,0 +1,15 @@
+{
+  "version": "auth v0.1.6",
+  "stage": "before-logout",
+  "checkedAt": "2026-11-24T05:19:52.679Z",
+  "users": 1,
+  "identities": 1,
+  "active_sessions": 1,
+  "linked_active_sessions": 1,
+  "invalid_session_hash_shapes": 0,
+  "browser_transactions": 0,
+  "first_identity_created_at": 1795497409348,
+  "first_observed_session_ttl_ms": 3598652,
+  "consumed_handoffs": 1,
+  "firstIdentityCreatedUtc": "2026-11-24T05:16:49.348Z"
+}

@@ -91,6 +91,47 @@ test('Kinde PKCE, verified identities and application sessions remain isolated',
     overrides={email:'bob@example.test'};assert.equal(handoff(await callback(await start())),null);reset();
     assert.equal((await r.db.prepare('SELECT count(*) n FROM gt_auth_users').first()).n,2);
   });
+  await t.test('independent callbacks reuse one stable owner without orphan users',async()=>{
+    const before=(await r.db.prepare('SELECT count(*) n FROM gt_auth_users').first()).n;
+    overrides={sub:'parallel-sub',email:'parallel@example.test'};
+    const parallel=kindeAuth({...configuration,allowedEmails:['parallel@example.test']});
+    const flows=await Promise.all([start(),start()]);
+    const responses=await Promise.all(flows.map(flow=>parallel.route(new Request(apiOrigin+'/auth/kinde/callback?'+new URLSearchParams({state:flow.location.searchParams.get('state'),code:'independent-code'}),{headers:{cookie:flow.cookie}}))));
+    const codes=responses.map(handoff);assert.ok(codes.every(Boolean));
+    const sessions=await Promise.all(codes.map(async code=>{
+      const response=await parallel.route(new Request(apiOrigin+'/api/session/exchange',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({code,state,verifier})}));assert.equal(response.status,200);return response.json();
+    }));
+    assert.equal(sessions[0].user.id,sessions[1].user.id);
+    assert.equal((await r.db.prepare('SELECT count(*) n FROM gt_auth_users').first()).n,before+1);
+    assert.equal((await r.db.prepare('SELECT count(*) n FROM gt_auth_users u WHERE NOT EXISTS(SELECT 1 FROM gt_auth_identities i WHERE i.user_id=u.id)').first()).n,0);reset();
+  });
+  await t.test('pilot capacity refuses new owners while existing subjects can still sign in',async()=>{
+    const current=(await r.db.prepare('SELECT count(*) n FROM gt_auth_users').first()).n;
+    const fillers=Array.from({length:50-current},(_,n)=>'capacity-filler-'+n);
+    await r.db.batch(fillers.map(id=>r.db.prepare('INSERT INTO gt_auth_users VALUES(?,?,?)').bind(id,id+'@example.test',stamp)));
+    const limited=kindeAuth({...configuration,allowedEmails:['capacity@example.test','alice@example.test']});
+    const cb=flow=>limited.route(new Request(apiOrigin+'/auth/kinde/callback?'+new URLSearchParams({state:flow.location.searchParams.get('state'),code:'capacity-code'}),{headers:{cookie:flow.cookie}}));
+    overrides={sub:'capacity-new-subject',email:'capacity@example.test'};
+    assert.equal(handoff(await cb(await start())),null);
+    assert.equal((await r.db.prepare('SELECT count(*) n FROM gt_auth_users').first()).n,50);
+    reset();assert.ok(handoff(await cb(await start())));
+    assert.equal((await r.db.prepare('SELECT count(*) n FROM gt_auth_users').first()).n,50);
+    await r.db.batch(fillers.map(id=>r.db.prepare('DELETE FROM gt_auth_users WHERE id=?').bind(id)));
+  });
+  await t.test('starting a login removes expired transient records and retains owner identities',async()=>{
+    const markers={session:'e'.repeat(43),handoff:'f'.repeat(43),binding:'g'.repeat(43)};
+    const before=(await r.db.prepare('SELECT count(*) n FROM gt_auth_users').first()).n;
+    await r.db.batch([
+      r.db.prepare('INSERT INTO gt_auth_sessions VALUES(?,?,?)').bind(markers.session,alice.user.id,stamp-1),
+      r.db.prepare('INSERT INTO gt_auth_handoffs VALUES(?,?,?,?,?,?,NULL)').bind(markers.handoff,alice.user.id,state,await hash(verifier),stamp-1,stamp+3600000),
+      r.db.prepare('INSERT INTO gt_kinde_logins VALUES(?,?,?,?,?,?,?,NULL)').bind(markers.binding,'expired-test-state','expired-test-nonce','expired-verifier',state,await hash(verifier),stamp-1),
+    ]);
+    await start();
+    assert.equal(await r.db.prepare('SELECT token_hash FROM gt_auth_sessions WHERE token_hash=?').bind(markers.session).first(),null);
+    assert.equal(await r.db.prepare('SELECT code_hash FROM gt_auth_handoffs WHERE code_hash=?').bind(markers.handoff).first(),null);
+    assert.equal(await r.db.prepare('SELECT binding_hash FROM gt_kinde_logins WHERE binding_hash=?').bind(markers.binding).first(),null);
+    assert.equal((await r.db.prepare('SELECT count(*) n FROM gt_auth_users').first()).n,before);
+  });
   await t.test('session lifetime is bounded by provider identity and logout revokes local access',async()=>{
     overrides={exp:stamp/1000+90};const short=await (await exchange(handoff(await callback(await start())))).json();assert.equal(short.expiresAt,stamp+90000);reset();
     const response=await auth.route(new Request(apiOrigin+'/api/session/logout',{method:'POST',headers:{origin,authorization:'Bearer '+alice.token}}));assert.equal(response.status,200);
