@@ -3,12 +3,13 @@
   "functionalRuntimeVersion": "v0.1.5",
   "baselineReport": "kinde-cloud-verification-v0.1.5.json",
   "deployment": {
-    "id": "684f5081-ceb7-40ae-ba9e-74141a938996",
-    "url": "https://684f5081.gaintrace-batch-api.pages.dev",
-    "commit": "ae25a64"
+    "id": "3a38d033-5611-464f-9229-e5e2958155f6",
+    "url": "https://3a38d033.gaintrace-batch-api.pages.dev",
+    "commit": "bbb2f75",
+    "createdAt": "2026-11-24T05:31:34.823672Z"
   },
-  "startedAt": "2026-11-24T05:06:49.348Z",
-  "metricsWindowBasis": "First identity creation minus the 10-minute login transaction TTL; includes successful initial auth flow.",
+  "startedAt": "2026-11-24T05:31:34.823672Z",
+  "metricsWindowBasis": "Optimized deployment creation time; excludes earlier v0.1.5 real-login CPU samples.",
   "realLogin": {
     "passed": true,
     "runtimeVersion": "v0.1.5",
@@ -37,8 +38,14 @@
   },
   "optimizationCandidate": {
     "localChecksPassed": 49,
-    "deployed": false,
-    "realFlowCpuVerified": false
+    "deployed": true,
+    "realFlowCpuVerified": false,
+    "deployment": {
+      "id": "3a38d033-5611-464f-9229-e5e2958155f6",
+      "url": "https://3a38d033.gaintrace-batch-api.pages.dev",
+      "commit": "bbb2f75",
+      "createdAt": "2026-11-24T05:31:34.823672Z"
+    }
   },
   "phone": {
     "fullLoginProven": false,

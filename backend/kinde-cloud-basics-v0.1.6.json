@@ -1,0 +1,51 @@
+{
+  "version": "auth v0.1.6",
+  "startedAt": "2026-11-24T05:32:06.897Z",
+  "origin": "https://gaintrace-batch-api.pages.dev",
+  "checks": [
+    {
+      "name": "Official isolated configuration",
+      "existingSecretsPreserved": true,
+      "allowlistPrivate": true,
+      "d1BindingUnchanged": true
+    },
+    {
+      "name": "Connection page, login page and module assets",
+      "status": 200
+    },
+    {
+      "name": "Anonymous denial and mock/session credential separation",
+      "unauthorizedStatus": 401,
+      "existingMockAccountsAccessible": true
+    },
+    {
+      "name": "Deployment alias rejects authentication",
+      "status": 403
+    },
+    {
+      "name": "Invalid callback, foreign Origin and fake exchanges rejected"
+    },
+    {
+      "name": "Cloud S256 redirect and secure browser binding",
+      "syntheticTransactionRemoved": true
+    },
+    {
+      "name": "Temporary Cron remains disabled",
+      "schedules": []
+    }
+  ],
+  "liveOtpCompleted": false,
+  "phoneLoginProven": false,
+  "cpuVerified": false,
+  "deployment": {
+    "id": "3a38d033-5611-464f-9229-e5e2958155f6",
+    "url": "https://3a38d033.gaintrace-batch-api.pages.dev",
+    "commit": "bbb2f75"
+  },
+  "identityCounts": {
+    "users": 1,
+    "identities": 1,
+    "active_sessions": 0
+  },
+  "completedAt": "2026-11-24T05:32:14.949Z"
+}
