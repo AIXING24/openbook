@@ -1,0 +1,13 @@
+{
+  "name": "gaintrace-batch-api",
+  "pages_build_output_dir": ".pages-output",
+  "compatibility_date": "2026-08-06",
+  "vars": {
+    "VALIDATION_MODE": "mock-only",
+    "AUTH_MODE": "kinde-test-only",
+    "AUTH_ISSUER": "https://gaintrace.kinde.com",
+    "AUTH_CLIENT_ID": "aa0b21876d724d4482f6d1af6cc8181e",
+    "AUTH_API_ORIGIN": "https://gaintrace-batch-api.pages.dev"
+  },
+  "d1_databases": [{"binding": "DB", "database_name": "gaintrace-free-validation-db", "database_id": "REPLACE_WITH_TEST_DATABASE_ID"}]
+}

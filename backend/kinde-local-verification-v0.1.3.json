@@ -1,0 +1,39 @@
+{
+  "version": "auth probe v0.1.0",
+  "stage": "identity-checked",
+  "productionIntegrated": false,
+  "issuer": "https://gaintrace.kinde.com",
+  "clientId": "aa0b21876d724d4482f6d1af6cc8181e",
+  "pkceWithoutSecret": true,
+  "idTokenSignature": true,
+  "issuerAudienceNonce": true,
+  "testEmailMatches": true,
+  "emailVerifiedClaim": "true",
+  "profileEvidence": "not-requested",
+  "claimNames": [
+    "amr",
+    "at_hash",
+    "aud",
+    "auth_time",
+    "azp",
+    "email",
+    "email_verified",
+    "exp",
+    "family_name",
+    "given_name",
+    "iat",
+    "iss",
+    "jti",
+    "name",
+    "nonce",
+    "org_codes",
+    "rat",
+    "sub",
+    "updated_at"
+  ],
+  "amr": [
+    "email"
+  ],
+  "productionSessionIssued": false,
+  "completedAt": "2026-11-24T02:28:51.076Z"
+}

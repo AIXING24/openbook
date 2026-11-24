@@ -6,6 +6,8 @@
 
 后续实施更新：用户已完成Kinde Free管理账号注册；实际账号界面与本机验证准备见[kinde-account-validation-v0.1.2.md](kinde-account-validation-v0.1.2.md)。下文保留本次公开资料调研的证据边界，不代表真实登录已经验收。
 
+2026-11-24：用户已完成指定邮箱的OTP，本机真实public PKCE和verified ID身份检查通过，独立Kinde/Pages候选43项本地检查通过。详见[kinde-auth-validation-v0.1.3.md](kinde-auth-validation-v0.1.3.md)；云端回调/身份存储、手机认证、Live邮件额度和新增CPU尚未验收。
+
 ## 唯一建议：下一步只验证 Kinde Free
 
 **Kinde Free 是最值得用户下一步创建免费账号核验的候选：官方同时列出无需信用卡、免费生产环境、默认 `*.kinde.com` 登录域名、邮箱无密码 OTP 及 Kinde 默认发信。暂不宣布“已满足全部约束、可以上线”。** 尚缺默认发信的明确额度／限速，以及下述生产 SMTP 文档措辞的澄清；不再扩展供应商扫描。[K-Price] [K-Domain] [K-OTP] [K-Sender] [K-Live]
