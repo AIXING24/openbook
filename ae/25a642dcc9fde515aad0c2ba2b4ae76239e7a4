@@ -1,0 +1,31 @@
+backend/tests/kinde-workerd.test.mjs
+  s_954afabfda404a::t_f19c19e5c74776 1-16,18-20,22-36,38-41,43-44
+  s_954afabfda404a::t_c3e251047b2760 37,42
+  s_954afabfda404a::t_44f103ff1b33cb 17,21
+backend/tests/kinde-auth.test.mjs
+  s_954afabfda404a::t_c3e251047b2760 22
+backend/kinde-auth.mjs
+  s_954afabfda404a::t_c3e251047b2760 28
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_6a633e9ebe8d73 53-54
+backend/kinde-runtime-verification-v0.1.5.json
+  s_954afabfda404a::t_6a633e9ebe8d73 1-18
+docs/backend/kinde-runtime-fix-v0.1.5.md
+  s_954afabfda404a::t_6a633e9ebe8d73 1-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "ae25a642dcc9fde515aad0c2ba2b4ae76239e7a4",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
