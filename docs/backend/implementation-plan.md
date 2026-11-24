@@ -50,3 +50,5 @@ auth v0.1.2：用户已完成Kinde账号/业务注册。实际Free/10500MAU/2环
 2026-11-24 auth v0.1.3：用户完成测试注册/OTP，本机public PKCE兑换与ID签名/issuer/clientaud/nonce/邮箱匹配/boolean verified通过，报告已脱敏归档，本机服务关闭。独立Kinde适配、一次性交接/会话、Pages模拟登录入口和候选构建已实现，完整43项检查通过。尚未改Kinde云回调、传送测试身份到Cloudflare或部署候选；下一步确认精确云回调和测试身份存储后，执行云端登录/退出/网络/CPU验收。默认sender的Live许可、邮件额度和无卡超额策略仍待核实。见[登录验证](kinde-auth-validation-v0.1.3.md)。
 
 2026-11-24 auth v0.1.4：用户已明确授权精确云回调及测试身份存储，Kinde保存/重载核实、隔离D1认证表和Pages候选部署完成。7组云端基础验收通过；旧模拟secret隐藏值回写问题已恢复并以实际账户200核验。Pages基础入口23次请求、0运行时错误、最高分钟桶P99 5.125ms，非逐请求峰值且不覆盖完整登录。已发送指定测试邮箱OTP，待用户页面输入；真实云端callback、应用会话、退出、手机完整认证和全流程CPU尚未完成。详见[云端模拟验证](kinde-cloud-validation-v0.1.4.md)。
+
+2026-11-24 auth v0.1.5：首次云端OTP后实际会话未生成。根因是Workerd不支持provider fetch的redirect:error；最小原生探针与真实Pages运行时回归复现。改manual并拒绝3xx，新增3项原生运行时检查及完整46项通过，临时诊断已清理。重新部署后仍需新OTP验证真实云端会话/退出/CPU，不能沿用此前基础入口结果宣称通过。见[运行时修复](kinde-runtime-fix-v0.1.5.md)。

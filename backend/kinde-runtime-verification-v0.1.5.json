@@ -1,0 +1,18 @@
+{
+  "version": "auth v0.1.5",
+  "date": "2026-11-24",
+  "rootCause": "Cloudflare Workerd rejects redirect:error before sending the provider request; Node and injected fetch doubles accepted it.",
+  "nativeError": "Invalid redirect value, must be one of \"follow\" or \"manual\" (\"error\" won't be implemented since it does not make sense at the edge; use \"manual\" and check the response status code).",
+  "regressionCommand": "node --test backend/tests/kinde-workerd.test.mjs",
+  "beforeFix": "Native runtime callback returned gt_error instead of handoff",
+  "afterFix": {
+    "nativeRuntimeTestsPassed": 3,
+    "fullSuitePassed": 46,
+    "unexpectedProviderRedirectRejected": true
+  },
+  "fix": "redirect:manual, followed by existing response.ok rejection of 3xx",
+  "temporaryDiagnosticsRemoved": true,
+  "cloudOtpCompleted": false,
+  "completeFlowCpuVerified": false,
+  "productionFrontendIntegrated": false
+}

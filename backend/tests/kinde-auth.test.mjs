@@ -19,7 +19,7 @@ test('Kinde PKCE, verified identities and application sessions remain isolated',
     return corrupt?token.slice(0,-10)+'abcdefghij':token;
   };
   const configuration={db:r.db,issuer,clientId,apiOrigin,allowedOrigin:origin,returnUrl:origin+'/openbook/',allowedEmails:['alice@example.test','bob@example.test'],now:()=>stamp,fetch:async(url,options)=>{
-    assert.equal(options.redirect,'error');
+    assert.equal(options.redirect,'manual');
     if(url===issuer+'/.well-known/jwks'){keyCalls++;return Response.json({keys:[jwk]});}
     assert.equal(url,issuer+'/oauth2/token');assert.equal(options.method,'POST');
     const fields=options.body;assert.equal(fields.get('grant_type'),'authorization_code');assert.equal(fields.get('client_id'),clientId);assert.equal(fields.get('redirect_uri'),apiOrigin+'/auth/kinde/callback');assert.equal(fields.has('client_secret'),false);assert.equal(fields.has('refresh_token'),false);

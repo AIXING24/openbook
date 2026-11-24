@@ -25,7 +25,7 @@ export function kindeAuth({db,issuer,clientId,apiOrigin,allowedOrigin,returnUrl,
   const reject=()=>{const url=new URL(returnUrl);url.hash='gt_error=login-rejected';return redirect(url.href);};
   let keys,keysAt=0,loading;
   const providerJson=async(url,options={})=>{
-    const response=await fetcher(url,{...options,redirect:'error',signal:AbortSignal.timeout(10000)});
+    const response=await fetcher(url,{...options,redirect:'manual',signal:AbortSignal.timeout(10000)});
     if(!response.ok)throw Error('Provider unavailable');return JSON.parse(await bodyText(response,64000));
   };
   const loadKeys=async(force=false)=>{
