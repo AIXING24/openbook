@@ -1,9 +1,9 @@
 {
   "version": "auth v0.1.6",
-  "queriedAt": "2026-11-24T05:33:52.829Z",
+  "queriedAt": "2026-11-24T05:44:59.935Z",
   "timeRange": {
     "start": "2026-11-24T05:31:34.823672Z",
-    "end": "2026-11-24T05:33:52.829Z"
+    "end": "2026-11-24T05:44:59.935Z"
   },
   "deployment": {
     "id": "3a38d033-5611-464f-9229-e5e2958155f6",
@@ -14,6 +14,22 @@
   "scriptName": "pages-worker--24757550-production",
   "units": "CPU time 99th percentile - microseconds",
   "rows": [
+    {
+      "dimensions": {
+        "datetimeMinute": "2026-11-24T05:35:00Z",
+        "scriptName": "pages-worker--24757550-production",
+        "status": "success"
+      },
+      "quantiles": {
+        "cpuTimeP50": 1248,
+        "cpuTimeP99": 8283,
+        "cpuTimeP999": 8283
+      },
+      "sum": {
+        "errors": 0,
+        "requests": 7
+      }
+    },
     {
       "dimensions": {
         "datetimeMinute": "2026-11-24T05:31:00Z",
@@ -28,6 +44,38 @@
       "sum": {
         "errors": 0,
         "requests": 1
+      }
+    },
+    {
+      "dimensions": {
+        "datetimeMinute": "2026-11-24T05:42:00Z",
+        "scriptName": "pages-worker--24757550-production",
+        "status": "success"
+      },
+      "quantiles": {
+        "cpuTimeP50": 3644,
+        "cpuTimeP99": 3644,
+        "cpuTimeP999": 3644
+      },
+      "sum": {
+        "errors": 0,
+        "requests": 1
+      }
+    },
+    {
+      "dimensions": {
+        "datetimeMinute": "2026-11-24T05:34:00Z",
+        "scriptName": "pages-worker--24757550-production",
+        "status": "success"
+      },
+      "quantiles": {
+        "cpuTimeP50": 630,
+        "cpuTimeP99": 990,
+        "cpuTimeP999": 990
+      },
+      "sum": {
+        "errors": 0,
+        "requests": 3
       }
     },
     {
@@ -47,10 +95,11 @@
       }
     }
   ],
-  "requests": 20,
+  "requests": 31,
   "runtimeErrors": 0,
-  "highestBucketP99Ms": 5.201,
-  "fullAuthenticatedFlowProven": false,
+  "highestBucketP99Ms": 8.283,
+  "fullAuthenticatedFlowProven": true,
+  "currentObservedBucketsWithin10ms": true,
   "freeCpuHeadroomProven": false,
   "limitations": "Adaptive minute-bucket quantiles, not exact per-request maximum or path-level CPU. Minute buckets do not separate paths; independent successful callback/exchange/exit evidence and repeat/cold samples are required. Zero runtime errors does not prove stable Free CPU headroom."
 }

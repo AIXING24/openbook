@@ -1,15 +1,15 @@
 {
   "version": "auth v0.1.6",
   "stage": "snapshot",
-  "checkedAt": "2026-11-24T05:34:02.505Z",
+  "checkedAt": "2026-11-24T05:38:04.024Z",
   "users": 1,
   "identities": 1,
-  "active_sessions": 0,
-  "linked_active_sessions": 0,
+  "active_sessions": 1,
+  "linked_active_sessions": 1,
   "invalid_session_hash_shapes": 0,
   "browser_transactions": 0,
   "first_identity_created_at": 1795497409348,
-  "max_remaining_session_lifetime_ms": null,
-  "consumed_handoffs": 0,
+  "max_remaining_session_lifetime_ms": 3454965,
+  "consumed_handoffs": 1,
   "firstIdentityCreatedUtc": "2026-11-24T05:16:49.348Z"
 }

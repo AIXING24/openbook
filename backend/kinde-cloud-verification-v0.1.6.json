@@ -1,6 +1,6 @@
 {
   "version": "auth v0.1.6",
-  "functionalRuntimeVersion": "v0.1.5",
+  "functionalRuntimeVersion": "v0.1.6",
   "baselineReport": "kinde-cloud-verification-v0.1.5.json",
   "deployment": {
     "id": "3a38d033-5611-464f-9229-e5e2958155f6",
@@ -12,14 +12,13 @@
   "metricsWindowBasis": "Optimized deployment creation time; excludes earlier v0.1.5 real-login CPU samples.",
   "realLogin": {
     "passed": true,
-    "runtimeVersion": "v0.1.5",
-    "pageConfirmed": true,
-    "signedIdentityAccepted": true,
-    "sessionApiConfirmed": true,
+    "runtimeVersion": "v0.1.6",
+    "device": "phone Safari",
+    "userReportedPageSuccess": true,
+    "linkedActiveSessions": 1,
     "users": 1,
     "identities": 1,
-    "activeSessionsBeforeLogout": 1,
-    "maxObservedInitialSessionTtlMs": 3598652
+    "verifiedAt": "2026-11-24T05:38:04.024Z"
   },
   "logout": {
     "pageConfirmed": true,
@@ -39,17 +38,52 @@
   "optimizationCandidate": {
     "localChecksPassed": 49,
     "deployed": true,
-    "realFlowCpuVerified": false,
+    "realFlowCpuVerified": true,
     "deployment": {
       "id": "3a38d033-5611-464f-9229-e5e2958155f6",
       "url": "https://3a38d033.gaintrace-batch-api.pages.dev",
       "commit": "bbb2f75",
       "createdAt": "2026-11-24T05:31:34.823672Z"
+    },
+    "phoneRealLoginVerified": true,
+    "currentObservedBucketsWithin10ms": true,
+    "stableCpuHeadroomProven": false,
+    "realFlowFunctionalVerified": true,
+    "firstUserAndMoreColdCpuSamplesPending": true,
+    "currentSample": {
+      "requests": 31,
+      "runtimeErrors": 0,
+      "highestBucketP99Ms": 8.283,
+      "observedBucketsWithin10ms": true,
+      "includesRealPhoneLoginAndLogout": true
     }
   },
   "phone": {
-    "fullLoginProven": false,
+    "fullLoginProven": true,
+    "network": "cellular",
+    "logoutVerified": true,
     "wifiProven": false
   },
-  "productionFrontendIntegrated": false
+  "productionFrontendIntegrated": false,
+  "desktopV015Login": {
+    "passed": true,
+    "runtimeVersion": "v0.1.5",
+    "pageConfirmed": true,
+    "signedIdentityAccepted": true,
+    "sessionApiConfirmed": true,
+    "users": 1,
+    "identities": 1,
+    "activeSessionsBeforeLogout": 1,
+    "maxObservedInitialSessionTtlMs": 3598652
+  },
+  "realLogout": {
+    "passed": true,
+    "runtimeVersion": "v0.1.6",
+    "device": "phone Safari",
+    "userReportedPageSuccess": true,
+    "activeSessionsAfterLogout": 0,
+    "identityMappingsRetained": 1,
+    "verifiedAt": "2026-11-24T05:43:02.601Z"
+  },
+  "nextStep": "Authenticated synthetic-ledger API/frontend integration; first-user/cold and combined read/write CPU plus Wi-Fi/Live-mail acceptance remain pending."
 }
