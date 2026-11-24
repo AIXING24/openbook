@@ -1,0 +1,31 @@
+backend/scripts/check-kinde-cloud.mjs
+  s_954afabfda404a::t_b632feb90625e4 1-55
+backend/kinde-cloud-metrics-v0.1.4.json
+  s_954afabfda404a::t_566be3e33a68c6 1-54
+backend/scripts/configure-kinde-cloud.mjs
+  s_954afabfda404a::t_94d5aaec07af68 1-30
+docs/backend/kinde-cloud-validation-v0.1.4.md
+  s_954afabfda404a::t_ff25b28a983339 1-30
+backend/scripts/capture-kinde-metrics.mjs
+  s_954afabfda404a::t_566be3e33a68c6 1-16
+backend/kinde-cloud-verification-v0.1.4.json
+  s_954afabfda404a::t_9ce40fcc230118 1-51
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_ff25b28a983339 51-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "8658e1ec7d48cc96adf05c42cbe8341037810fd0",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
