@@ -1,0 +1,41 @@
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_c0fb317f896017 55-56
+backend/kinde-session-before-logout-v0.1.6.json
+  s_954afabfda404a::t_736362325f017d 1-15
+backend/kinde-auth.mjs
+  s_954afabfda404a::t_81861e97584abd 50-53,55,57-60,98,102-105,108
+  s_954afabfda404a::t_6f0d674943f3da 76-83
+backend/tests/kinde-auth.test.mjs
+  s_954afabfda404a::t_81861e97584abd 94-107
+  s_954afabfda404a::t_6f0d674943f3da 121-134
+backend/kinde-cloud-metrics-v0.1.5-login.json
+  s_954afabfda404a::t_eebbce4382cbff 1-71
+backend/kinde-cloud-verification-v0.1.6.json
+  s_954afabfda404a::t_4e7138bb082870 1-2,5-9,18-19,46,48
+  s_954afabfda404a::t_eebbce4382cbff 3-4,10-17,20-45,47
+docs/backend/kinde-cloud-acceptance-v0.1.6.md
+  s_954afabfda404a::t_c0fb317f896017 1-26
+backend/scripts/capture-kinde-metrics.mjs
+  s_954afabfda404a::t_eebbce4382cbff 6-7,9,17-18
+backend/scripts/check-kinde-session.mjs
+  s_954afabfda404a::t_c0fb317f896017 4-5
+  s_954afabfda404a::t_eebbce4382cbff 1-3,6-9
+backend/kinde-session-after-logout-v0.1.6.json
+  s_954afabfda404a::t_bf9ab22a3a1025 1-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "bbb2f752703abd4a38ab73c83832e44fc72d13b7",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
