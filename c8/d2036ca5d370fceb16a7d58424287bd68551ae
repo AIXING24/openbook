@@ -1,0 +1,21 @@
+backend/kinde-cloud-verification-v0.1.5.json
+  s_954afabfda404a::t_9bc51e6950cbf7 1-51
+docs/backend/kinde-runtime-fix-v0.1.5.md
+  s_954afabfda404a::t_cf7861304a9a94 20-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "c8d2036ca5d370fceb16a7d58424287bd68551ae",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
