@@ -1,0 +1,41 @@
+backend/kinde-cloud-verification-v0.1.6.json
+  s_954afabfda404a::t_044e15e946553f 50-51,63-64,78-86
+  s_954afabfda404a::t_8a37ae5cc3407e 41,52-58,87-88
+  s_954afabfda404a::t_9e148f99196584 3,15-18,21,47-49,62,67-77
+backend/kinde-session-phone-after-logout-v0.1.6.json
+  s_954afabfda404a::t_2a45e474adf385 1-15
+backend/scripts/capture-kinde-metrics.mjs
+  s_954afabfda404a::t_9e148f99196584 17
+backend/kinde-session-snapshot-v0.1.6.json
+  s_954afabfda404a::t_c3c41cf6da7d53 4,7-8,12-13
+backend/kinde-phone-before-logout-v0.1.6.json
+  s_954afabfda404a::t_9e148f99196584 1-15
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_8a37ae5cc3407e 57-58
+backend/kinde-cloud-metrics-v0.1.6.json
+  s_954afabfda404a::t_e4fa8a70ee3837 19-32,49-50,67-78,100
+  s_954afabfda404a::t_044e15e946553f 3,6,51-66,98,101-102
+backend/kinde-cleanup-proof-v0.1.6.json
+  s_954afabfda404a::t_9e148f99196584 1-15
+docs/backend/kinde-cloud-acceptance-v0.1.6.md
+  s_954afabfda404a::t_9e148f99196584 31
+  s_954afabfda404a::t_8a37ae5cc3407e 1,3,5,7,9,11,13,15,17,19,21,23,25-28,30,32-34
+backend/scripts/check-kinde-session.mjs
+  s_954afabfda404a::t_9e148f99196584 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "721dd794bcb426354f9da800207c7e590729c70b",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
