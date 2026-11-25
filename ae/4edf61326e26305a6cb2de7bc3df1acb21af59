@@ -1,0 +1,56 @@
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_5b74691c350dd0 60
+  s_954afabfda404a::t_b65d40ca245cba 3,59
+backend/tests/ledger-link.test.mjs
+  s_954afabfda404a::t_2bd60e64879c3a 1-88
+docs/backend/ledger-link-validation-v0.2.0.md
+  s_954afabfda404a::t_5b74691c350dd0 15,19
+  s_954afabfda404a::t_b65d40ca245cba 1-14,16-18,20-25
+client/ledger-api.mjs
+  s_954afabfda404a::t_500e2c34108e0a 1-38
+backend/scripts/serve-ledger-preview.mjs
+  s_954afabfda404a::t_a7ec98adfee6fd 16
+  s_954afabfda404a::t_7a8a29a9120d51 1-3,5-6,8-15,17-28
+backend/scripts/build-kinde-pages.mjs
+  s_954afabfda404a::t_d19178b4f47c3e 1
+backend/ledger-page.mjs
+  s_954afabfda404a::t_598423d264b67b 1-2
+client/mock-ledger.mjs
+  s_954afabfda404a::t_89be65a55d4c60 5-9
+  s_954afabfda404a::t_500e2c34108e0a 1-4,10-25
+docs/backend/cloudflare-free-cpu-policy-2026-11-24.md
+  s_954afabfda404a::t_41f7aadc6678ac 1-2,4-8,11-17,19-20
+  s_954afabfda404a::t_fe1824d948b63a 3,9-10,18
+backend/package-lock.json
+  s_954afabfda404a::t_10a2e137efc3c9 3,9
+backend/scripts/check-ledger-cloud.mjs
+  s_954afabfda404a::t_b65d40ca245cba 1-44
+client/ledger-validation.mjs
+  s_954afabfda404a::t_a239a22ece59e9 1-18,20-30,36-38,40-43,45,47-73
+  s_954afabfda404a::t_d19178b4f47c3e 31-35
+backend/worker.mjs
+  s_954afabfda404a::t_d19178b4f47c3e 3
+client/ledger-test.html
+  s_954afabfda404a::t_500e2c34108e0a 1-12,14-16
+  s_954afabfda404a::t_0dcb316c287980 13
+backend/ledger-routes.mjs
+  s_954afabfda404a::t_661ec1d67eb0f6 23-24,35
+  s_954afabfda404a::t_785cc95362356f 1-17,48
+  s_954afabfda404a::t_d19178b4f47c3e 18-22,25-34,36-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "ae4edf61326e26305a6cb2de7bc3df1acb21af59",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
