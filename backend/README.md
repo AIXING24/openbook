@@ -20,6 +20,8 @@
 
 这是合成日历，不是实际交易所日历。测试用 `mock-calendar-until` 截止时间保护；显式关闭后不回退到旧模拟时钟。`scripts/cloud-mock-calendar.mjs` 只对现有唯一邮箱模拟账本验证两个固定日期，临时启用每分钟 Cron，并在 finally 清空调度和关闭开关；不允许覆盖已有日期或重复运行。真实日终调度、自动年度清理和行情接入仍未启用。
 
+v0.3.4已由实际云Cron生成两个模拟日期，并独立核验调度清空。11条已返回官方定时CPU样本（含最终确认分钟）均成功，最高7.926ms；这是当前小账本窗口，不是全容量保证。`scripts/capture-calendar-metrics.mjs` 可只读补查延迟统计，不重新写账本或开启Cron。证据见[模拟日历验收](../docs/backend/mock-calendar-validation-v0.3.4.md)。
+
 ## 本地验证
 
 先在仓库根目录执行 `npm ci`，再在本目录执行 `npm ci`、`npm test`。测试使用 Miniflare 的内存 D1，退出后销毁。Cloudflare 配置用 `wrangler.example.json` 为样例生成 `wrangler.local.json`；配置、随机测试密钥和 Wrangler 凭据不提交。

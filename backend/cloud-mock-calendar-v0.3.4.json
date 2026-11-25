@@ -1,0 +1,240 @@
+{
+  "version": "backend v0.3.4",
+  "sourceCommit": "3f34a2651714fecce2b81356d8e7a7570a3acda7",
+  "startedAt": "2026-11-25T08:36:27.891Z",
+  "syntheticCalendar": true,
+  "dates": [
+    "2026-11-23",
+    "2026-11-24"
+  ],
+  "accountCount": 1,
+  "startingRevision": 3,
+  "mockTradeCount": 6,
+  "noBrowserOrAppSessionUsedByScheduler": true,
+  "manualDailyStepsCalled": 0,
+  "observations": [
+    {
+      "observedAt": "2026-11-25T08:36:33.311Z",
+      "jobs": [],
+      "confirmed": 0
+    },
+    {
+      "observedAt": "2026-11-25T08:43:40.995Z",
+      "jobs": [
+        {
+          "date": "2026-11-23",
+          "phase": "apply"
+        }
+      ],
+      "confirmed": 0
+    },
+    {
+      "observedAt": "2026-11-25T08:45:42.937Z",
+      "jobs": [
+        {
+          "date": "2026-11-23",
+          "phase": "value"
+        }
+      ],
+      "confirmed": 0
+    },
+    {
+      "observedAt": "2026-11-25T08:47:45.243Z",
+      "jobs": [
+        {
+          "date": "2026-11-23",
+          "phase": "done"
+        }
+      ],
+      "confirmed": 1
+    },
+    {
+      "observedAt": "2026-11-25T08:48:46.080Z",
+      "jobs": [
+        {
+          "date": "2026-11-23",
+          "phase": "done"
+        },
+        {
+          "date": "2026-11-24",
+          "phase": "apply"
+        }
+      ],
+      "confirmed": 1
+    },
+    {
+      "observedAt": "2026-11-25T08:49:47.116Z",
+      "jobs": [
+        {
+          "date": "2026-11-23",
+          "phase": "done"
+        },
+        {
+          "date": "2026-11-24",
+          "phase": "value"
+        }
+      ],
+      "confirmed": 1
+    },
+    {
+      "observedAt": "2026-11-25T08:51:49.169Z",
+      "jobs": [
+        {
+          "date": "2026-11-23",
+          "phase": "done"
+        },
+        {
+          "date": "2026-11-24",
+          "phase": "finalize"
+        }
+      ],
+      "confirmed": 1
+    },
+    {
+      "observedAt": "2026-11-25T08:52:50.177Z",
+      "jobs": [
+        {
+          "date": "2026-11-23",
+          "phase": "done"
+        },
+        {
+          "date": "2026-11-24",
+          "phase": "done"
+        }
+      ],
+      "confirmed": 2
+    }
+  ],
+  "confirmed": true,
+  "temporaryCronRemoved": true,
+  "deadline": "2026-11-25T09:01:28.411Z",
+  "temporaryCronEnabledAt": "2026-11-25T08:36:32.841Z",
+  "points": [
+    {
+      "date": "2026-11-23",
+      "status": "confirmed",
+      "source": "SYNTHETIC_CONFIRMED_CLOSE",
+      "ledgerRevision": 3,
+      "realizedUSD": 60,
+      "totalUSD": 105,
+      "generatedAt": "2026-11-25T08:47:44.664Z",
+      "referenceAccountingMatched": true
+    },
+    {
+      "date": "2026-11-24",
+      "status": "confirmed",
+      "source": "SYNTHETIC_CONFIRMED_CLOSE",
+      "ledgerRevision": 3,
+      "realizedUSD": 60,
+      "totalUSD": 105,
+      "generatedAt": "2026-11-25T08:52:45.363Z",
+      "referenceAccountingMatched": true
+    }
+  ],
+  "completedAt": "2026-11-25T08:52:50.211Z",
+  "cleanupAt": "2026-11-25T08:52:53.073Z",
+  "cpu": {
+    "queriedAt": "2026-11-25T08:55:04.826Z",
+    "timeRange": {
+      "start": "2026-11-25T08:36:27.891Z",
+      "end": "2026-11-25T08:52:53.073Z"
+    },
+    "units": "Official scheduled invocation cpuTimeUs, microseconds",
+    "samples": [
+      {
+        "cpuTimeUs": 7926,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:50:44Z",
+        "scheduledDatetime": "2026-11-25T08:50:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 4563,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:44:44Z",
+        "scheduledDatetime": "2026-11-25T08:44:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 6104,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:49:44Z",
+        "scheduledDatetime": "2026-11-25T08:49:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 5901,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:47:44Z",
+        "scheduledDatetime": "2026-11-25T08:47:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 3234,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:48:44Z",
+        "scheduledDatetime": "2026-11-25T08:48:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 4384,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:45:44Z",
+        "scheduledDatetime": "2026-11-25T08:45:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 5571,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:46:44Z",
+        "scheduledDatetime": "2026-11-25T08:46:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 7704,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:43:44Z",
+        "scheduledDatetime": "2026-11-25T08:43:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 5270,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:52:44Z",
+        "scheduledDatetime": "2026-11-25T08:52:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 4742,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:42:44Z",
+        "scheduledDatetime": "2026-11-25T08:42:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      },
+      {
+        "cpuTimeUs": 4773,
+        "cron": "* * * * *",
+        "datetime": "2026-11-25T08:51:44Z",
+        "scheduledDatetime": "2026-11-25T08:51:43Z",
+        "scriptName": "gaintrace-batch-validation",
+        "status": "success"
+      }
+    ],
+    "maxObservedMs": 7.926,
+    "allObservedWithin10ms": true,
+    "allObservedSuccessful": true,
+    "coversFinalConfirmationMinute": true,
+    "freeCpuHeadroomProven": false,
+    "limitations": "Only returned scheduled samples in this fixed small mock-ledger window. Final confirmation minute is represented; missing samples, larger ledgers and universal cold-start headroom are not proven."
+  }
+}

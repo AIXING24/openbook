@@ -1,0 +1,15 @@
+{
+  "version": "backend v0.3.4",
+  "checkedAt": "2026-11-25T08:53:37.517Z",
+  "independentTemporaryCronRemoved": true,
+  "schedules": [],
+  "counts": {
+    "enabled": "0",
+    "confirmed_days": 2,
+    "mock_trades": 6,
+    "revision": 3,
+    "committed_operations": 2
+  },
+  "pagesDeploymentUnchanged": true,
+  "anonymousHistoryDenied": true
+}
