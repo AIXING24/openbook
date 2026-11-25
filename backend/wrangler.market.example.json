@@ -1,0 +1,14 @@
+{
+  "name": "gaintrace-market-validation",
+  "main": "market-validation.mjs",
+  "compatibility_date": "2026-08-06",
+  "workers_dev": true,
+  "preview_urls": false,
+  "vars": {
+    "VALIDATION_MODE": "isolated-market-only",
+    "VALIDATION_STARTED_AT": "REPLACE_WITH_VALIDATION_START",
+    "VALIDATION_EXPIRES_AT": "REPLACE_WITH_EXPIRY_WITHIN_ONE_HOUR"
+  },
+  "observability": {"enabled": true, "head_sampling_rate": 1},
+  "triggers": {"crons": []}
+}

@@ -1,0 +1,43 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "startedAt": "2026-11-25T11:53:48.861Z",
+  "baselineCompletedAt": "2026-11-25T11:37:02.153Z",
+  "publicSampleOnly": true,
+  "productionWrites": false,
+  "cloudDeployment": false,
+  "probes": [
+    {
+      "kind": "summary",
+      "observedAt": "2026-11-25T11:53:48.862Z",
+      "httpStatus": 200,
+      "status": "valid-candidate",
+      "asOfDate": "2026-11-24",
+      "closeField": "close",
+      "extendedHoursNotUsed": true,
+      "adjustmentRequested": "unadjusted",
+      "finalityVerified": false,
+      "selectedDataHash": "ed1979fcf49c241c47e53867dfa215d4910fd11698ff98ec1cbf5f0ae7f6f1be",
+      "sameAsBaseline": true
+    },
+    {
+      "kind": "history",
+      "observedAt": "2026-11-25T11:54:02.820Z",
+      "httpStatus": 200,
+      "status": "valid-candidate",
+      "rows": 251,
+      "firstDate": "2025-11-25",
+      "lastDate": "2026-11-24",
+      "hasMore": false,
+      "adjustmentReturned": "unadjusted",
+      "dateBasis": "America/New_York",
+      "finalityVerified": false,
+      "regularSessionCoverageVerified": false,
+      "calendarCompletenessVerified": false,
+      "selectedDataHash": "60ee6a7d8b08025ccab7f4aec00e70b51e87b17b695542854d1f1dbcb7765abe",
+      "sameAsBaseline": true
+    }
+  ],
+  "completedAt": "2026-11-25T11:54:04.009Z",
+  "allObservedUnchanged": true,
+  "limitations": "Two reads at distinct times of one ticker. No change in selected fields during this interval is not a finality/revision guarantee. The next market-close/07:00 Beijing readiness window has not been observed; no historical observation timestamp is fabricated."
+}

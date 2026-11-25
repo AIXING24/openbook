@@ -18,7 +18,7 @@ export default {
     const db=env.DB;
     if(path.startsWith('/validation/')){
       if(!authorized(request,env.TEST_ADMIN_TOKEN))return response({error:'Admin authorization required'},401);
-      if(path==='/validation/status')return response({version:'backend v0.3.5-candidate',jobs:await all(db,'SELECT account,date,phase,revision,previous_date FROM gt_jobs ORDER BY account,date'),control:await all(db,'SELECT * FROM gt_control')});
+      if(path==='/validation/status')return response({version:'backend v0.3.6-candidate',jobs:await all(db,'SELECT account,date,phase,revision,previous_date FROM gt_jobs ORDER BY account,date'),control:await all(db,'SELECT * FROM gt_control')});
       if(path==='/validation/step' && request.method==='POST'){
         if(!['alice','bob'].includes(b.account) || !validDate(b.date))return response({error:'Invalid job'},422);
         return response(await dailyStep(db,b.account,b.date));
