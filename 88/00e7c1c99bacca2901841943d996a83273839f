@@ -1,0 +1,28 @@
+backend/scripts/capture-calendar-metrics.mjs
+  s_954afabfda404a::t_0cb836217af498 1-24
+backend/README.md
+  s_954afabfda404a::t_7321d3087d7213 23-24
+backend/cloud-mock-calendar-v0.3.4.json
+  s_954afabfda404a::t_ae53c9212dfefe 137-238
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_7321d3087d7213 67-68
+docs/backend/mock-calendar-validation-v0.3.4.md
+  s_954afabfda404a::t_7321d3087d7213 15,18-25
+  s_954afabfda404a::t_c2d74356863393 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "8800e7c1c99bacca2901841943d996a83273839f",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
