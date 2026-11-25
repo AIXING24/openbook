@@ -1,7 +1,9 @@
 // Candidate Pages wrapper: email allowlist/configuration must be explicitly enabled.
-// Keeps the existing mock API; no production frontend or ledger is connected.
+// Authenticated synthetic ledgers are separate from the original mock accounts.
 import pages from './pages.mjs';
 import {kindeAuth} from './kinde-auth.mjs';
+import {ledgerRoute} from './ledger-routes.mjs';
+import {ledgerTestHtml} from './ledger-page.mjs';
 let previous,auth;
 const safe={'cache-control':'no-store','referrer-policy':'no-referrer','x-content-type-options':'nosniff'};
 const configuration=env=>{
@@ -17,12 +19,31 @@ const configuration=env=>{
 export default {
   async fetch(request,env,context){
     const url=new URL(request.url),path=url.pathname;
-    if(path.startsWith('/auth/')||path.startsWith('/api/session/')){
+    if(path.startsWith('/auth/')||path.startsWith('/api/session/')||path.startsWith('/api/ledger/')){
       let candidate;try{candidate=configuration(env);}catch{return Response.json({error:'Auth configuration invalid'},{status:503,headers:safe});}
       if(!candidate)return Response.json({error:'Auth validation not enabled'},{status:503,headers:safe});
       if(url.origin!==env.AUTH_API_ORIGIN)return Response.json({error:'Auth hostname rejected'},{status:403,headers:safe});
-      if(['/auth/email-session.mjs','/auth/test-client.mjs'].includes(path)&&request.method==='GET')return env.ASSETS.fetch(request);
-      if(path==='/auth/test'&&request.method==='GET')return new Response('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GainTrace 邮箱登录验证</title><body style="font:17px system-ui;max-width:560px;margin:12vh auto;padding:24px;color:#173b2d"><h1>GainTrace 邮箱登录验证</h1><p>这是模拟登录验证，请使用指定的测试邮箱。</p><p id="status">正在检查登录状态…</p><button id="login" hidden>邮箱验证码登录</button><button id="logout" hidden>退出测试登录</button><script type="module" src="/auth/test-client.mjs"></script></body></html>',{headers:{...safe,'content-type':'text/html;charset=utf-8','content-security-policy':"default-src 'none'; script-src 'self'; connect-src 'self'; style-src 'unsafe-inline'; frame-ancestors 'none'; base-uri 'none'"}});
+      if(['/auth/email-session.mjs','/auth/test-client.mjs','/auth/ledger-client.mjs'].includes(path)&&request.method==='GET'){
+        const asset=await env.ASSETS.fetch(request),headers=new Headers(asset.headers);
+        for(const [name,value] of Object.entries(safe))headers.set(name,value);
+        return new Response(asset.body,{status:asset.status,headers});
+      }
+      if(path==='/auth/test'&&request.method==='GET')return new Response(ledgerTestHtml,{headers:{...safe,'content-type':'text/html;charset=utf-8','content-security-policy':"default-src 'none'; script-src 'self'; connect-src 'self'; style-src 'unsafe-inline'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"}});
+      if(path.startsWith('/api/ledger/')){
+        if(env.VALIDATION_MODE!=='mock-only')return Response.json({error:'Mock validation disabled'},{status:503,headers:safe});
+        const route=path.slice('/api/ledger'.length);
+        if(!['/meta','/trades','/history','/operation','/import/start','/import/part','/import/verify','/import/activate'].includes(route))return Response.json({error:'Unknown ledger route'},{status:404,headers:safe});
+        const user=await candidate.authenticate(request);
+        if(!user)return Response.json({error:'Session required'},{status:401,headers:safe});
+        if(!['GET','POST'].includes(request.method))return Response.json({error:'Method not allowed'},{status:405,headers:safe});
+        if(request.method==='POST'&&request.headers.get('origin')!==env.AUTH_API_ORIGIN)return Response.json({error:'Origin rejected'},{status:403,headers:safe});
+        if(request.method==='POST'&&request.headers.get('content-type')?.split(';')[0]!=='application/json')return Response.json({error:'JSON required'},{status:415,headers:safe});
+        url.pathname=route;
+        // The UUID comes exclusively from the validated application session.
+        const result=await ledgerRoute(new Request(url,request),env,'email:'+user.id);
+        const headers=new Headers(result.headers);for(const [name,value] of Object.entries(safe))headers.set(name,value);
+        return new Response(result.body,{status:result.status,headers});
+      }
       if(path==='/api/session/me'&&request.method==='GET'){
         const user=await candidate.authenticate(request);
         return user?Response.json({id:user.id,expiresAt:user.expiresAt},{headers:safe}):Response.json({error:'Session required'},{status:401,headers:safe});
