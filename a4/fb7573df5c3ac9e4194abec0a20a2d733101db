@@ -1,0 +1,37 @@
+backend/worker.mjs
+  s_954afabfda404a::t_9ccbeb458128df 21
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_9ccbeb458128df 73-74
+backend/package-lock.json
+  s_954afabfda404a::t_c87c09dd0bc99f 3,9
+docs/backend/market-followup-validation-v0.3.6.md
+  s_954afabfda404a::t_9ccbeb458128df 1-42
+backend/tests/market-validation-workerd.test.mjs
+  s_954afabfda404a::t_d001d3a4080f91 1-27
+backend/scripts/recheck-massive-evidence.mjs
+  s_954afabfda404a::t_0380a29cfdd414 1-36
+backend/package.json
+  s_954afabfda404a::t_9ccbeb458128df 3
+backend/market-validation.mjs
+  s_954afabfda404a::t_3606e7edbe0bbf 1-105
+backend/tests/market-validation.test.mjs
+  s_954afabfda404a::t_3606e7edbe0bbf 1-73
+backend/wrangler.market.example.json
+  s_954afabfda404a::t_3606e7edbe0bbf 1-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "a4fb7573df5c3ac9e4194abec0a20a2d733101db",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
