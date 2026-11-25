@@ -1,0 +1,41 @@
+{
+  "version": "client v0.2.0 / backend v0.3.3",
+  "startedAt": "2026-11-25T08:09:06.593Z",
+  "origin": "https://gaintrace-batch-api.pages.dev",
+  "checks": [
+    {
+      "name": "Existing isolated project, private allowlist and D1 binding preserved"
+    },
+    {
+      "name": "Canonical page and final client module available; local preview absent"
+    },
+    {
+      "name": "Anonymous, fake sessions, legacy mock credentials and admin route access denied"
+    },
+    {
+      "name": "Deployment aliases cannot receive authentication or ledger traffic"
+    },
+    {
+      "name": "Original two mock ledgers remain accessible with original credentials"
+    },
+    {
+      "name": "Temporary scheduled tasks remain disabled"
+    }
+  ],
+  "realAuthenticatedLedgerFlowProven": false,
+  "cpuVerified": false,
+  "deployment": {
+    "id": "f8bb418d-c66e-4af4-b842-7f209ad52ba1",
+    "url": "https://f8bb418d.gaintrace-batch-api.pages.dev",
+    "commit": "ae4edf61326e26305a6cb2de7bc3df1acb21af59",
+    "createdAt": "2026-11-25T08:08:14.914336Z"
+  },
+  "counts": {
+    "users": 1,
+    "identities": 1,
+    "active_sessions": 0,
+    "email_ledgers": 0,
+    "email_ledger_trades": 0
+  },
+  "completedAt": "2026-11-25T08:09:15.384Z"
+}
