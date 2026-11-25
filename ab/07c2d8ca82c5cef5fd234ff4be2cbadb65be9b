@@ -1,0 +1,23 @@
+backend/ledger-cloud-basics-v0.2.0.json
+  s_954afabfda404a::t_d08f5c9e3d3e87 1-41
+docs/backend/ledger-link-validation-v0.2.0.md
+  s_954afabfda404a::t_3fefa2fe3b0856 23-29
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_3fefa2fe3b0856 61-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "ab07c2d8ca82c5cef5fd234ff4be2cbadb65be9b",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
