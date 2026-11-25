@@ -2,6 +2,7 @@ import {ledgerRoute} from './ledger-routes.mjs';
 import {dailyStep,retainDaily} from './daily.mjs';
 import {read,all,statement as q} from './storage.mjs';
 import {validDate} from './validation.mjs';
+import {mockScheduledStep} from './mock-schedule.mjs';
 const authorized=(r,s)=>typeof s==='string' && s.length>=10 && r.headers.get('authorization')==='Bearer '+s;
 const response=(data,status=200)=>Response.json(data,{status});
 export default {
@@ -17,7 +18,7 @@ export default {
     const db=env.DB;
     if(path.startsWith('/validation/')){
       if(!authorized(request,env.TEST_ADMIN_TOKEN))return response({error:'Admin authorization required'},401);
-      if(path==='/validation/status')return response({version:'backend v0.3.3',jobs:await all(db,'SELECT account,date,phase,revision,previous_date FROM gt_jobs ORDER BY account,date'),control:await all(db,'SELECT * FROM gt_control')});
+      if(path==='/validation/status')return response({version:'backend v0.3.4',jobs:await all(db,'SELECT account,date,phase,revision,previous_date FROM gt_jobs ORDER BY account,date'),control:await all(db,'SELECT * FROM gt_control')});
       if(path==='/validation/step' && request.method==='POST'){
         if(!['alice','bob'].includes(b.account) || !validDate(b.date))return response({error:'Invalid job'},422);
         return response(await dailyStep(db,b.account,b.date));
@@ -43,6 +44,11 @@ export default {
   },
   async scheduled(controller,env) {
     if(env.VALIDATION_MODE!=='mock-only')return;
+    const calendar=await read(env.DB,"SELECT value,(SELECT value FROM gt_control WHERE key='mock-calendar-until') expires FROM gt_control WHERE key='mock-calendar-enabled'");
+    if(calendar){
+      if(calendar.value!=='1'||(calendar.expires!==null&&(!Number.isFinite(Number(calendar.expires))||controller.scheduledTime>=Number(calendar.expires))))return;
+      return mockScheduledStep(env.DB,controller);
+    }
     const clock=await read(env.DB,"SELECT value FROM gt_control WHERE key='valuation-date'");if(!clock)return;
     const last=await read(env.DB,"SELECT value FROM gt_control WHERE key='last-account'");
     const sql=`SELECT a.id FROM gt_accounts a WHERE a.generation IS NOT NULL AND a.id>? AND NOT EXISTS(SELECT 1 FROM gt_daily d WHERE d.account=a.id AND d.date=? AND d.status='confirmed') ORDER BY a.id LIMIT 1`;

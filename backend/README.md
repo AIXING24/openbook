@@ -1,4 +1,4 @@
-# GainTrace 后端 v0.3.3
+# GainTrace 后端 v0.3.4
 
 开发分支上的分批存储与计算实现，当前只接受合成账户和 Mock HSBC 账本。Pages 已接入独立邮箱认证及模拟账本接口，真实行情日期与正式前端迁移尚未接入。前端 v1.16.0 继续使用原本地存储。
 
@@ -13,6 +13,12 @@
 - `node scripts/build-kinde-pages.mjs <独立输出目录>` 构建 Pages 候选和浏览器模块。`node scripts/serve-ledger-preview.mjs` 是本机一次性内存D1/合成会话 UI 验证工具，不能当真实OTP验收，且不把预览文件写入部署目录。
 
 验收状态见 [联动记录](../docs/backend/ledger-link-validation-v0.2.0.md)。
+
+## 模拟日历补算
+
+`gt_mock_schedule_targets` 明确限定测试账本及起始日，`gt_mock_schedule_days` 保存固定模拟日历、可计算时间和休市标记。启用 `gt_control.mock-calendar-enabled=1` 后，Worker Cron 每次只推进一个账户最早缺失日期的一个片段；失败日期等待价格/FX补齐，不跳过缺口，轮转时不阻塞其他账户。未到可计算时间不生成，已确认日期不重复写入。无需浏览器打开或应用会话。
+
+这是合成日历，不是实际交易所日历。测试用 `mock-calendar-until` 截止时间保护；显式关闭后不回退到旧模拟时钟。`scripts/cloud-mock-calendar.mjs` 只对现有唯一邮箱模拟账本验证两个固定日期，临时启用每分钟 Cron，并在 finally 清空调度和关闭开关；不允许覆盖已有日期或重复运行。真实日终调度、自动年度清理和行情接入仍未启用。
 
 ## 本地验证
 

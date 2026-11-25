@@ -1,0 +1,134 @@
+{
+  "version": "client v0.2.0 / backend v0.3.3",
+  "checkedAt": "2026-11-25T08:27:30.696Z",
+  "deployment": {
+    "id": "f8bb418d-c66e-4af4-b842-7f209ad52ba1",
+    "url": "https://f8bb418d.gaintrace-batch-api.pages.dev",
+    "commit": "ae4edf61326e26305a6cb2de7bc3df1acb21af59",
+    "createdAt": "2026-11-25T08:08:14.914336Z"
+  },
+  "userConfirmedLoginImportAndSave": true,
+  "realAuthenticatedLedgerFlowProven": true,
+  "logoutVerified": false,
+  "counts": {
+    "email_ledgers": 1,
+    "orphan_ledgers": 0,
+    "active_mock_trades": 6,
+    "non_mock_trades": 0,
+    "committed_operations": 2,
+    "minimum_revision": 3,
+    "active_sessions": 1
+  },
+  "cpu": {
+    "timeRange": {
+      "start": "2026-11-25T08:09:06.593Z",
+      "end": "2026-11-25T08:27:32.875Z"
+    },
+    "scriptName": "pages-worker--24757550-production",
+    "units": "CPU time 99th percentile - microseconds",
+    "rows": [
+      {
+        "dimensions": {
+          "datetimeMinute": "2026-11-25T08:19:00Z",
+          "scriptName": "pages-worker--24757550-production",
+          "status": "success"
+        },
+        "quantiles": {
+          "cpuTimeP50": 398,
+          "cpuTimeP99": 940,
+          "cpuTimeP999": 940
+        },
+        "sum": {
+          "errors": 0,
+          "requests": 7
+        }
+      },
+      {
+        "dimensions": {
+          "datetimeMinute": "2026-11-25T08:22:00Z",
+          "scriptName": "pages-worker--24757550-production",
+          "status": "success"
+        },
+        "quantiles": {
+          "cpuTimeP50": 2321,
+          "cpuTimeP99": 6317,
+          "cpuTimeP999": 6317
+        },
+        "sum": {
+          "errors": 0,
+          "requests": 24
+        }
+      },
+      {
+        "dimensions": {
+          "datetimeMinute": "2026-11-25T08:23:00Z",
+          "scriptName": "pages-worker--24757550-production",
+          "status": "success"
+        },
+        "quantiles": {
+          "cpuTimeP50": 1459,
+          "cpuTimeP99": 5187,
+          "cpuTimeP999": 5187
+        },
+        "sum": {
+          "errors": 0,
+          "requests": 4
+        }
+      },
+      {
+        "dimensions": {
+          "datetimeMinute": "2026-11-25T08:09:00Z",
+          "scriptName": "pages-worker--24757550-production",
+          "status": "success"
+        },
+        "quantiles": {
+          "cpuTimeP50": 758,
+          "cpuTimeP99": 3745,
+          "cpuTimeP999": 3745
+        },
+        "sum": {
+          "errors": 0,
+          "requests": 23
+        }
+      },
+      {
+        "dimensions": {
+          "datetimeMinute": "2026-11-25T08:21:00Z",
+          "scriptName": "pages-worker--24757550-production",
+          "status": "success"
+        },
+        "quantiles": {
+          "cpuTimeP50": 1652,
+          "cpuTimeP99": 6496,
+          "cpuTimeP999": 6496
+        },
+        "sum": {
+          "errors": 0,
+          "requests": 8
+        }
+      },
+      {
+        "dimensions": {
+          "datetimeMinute": "2026-11-25T08:20:00Z",
+          "scriptName": "pages-worker--24757550-production",
+          "status": "success"
+        },
+        "quantiles": {
+          "cpuTimeP50": 849,
+          "cpuTimeP99": 3837,
+          "cpuTimeP999": 3837
+        },
+        "sum": {
+          "errors": 0,
+          "requests": 5
+        }
+      }
+    ],
+    "requests": 71,
+    "runtimeErrors": 0,
+    "highestBucketP99Ms": 6.496,
+    "currentObservedBucketsWithin10ms": true,
+    "freeCpuHeadroomProven": false,
+    "limitations": "Current deployment only. Adaptive minute-bucket quantiles include background probes and do not identify individual request paths or exact maxima. This reused user is not a new-user or universal cold-start proof."
+  }
+}
