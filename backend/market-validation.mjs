@@ -68,6 +68,7 @@ export function marketValidation({fetchSource = fetch, clock = Date.now} = {}) {
     const url = new URL(request.url), kind = url.searchParams.get('kind');
     if (url.pathname === '/validation/status') return respond({version, isolated: true, databaseBound: false, realLedgerWrites: false, cronEnabled: false, sourceApproved: false});
     if (url.pathname !== '/validation/market') return respond({error: 'Unknown isolated validation route'}, 404);
+    let sourcePhase = 'none';
     try {
       if (kind === 'evidence-5' || kind === 'evidence-50') {
         const count = kind === 'evidence-5' ? 5 : 50, result = assessValuationEvidence(mockMarketEvidence(count));
@@ -78,16 +79,24 @@ export function marketValidation({fetchSource = fetch, clock = Date.now} = {}) {
         return respond({version, kind, date, observedAt: now, closeAt, status: now < closeAt ? 'pending' : 'requires-source-observation', reason: now < closeAt ? 'regular-session-not-closed' : 'readiness-not-established', upstreamRequests: 0, finalityVerified: false});
       }
       if (kind === 'fx') {
-        const response = await fetchSource(fxSource, {headers: {accept: 'text/csv'}, redirect: 'error', signal: AbortSignal.timeout(20000)});
+        sourcePhase = 'fetch';
+        const response = await fetchSource(fxSource, {headers: {accept: 'text/csv'}, redirect: 'manual', signal: AbortSignal.timeout(20000)});
         if (!response.ok) {await response.body?.cancel(); return respond({version, kind, status: 'pending', upstreamHttpStatus: response.status});}
-        const text = await boundedSourceText(response, 24576), result = ecbReferenceRates(text, {date: context.through, observedAt: now});
+        sourcePhase = 'read';
+        const text = await boundedSourceText(response, 24576);
+        sourcePhase = 'parse';
+        const result = ecbReferenceRates(text, {date: context.through, observedAt: now});
         return respond({version, kind, status: 'valid-candidate', asOfDate: result.asOfDate, basis: result.basis, isExecutionRate: false, currencies: Object.keys(result.rates), realLedgerWrites: false});
       }
       if (!actions.has(kind)) return respond({error: 'Unsupported isolated validation kind'}, 400);
       if (typeof env.MASSIVE_API_KEY !== 'string' || !/^[A-Za-z0-9_-]{16,256}$/.test(env.MASSIVE_API_KEY)) return respond({error: 'Source secret unavailable'}, 503);
-      const response = await fetchSource('https://api.massive.com' + actions.get(kind), {headers: {authorization: 'Bearer ' + env.MASSIVE_API_KEY, accept: 'application/json'}, redirect: 'error', signal: AbortSignal.timeout(20000)});
+      sourcePhase = 'fetch';
+      const response = await fetchSource('https://api.massive.com' + actions.get(kind), {headers: {authorization: 'Bearer ' + env.MASSIVE_API_KEY, accept: 'application/json'}, redirect: 'manual', signal: AbortSignal.timeout(20000)});
       if (!response.ok) {await response.body?.cancel(); return respond({version, kind, status: 'pending', upstreamHttpStatus: response.status});}
-      const text = await boundedSourceText(response, 262144), payload = JSON.parse(text);
+      sourcePhase = 'read';
+      const text = await boundedSourceText(response, 262144);
+      sourcePhase = 'parse';
+      const payload = JSON.parse(text);
       const result = kind === 'summary' ? assessMassiveSummary(payload, context) : assessMassiveHistory(payload, context);
       let selectedDataHash;
       if (result.status === 'valid-candidate') {
@@ -97,7 +106,7 @@ export function marketValidation({fetchSource = fetch, clock = Date.now} = {}) {
       }
       return respond({version, kind, ...result, upstreamHttpStatus: response.status, observedAt: now, selectedDataHash, realLedgerWrites: false});
     } catch {
-      return respond({version, kind, status: 'pending', reason: 'source-network-or-evidence-unavailable', realLedgerWrites: false});
+      return respond({version, kind, status: 'pending', reason: 'source-network-or-evidence-unavailable', sourcePhase, realLedgerWrites: false});
     }
   }};
 }

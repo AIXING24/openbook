@@ -1,0 +1,145 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "queriedAt": "2026-11-25T12:32:36.412Z",
+  "timeRange": {
+    "start": "2026-11-25T12:30:00.000Z",
+    "end": "2026-11-25T12:32:00.000Z"
+  },
+  "clientTimeRange": {
+    "start": "2026-11-25T12:30:08.107Z",
+    "end": "2026-11-25T12:31:19.875Z"
+  },
+  "scriptName": "gaintrace-market-validation",
+  "buckets": [
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T12:31:06Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 197
+      },
+      "quantiles": {
+        "cpuTimeP50": 197,
+        "cpuTimeP99": 197
+      },
+      "sum": {
+        "cpuTimeUs": 197,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T12:31:19Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1345
+      },
+      "quantiles": {
+        "cpuTimeP50": 1345,
+        "cpuTimeP99": 1345
+      },
+      "sum": {
+        "cpuTimeUs": 1345,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T12:30:08Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 4676
+      },
+      "quantiles": {
+        "cpuTimeP50": 4676,
+        "cpuTimeP99": 4676
+      },
+      "sum": {
+        "cpuTimeUs": 4676,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T12:30:21Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 2609
+      },
+      "quantiles": {
+        "cpuTimeP50": 2609,
+        "cpuTimeP99": 2609
+      },
+      "sum": {
+        "cpuTimeUs": 2609,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T12:30:35Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1081
+      },
+      "quantiles": {
+        "cpuTimeP50": 1081,
+        "cpuTimeP99": 1081
+      },
+      "sum": {
+        "cpuTimeUs": 1081,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 1
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T12:30:53Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 2271
+      },
+      "quantiles": {
+        "cpuTimeP50": 2271,
+        "cpuTimeP99": 2271
+      },
+      "sum": {
+        "cpuTimeUs": 2271,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    }
+  ],
+  "observedRequests": 6,
+  "observedErrors": 0,
+  "maxObservedCpuMs": 4.676,
+  "expectedClientRequests": 6,
+  "reportedRequestCountMatchesClient": true,
+  "allInvocationsIndividuallyProven": false,
+  "units": "Official GraphQL CPU microseconds converted to milliseconds; bucket maximum, not network latency",
+  "universalFreeHeadroomProven": false,
+  "coldStartsProven": false,
+  "limitations": "Returned adaptive analytics buckets for a small isolated, minute-rounded window only. Matching request counts is not proof of individually complete samples. No route-specific attribution, universal cold-start guarantee or complete account billing verification."
+}

@@ -1,0 +1,91 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "startedAt": "2026-11-25T12:18:23.091Z",
+  "transport": "diagnostic official DoH with original hostname and TLS validation",
+  "mobileBrowserAccessProven": false,
+  "firstRequestColdStartProven": false,
+  "productionWrites": false,
+  "stages": [
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-25T12:18:23.092Z",
+      "completedAt": "2026-11-25T12:18:23.632Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      }
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-25T12:18:36.636Z",
+      "completedAt": "2026-11-25T12:18:37.074Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      }
+    },
+    {
+      "kind": "fx",
+      "startedAt": "2026-11-25T12:18:50.077Z",
+      "completedAt": "2026-11-25T12:18:50.363Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "fx",
+        "status": "pending",
+        "reason": "source-network-or-evidence-unavailable",
+        "realLedgerWrites": false
+      }
+    },
+    {
+      "kind": "today-readiness",
+      "startedAt": "2026-11-25T12:19:03.373Z",
+      "completedAt": "2026-11-25T12:19:04.011Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "today-readiness",
+        "date": "2026-11-25",
+        "observedAt": 1795609144121,
+        "closeAt": 1795640400000,
+        "status": "pending",
+        "reason": "regular-session-not-closed",
+        "upstreamRequests": 0,
+        "finalityVerified": false
+      }
+    },
+    {
+      "kind": "unauthorized",
+      "startedAt": "2026-11-25T12:19:17.013Z",
+      "completedAt": "2026-11-25T12:19:17.458Z",
+      "httpStatus": 401,
+      "payload": {
+        "error": "Isolated validation authorization required"
+      }
+    },
+    {
+      "kind": "source-secret-missing",
+      "startedAt": "2026-11-25T12:19:30.461Z",
+      "completedAt": "2026-11-25T12:19:30.741Z",
+      "httpStatus": 503,
+      "payload": {
+        "error": "Source secret unavailable"
+      }
+    }
+  ],
+  "completedAt": "2026-11-25T12:19:30.742Z",
+  "cpuMeasured": false,
+  "limitations": "Elapsed network/request time is not CPU. First request after secret deployment is not proof of cold start. Diagnostic DoH access is not ordinary mobile workers.dev availability. No production ledger activation."
+}

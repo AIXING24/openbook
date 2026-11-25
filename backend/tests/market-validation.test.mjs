@@ -45,7 +45,7 @@ test('before regular close readiness remains pending without requesting a quote'
 test('real summary response includes metadata and hash but no prices or secrets', async () => {
   const worker = marketValidation({clock: () => now, fetchSource: async (url, options) => {
     assert.equal(url, 'https://api.massive.com/v1/open-close/NVDA/2026-11-24?adjusted=false');
-    assert.equal(options.redirect, 'error');
+    assert.equal(options.redirect, 'manual');
     assert.equal(options.headers.authorization, 'Bearer ' + key);
     return Response.json({status: 'OK', symbol: 'NVDA', from: '2026-11-24', open: 10, high: 12, low: 9, close: 11, afterHours: 500});
   }});
@@ -70,4 +70,17 @@ test('bounded source reader handles chunk overflow and empty responses', async (
   assert.equal(await boundedSourceText(new Response('abc'), 3), 'abc');
   await assert.rejects(boundedSourceText(new Response('abcd'), 3));
   await assert.rejects(boundedSourceText(new Response(null), 3));
+});
+
+test('source redirects are not followed and do not leak the source key', async () => {
+  let calls = 0;
+  const worker = marketValidation({clock: () => now, fetchSource: async (url, options) => {
+    calls++;
+    assert.equal(options.redirect, 'manual');
+    return new Response(null, {status: 302, headers: {location: 'https://other.invalid'}});
+  }});
+  const result = await (await worker.fetch(request('summary'), environment())).json();
+  assert.equal(result.status, 'pending');
+  assert.equal(result.upstreamHttpStatus, 302);
+  assert.equal(calls, 1);
 });

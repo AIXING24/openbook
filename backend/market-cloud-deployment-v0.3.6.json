@@ -1,0 +1,18 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "name": "gaintrace-market-validation",
+  "startedAt": "2026-11-25T12:14:56.802Z",
+  "expiresAt": "2026-11-25T13:14:56.802Z",
+  "deployedAt": "2026-11-25T12:15:09.232Z",
+  "isolated": true,
+  "officialCliDeployment": true,
+  "sourceSecretStoredInCloudflare": false,
+  "noDatabaseBinding": true,
+  "noCron": true,
+  "realLedgerWrites": false,
+  "productionDeploymentChanged": false,
+  "runtimeRedirectFixDeployedAt": "2026-11-25T12:29:01.459Z",
+  "runtimeRedirectPolicy": "manual, reject non-2xx without following",
+  "sourceModuleHash": "434a9edb023cbf9951a69655a3a4160ff2cb3b88a923af7873ee70974f7b57af",
+  "fixedDeploymentVersion": "ba6b1b42-156b-41f9-ae71-dda283cbcb18"
+}
