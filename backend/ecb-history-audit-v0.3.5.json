@@ -1,0 +1,23 @@
+{
+  "version": "backend v0.3.5 candidate",
+  "checkedAt": "2026-11-25T10:10:18.278Z",
+  "source": "European Central Bank",
+  "sourceUrl": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD+CNY+HKD.EUR.SP00.A?startPeriod=2025-11-25&endPeriod=2026-11-24&format=csvdata",
+  "transport": "curl HTTPS with certificate verification",
+  "requestedRange": {
+    "start": "2025-11-25",
+    "end": "2026-11-24"
+  },
+  "responseBytes": 169051,
+  "observations": 765,
+  "referenceDates": 255,
+  "firstReferenceDate": "2025-11-25",
+  "lastReferenceDate": "2026-11-24",
+  "allDatesHaveThreeValidatedCurrencies": true,
+  "allCrossRatesFinitePositive": true,
+  "parserUnit": "One date / three rows per call; full-year grouping is an offline Node audit, not a Worker CPU result",
+  "basis": "ECB_REFERENCE",
+  "method": "CNY per USD = EURCNY / EURUSD; CNY per HKD = EURCNY / EURHKD",
+  "productionWrites": false,
+  "limitations": "Reference dates do not represent every calendar day. Prior reference dates require a verified TARGET calendar decision, not an arbitrary stale-rate fallback. Reference rates are not exact exchange close or actual bank execution rates. Derived rates are modifications of ECB data."
+}

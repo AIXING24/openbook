@@ -1,0 +1,133 @@
+{
+  "version": "backend v0.3.5 candidate",
+  "startedAt": "2026-11-25T10:03:39.401Z",
+  "publicSampleSymbolsOnly": true,
+  "officialPriceLicenseVerified": false,
+  "productionWrites": false,
+  "probes": [
+    {
+      "symbol": "sh600519",
+      "mode": "raw",
+      "endpoint": "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600519%2Cday%2C%2C%2C400%2C",
+      "checkedAt": "2026-11-25T10:03:39.409Z",
+      "confirmedCloseEvidence": false,
+      "httpStatus": 200,
+      "responseKeys": [
+        "day",
+        "qt",
+        "mx_price",
+        "prec",
+        "version"
+      ],
+      "explicitRequestedSeriesPresent": true,
+      "rows": 400,
+      "firstDate": "2025-04-03",
+      "lastDate": "2026-11-25",
+      "responseHash": "fe5225687e87885492875359bb458229d7eeb8f6b3ac8da61ee975aedfebd162",
+      "allRowsHavePositiveClose": true,
+      "providerMessage": ""
+    },
+    {
+      "symbol": "sh600519",
+      "mode": "qfq",
+      "endpoint": "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh600519%2Cday%2C%2C%2C400%2Cqfq",
+      "checkedAt": "2026-11-25T10:03:39.666Z",
+      "confirmedCloseEvidence": false,
+      "httpStatus": 200,
+      "responseKeys": [
+        "qfqday",
+        "qt",
+        "mx_price",
+        "prec",
+        "version"
+      ],
+      "explicitRequestedSeriesPresent": true,
+      "rows": 401,
+      "firstDate": "2025-04-02",
+      "lastDate": "2026-11-25",
+      "responseHash": "ba0ae63dcc7f5546310ff455898d6bcf3cfd7b10d8c98fbb7fc3f3d51dec746e",
+      "allRowsHavePositiveClose": true,
+      "providerMessage": ""
+    },
+    {
+      "symbol": "hk00700",
+      "mode": "raw",
+      "endpoint": "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=hk00700%2Cday%2C%2C%2C400%2C",
+      "checkedAt": "2026-11-25T10:03:39.747Z",
+      "confirmedCloseEvidence": false,
+      "httpStatus": 200,
+      "responseKeys": [
+        "day",
+        "qt",
+        "prec",
+        "vcm",
+        "version"
+      ],
+      "explicitRequestedSeriesPresent": true,
+      "rows": 400,
+      "firstDate": "2025-04-14",
+      "lastDate": "2026-11-25",
+      "responseHash": "2f7dd04e934e4624fbcf9cf052e2dad4ef5c117883d5dacf178e6a96845212f7",
+      "allRowsHavePositiveClose": true,
+      "providerMessage": ""
+    },
+    {
+      "symbol": "hk00700",
+      "mode": "qfq",
+      "endpoint": "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=hk00700%2Cday%2C%2C%2C400%2Cqfq",
+      "checkedAt": "2026-11-25T10:03:39.830Z",
+      "confirmedCloseEvidence": false,
+      "httpStatus": 200,
+      "responseKeys": [
+        "day",
+        "qt",
+        "prec",
+        "vcm",
+        "version"
+      ],
+      "explicitRequestedSeriesPresent": false,
+      "providerMessage": ""
+    },
+    {
+      "symbol": "usNVDA.OQ",
+      "mode": "raw",
+      "endpoint": "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=usNVDA.OQ%2Cday%2C%2C%2C400%2C",
+      "checkedAt": "2026-11-25T10:03:39.908Z",
+      "confirmedCloseEvidence": false,
+      "httpStatus": 200,
+      "responseKeys": [
+        "day",
+        "qt",
+        "pandata",
+        "prec",
+        "version"
+      ],
+      "explicitRequestedSeriesPresent": true,
+      "rows": 400,
+      "firstDate": "2025-04-24",
+      "lastDate": "2026-11-24",
+      "responseHash": "57bcb9e99d98b338215e7884da02579b6ec209effaa2987b7ca4ff1726a654b1",
+      "allRowsHavePositiveClose": true,
+      "providerMessage": ""
+    },
+    {
+      "symbol": "usNVDA.OQ",
+      "mode": "qfq",
+      "endpoint": "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=usNVDA.OQ%2Cday%2C%2C%2C400%2Cqfq",
+      "checkedAt": "2026-11-25T10:03:40.000Z",
+      "confirmedCloseEvidence": false,
+      "httpStatus": 200,
+      "responseKeys": [
+        "day",
+        "qt",
+        "pandata",
+        "prec",
+        "version"
+      ],
+      "explicitRequestedSeriesPresent": false,
+      "providerMessage": ""
+    }
+  ],
+  "completedAt": "2026-11-25T10:03:40.079Z",
+  "limitations": "Endpoint availability and explicit raw series only. No official API contract, retention/redistribution licence, final-session flag, exhaustive ticker support or corporate-action completeness is proven. No bar is promoted to a confirmed production close."
+}
