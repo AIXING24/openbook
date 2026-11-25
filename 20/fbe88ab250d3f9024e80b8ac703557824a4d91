@@ -1,0 +1,32 @@
+backend/market-massive-cloud-checks-v0.3.6.json
+  s_954afabfda404a::t_132bb10a179561 104-134
+  s_954afabfda404a::t_6deb1a63e82b68 59-103
+backend/scripts/check-market-cloud.mjs
+  s_954afabfda404a::t_c7c0978477c03f 8,34,41
+backend/scripts/cleanup-market-validation.mjs
+  s_954afabfda404a::t_c7c0978477c03f 8-10,26
+backend/scripts/capture-market-cpu.mjs
+  s_954afabfda404a::t_37aaf5613b1fe0 7
+  s_954afabfda404a::t_c7c0978477c03f 10-11,21
+backend/market-massive-cloud-deployment-v0.3.6.json
+  s_954afabfda404a::t_0a37928732da92 1-13,20
+  s_954afabfda404a::t_6deb1a63e82b68 14-19
+backend/scripts/deploy-market-validation.mjs
+  s_954afabfda404a::t_c7c0978477c03f 4,9,26,33-34,41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "20fbe88ab250d3f9024e80b8ac703557824a4d91",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
