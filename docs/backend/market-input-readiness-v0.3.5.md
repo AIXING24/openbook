@@ -15,7 +15,7 @@
 | 腾讯现用接口 | 样例请求可取得未复权day；未核定公开官方接口契约、后台储存许可与完整企业行动 | 继续只读旁路观察，不直接审批生产源 |
 | [Alpha Vantage文档][AV-D]与[Support][AV-S] | TIME_SERIES_DAILY为raw/as-traded；免费compact仅最近100点，full需要premium。Support写25次API/日；已验证开源/教育项目的例外不能默认授予本仓库 | 默认免费配置不能承诺首次回补一年、50标的每日覆盖。个人非商业许可见[官方条款PDF][AV-T]§2；没有申请key或特殊额度 |
 | [Twelve Data Pricing][TD-P] | Basic详情8 credits/min、800/day，当前页面同项写Internal non-display usage：仅testing/evaluation/development，不得向用户显示、对外分享或用于production | 调用额度够不等于允许本工具生产展示，不直接作为免费上线方案；未注册 |
-| [Massive Stocks定价][MS-P] | 官方页面自身序列化plan记录Stocks Basic：$0、personal、5 API/min、2年历史、End of Day、US股票、corporate actions/reference可用；不是实时quote套餐 | **个人美股只读验收的下一候选**，尚未注册、取得key或实测权限。不能把US覆盖当A/H覆盖，不能把套餐摘要当所有事件完整性证明 |
+| [Massive Stocks定价][MS-P] | 官方页面自身序列化plan记录Stocks Basic：$0、personal、5 API/min、2年历史、End of Day、US股票、corporate actions/reference可用；不是实时quote套餐 | 后续用户已注册并安全配置key；NVDA摘要、一年251条未复权日线、4条拆股与4条分红请求均HTTP200。仅个人美股候选，完整性/最终性/云端CPU仍未核定，见[实测](massive-free-validation-v0.3.5.md) |
 
 [Massive个人条款][MS-T]适用于free/paid个人非商业用途；引用的[Market Data Terms][MS-M]§1允许本人分析/投资使用任意软件工具，但不允许分享数据或开发/提供给其他用户的服务。第三方行情许可、非专业订阅人资格及订单条款另有要求。首批只能针对用户个人白名单账本，不用一个个人key给整个公开App或多个用户供行情。注册及条款/资格声明由用户自行完成；不代作资格声明，不开收费功能。是否要求付款信息尚未经注册流程验证，若出现付款/卡信息要求，应停止。
 
@@ -47,7 +47,13 @@
 
 最终89项后端检查通过、0失败，包括本机原生Workerd时区/FX与来源拒绝、港股CAS/非CAS混合标的，以及原认证/同步/模拟Cron回归。新增模块语法和差异空白检查通过。本轮只提交开发分支，不部署或开启真实Cron。
 
-下一步由用户选择Massive Stocks Basic并完成免费账号/资格与条款确认，再通过正式安全流程把key设为私有服务端secret（不发聊天、不进仓库/前端/URL日志）。先验证个人美股一个标的的只读历史、日终延迟、原始价、拆股/分红字段及云端CPU，再决定审批来源。A/H行情许可、深市日历、TARGET日历、事件完整性、年度维护、Wi-Fi、Kinde正式发信许可与迁移/回滚仍待完成。不能把找到免费候选、只读覆盖或通过本地测试说成真实日终已经上线。
+2026-11-25后续：用户已主动完成免费账户注册，已在其官方账户的Plans & Upgrades页面实读Stocks Basic、Individual、$0/m。此记录只确认套餐状态，不代表所有API已经验收或许可已覆盖公开多用户App。原App仍使用腾讯；Massive是个人美股候选，不是迁移后端必须注册的服务，也不替代A/H来源。
+
+后续用户已安全配置key，个人美股NVDA的4类只读请求均通过，并验证最后一根日线`c`与摘要`close`一致。新增21项及既有23项纯门禁测试共44项通过。当前仍需日终就绪时点/修订、企业行动官方对账及云端连通性/CPU，最后才决定是否审批来源。A/H行情许可、深市日历、TARGET日历、事件完整性、年度维护、Wi-Fi、Kinde正式发信许可与迁移/回滚仍待完成。不能把找到免费候选、只读覆盖或通过本地测试说成真实日终已经上线。见[实测边界](massive-free-validation-v0.3.5.md)。
+
+### 本机密钥配置
+
+在交互式终端执行`node backend/scripts/configure-massive-key.mjs`，仅在隐藏输入提示中粘贴官方控制台Copy取得的API Key，按Enter。工具不会联网、不显示key、不在命令行参数中传递key，也不修改Cloudflare secret。它仅新建`backend/.massive-secrets.local.json`，权限0600，该文件由`*.local.json`忽略；已有文件和符号链接均拒绝覆写。不要用聊天、截图、公开报告或提交来传递密钥。后续读取脚本只能在请求官方API时使用认证头，不能将key写进URL、请求日志或探测报告。
 
 [AV-D]: https://www.alphavantage.co/documentation/
 [AV-S]: https://www.alphavantage.co/support/

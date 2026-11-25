@@ -1,0 +1,89 @@
+{
+  "version": "backend v0.3.5 candidate",
+  "startedAt": "2026-11-25T11:36:22.189Z",
+  "publicSampleOnly": true,
+  "provider": "massive",
+  "context": {
+    "ticker": "NVDA",
+    "from": "2025-11-25",
+    "through": "2026-11-24"
+  },
+  "transport": "macos-system-curl",
+  "tlsVerificationEnabled": true,
+  "authenticatedReadOnly": true,
+  "priceSeriesPublished": false,
+  "productionWrites": false,
+  "cloudDeployment": false,
+  "sourceApproved": false,
+  "probes": [
+    {
+      "kind": "summary",
+      "endpoint": "https://api.massive.com/v1/open-close/NVDA/2026-11-24?adjusted=false",
+      "requestedAt": "2026-11-25T11:36:22.190Z",
+      "httpStatus": 200,
+      "status": "valid-candidate",
+      "asOfDate": "2026-11-24",
+      "closeField": "close",
+      "extendedHoursNotUsed": true,
+      "adjustmentRequested": "unadjusted",
+      "finalityVerified": false,
+      "selectedDataHash": "ed1979fcf49c241c47e53867dfa215d4910fd11698ff98ec1cbf5f0ae7f6f1be",
+      "completedAt": "2026-11-25T11:36:23.246Z"
+    },
+    {
+      "kind": "history",
+      "endpoint": "https://api.massive.com/v2/aggs/ticker/NVDA/range/1/day/2025-11-25/2026-11-24?adjusted=false&sort=asc&limit=500",
+      "requestedAt": "2026-11-25T11:36:35.190Z",
+      "httpStatus": 200,
+      "status": "valid-candidate",
+      "rows": 251,
+      "firstDate": "2025-11-25",
+      "lastDate": "2026-11-24",
+      "hasMore": false,
+      "adjustmentReturned": "unadjusted",
+      "dateBasis": "America/New_York",
+      "finalityVerified": false,
+      "regularSessionCoverageVerified": false,
+      "calendarCompletenessVerified": false,
+      "selectedDataHash": "60ee6a7d8b08025ccab7f4aec00e70b51e87b17b695542854d1f1dbcb7765abe",
+      "completedAt": "2026-11-25T11:36:36.380Z"
+    },
+    {
+      "kind": "splits",
+      "endpoint": "https://api.massive.com/v3/reference/splits?ticker=NVDA&execution_date.lte=2026-11-24&sort=execution_date&order=desc&limit=100",
+      "requestedAt": "2026-11-25T11:36:48.192Z",
+      "httpStatus": 200,
+      "status": "valid-candidate",
+      "rows": 4,
+      "firstDate": "2006-04-07",
+      "lastDate": "2024-06-10",
+      "hasMore": false,
+      "eventCompletenessVerified": false,
+      "ledgerReconciled": false,
+      "selectedDataHash": "7792999500a654741600908ad4ac0f28f0ce081293b2da937a0737d1e96a9943",
+      "completedAt": "2026-11-25T11:36:49.059Z"
+    },
+    {
+      "kind": "dividends",
+      "endpoint": "https://api.massive.com/v3/reference/dividends?ticker=NVDA&ex_dividend_date.gte=2025-11-25&ex_dividend_date.lte=2026-11-24&sort=ex_dividend_date&order=desc&limit=100",
+      "requestedAt": "2026-11-25T11:37:01.198Z",
+      "httpStatus": 200,
+      "status": "valid-candidate",
+      "rows": 4,
+      "firstDate": "2025-12-04",
+      "lastDate": "2026-09-10",
+      "hasMore": false,
+      "eventCompletenessVerified": false,
+      "ledgerReconciled": false,
+      "selectedDataHash": "3f4ac24d731a67f78c184d591a0589a21669b5eb1a569f1aaaab25ad41433a2f",
+      "completedAt": "2026-11-25T11:37:02.153Z"
+    }
+  ],
+  "latestCloseComparison": {
+    "date": "2026-11-24",
+    "comparable": true,
+    "matches": true
+  },
+  "completedAt": "2026-11-25T11:37:02.153Z",
+  "limitations": "One personal account and one public ticker only. No full event pagination, official-calendar completeness, final/revision guarantee, rate-limit stress test, Cloudflare connectivity/CPU, public redistribution licence or production activation is established. Bar dates use New York time; aggregates are not automatically labelled final regular-session closes."
+}
