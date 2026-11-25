@@ -1,0 +1,43 @@
+backend/scripts/check-ledger-flow.mjs
+  s_954afabfda404a::t_bf96e5cab63033 1-36
+backend/mock-schedule.mjs
+  s_954afabfda404a::t_fe1ef0dc339506 1-19
+backend/tests/mock-schedule.test.mjs
+  s_954afabfda404a::t_fe1ef0dc339506 1-5,8-13,15-26,28-53
+backend/README.md
+  s_954afabfda404a::t_26cce942c47769 1,17-21
+docs/backend/mock-calendar-validation-v0.3.4.md
+  s_954afabfda404a::t_db5215a9e6c6c3 1-19
+backend/schema.sql
+  s_954afabfda404a::t_fe1ef0dc339506 17-18
+docs/backend/ledger-link-validation-v0.2.0.md
+  s_954afabfda404a::t_db5215a9e6c6c3 32-37
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_26cce942c47769 3,63-66
+backend/ledger-cloud-flow-v0.2.0.json
+  s_954afabfda404a::t_98ea00b9324534 1-134
+backend/worker.mjs
+  s_954afabfda404a::t_fe1ef0dc339506 5,21
+backend/package-lock.json
+  s_954afabfda404a::t_5f346f5532f539 3,9
+backend/package.json
+  s_954afabfda404a::t_fe1ef0dc339506 3
+backend/scripts/cloud-mock-calendar.mjs
+  s_954afabfda404a::t_26cce942c47769 1-80
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "3f34a2651714fecce2b81356d8e7a7570a3acda7",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
