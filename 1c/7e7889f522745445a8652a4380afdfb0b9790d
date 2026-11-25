@@ -1,0 +1,42 @@
+backend/massive-evidence.mjs
+  s_954afabfda404a::t_7fd4178736b403 1-40,42-46,48-54
+  s_954afabfda404a::t_6a1eb6f49772ea 41,47
+backend/tests/massive-http.test.mjs
+  s_954afabfda404a::t_e72ba80fba267c 1-40
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_58fdf36f545ae8 72
+backend/scripts/probe-massive-source.mjs
+  s_954afabfda404a::t_7fd4178736b403 1-4,6-7,9-27,31,33,35-61
+  s_954afabfda404a::t_e72ba80fba267c 5,8,28-30,32,34
+backend/tests/massive-evidence.test.mjs
+  s_954afabfda404a::t_6a1eb6f49772ea 76-77
+  s_954afabfda404a::t_7fd4178736b403 1-75,78
+docs/backend/market-input-readiness-v0.3.5.md
+  s_954afabfda404a::t_58fdf36f545ae8 18,52
+  s_954afabfda404a::t_0d32c1323ac823 50-51,53-56
+backend/scripts/massive-http.mjs
+  s_954afabfda404a::t_e72ba80fba267c 1-11,13-27
+docs/backend/massive-free-validation-v0.3.5.md
+  s_954afabfda404a::t_58fdf36f545ae8 1-41
+backend/scripts/configure-massive-key.mjs
+  s_954afabfda404a::t_ee1b69d8b2eca4 1-55
+backend/tests/massive-key-setup.test.mjs
+  s_954afabfda404a::t_ee1b69d8b2eca4 1-5,7-47,99
+  s_954afabfda404a::t_0d32c1323ac823 6,48-98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "1c7e7889f522745445a8652a4380afdfb0b9790d",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
