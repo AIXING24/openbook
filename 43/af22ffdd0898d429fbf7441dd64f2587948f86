@@ -1,0 +1,56 @@
+backend/README.md
+  s_954afabfda404a::t_70d4ec22369f5f 1,5-9
+backend/scripts/audit-ecb-history.mjs
+  s_954afabfda404a::t_e0db6d51924850 1-6,8-13,15
+backend/market-evidence.mjs
+  s_954afabfda404a::t_2aa9825b7cd71f 11,49,56
+  s_954afabfda404a::t_7c891b7a677f1a 2,38,42,50
+  s_954afabfda404a::t_478af783c3a4ad 23,27,34-35,40
+  s_954afabfda404a::t_70476ed3b3f557 1,3-10,12-22,24-26,28-33,36-37,39,41,43-48,51-55,57-59
+backend/tests/market-runtime.mjs
+  s_954afabfda404a::t_e0db6d51924850 1-9
+docs/backend/market-calendar-sources-2026-11-25.md
+  s_954afabfda404a::t_e44d171c185c25 15-50
+backend/scripts/probe-market-sources.mjs
+  s_954afabfda404a::t_9f39173eb0d15b 1-26
+backend/tests/market-workerd.test.mjs
+  s_954afabfda404a::t_e0db6d51924850 1-17
+backend/package.json
+  s_954afabfda404a::t_70d4ec22369f5f 3
+backend/worker.mjs
+  s_954afabfda404a::t_70d4ec22369f5f 21
+backend/market-source-probes-v0.3.5.json
+  s_954afabfda404a::t_61f9339d9adc7d 1-133
+backend/tests/market-evidence.test.mjs
+  s_954afabfda404a::t_70476ed3b3f557 1-27,29-44,59-64
+  s_954afabfda404a::t_2aa9825b7cd71f 28
+  s_954afabfda404a::t_478af783c3a4ad 52-58
+  s_954afabfda404a::t_7c891b7a677f1a 45-51
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_4a7120f42af198 71-72
+  s_954afabfda404a::t_70d4ec22369f5f 3,69-70
+backend/package-lock.json
+  s_954afabfda404a::t_ce20af8e85c255 3,9
+backend/ecb-fx.mjs
+  s_954afabfda404a::t_2aa9825b7cd71f 25,36-38
+  s_954afabfda404a::t_70476ed3b3f557 1-24,26-35,39
+docs/backend/market-input-readiness-v0.3.5.md
+  s_954afabfda404a::t_4a7120f42af198 48
+  s_954afabfda404a::t_70d4ec22369f5f 1-47,49-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "43af22ffdd0898d429fbf7441dd64f2587948f86",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
