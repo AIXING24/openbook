@@ -1,0 +1,165 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "queriedAt": "2026-11-25T13:08:22.195Z",
+  "timeRange": {
+    "start": "2026-11-25T13:06:00.000Z",
+    "end": "2026-11-25T13:08:00.000Z"
+  },
+  "clientTimeRange": {
+    "start": "2026-11-25T13:06:12.388Z",
+    "end": "2026-11-25T13:07:37.476Z"
+  },
+  "scriptName": "gaintrace-market-validation",
+  "buckets": [
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T13:06:54Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 5334
+      },
+      "quantiles": {
+        "cpuTimeP50": 5334,
+        "cpuTimeP99": 5334
+      },
+      "sum": {
+        "cpuTimeUs": 5334,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 1
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T13:06:26Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 16749
+      },
+      "quantiles": {
+        "cpuTimeP50": 16749,
+        "cpuTimeP99": 16749
+      },
+      "sum": {
+        "cpuTimeUs": 16749,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T13:06:12Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 8197
+      },
+      "quantiles": {
+        "cpuTimeP50": 8197,
+        "cpuTimeP99": 8197
+      },
+      "sum": {
+        "cpuTimeUs": 8197,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T13:07:37Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 827
+      },
+      "quantiles": {
+        "cpuTimeP50": 827,
+        "cpuTimeP99": 827
+      },
+      "sum": {
+        "cpuTimeUs": 827,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T13:07:08Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 5840
+      },
+      "quantiles": {
+        "cpuTimeP50": 5840,
+        "cpuTimeP99": 5840
+      },
+      "sum": {
+        "cpuTimeUs": 5840,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 1
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T13:06:39Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1926
+      },
+      "quantiles": {
+        "cpuTimeP50": 1926,
+        "cpuTimeP99": 1926
+      },
+      "sum": {
+        "cpuTimeUs": 1926,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 1
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-25T13:07:24Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 2709
+      },
+      "quantiles": {
+        "cpuTimeP50": 2709,
+        "cpuTimeP99": 2709
+      },
+      "sum": {
+        "cpuTimeUs": 2709,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    }
+  ],
+  "observedRequests": 7,
+  "observedErrors": 0,
+  "maxObservedCpuMs": 16.749,
+  "expectedClientRequests": 7,
+  "reportedRequestCountMatchesClient": true,
+  "allInvocationsIndividuallyProven": false,
+  "units": "Official GraphQL CPU microseconds converted to milliseconds; bucket maximum, not network latency",
+  "universalFreeHeadroomProven": false,
+  "coldStartsProven": false,
+  "limitations": "Returned adaptive analytics buckets for a small isolated, minute-rounded window only. Matching request counts is not proof of individually complete samples. No route-specific attribution, universal cold-start guarantee or complete account billing verification."
+}

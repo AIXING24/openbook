@@ -1,0 +1,135 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "startedAt": "2026-11-25T13:06:12.388Z",
+  "transport": "diagnostic official DoH with original hostname and TLS validation",
+  "mobileBrowserAccessProven": false,
+  "firstRequestColdStartProven": false,
+  "productionWrites": false,
+  "stages": [
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-25T13:06:12.389Z",
+      "completedAt": "2026-11-25T13:06:12.682Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      }
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-25T13:06:25.685Z",
+      "completedAt": "2026-11-25T13:06:26.397Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      }
+    },
+    {
+      "kind": "summary",
+      "startedAt": "2026-11-25T13:06:39.399Z",
+      "completedAt": "2026-11-25T13:06:40.647Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "summary",
+        "status": "valid-candidate",
+        "asOfDate": "2026-11-24",
+        "closeField": "close",
+        "extendedHoursNotUsed": true,
+        "adjustmentRequested": "unadjusted",
+        "finalityVerified": false,
+        "upstreamHttpStatus": 200,
+        "observedAt": 1795611999777,
+        "selectedDataHash": "ed1979fcf49c241c47e53867dfa215d4910fd11698ff98ec1cbf5f0ae7f6f1be",
+        "realLedgerWrites": false
+      },
+      "sameAsLocalBaseline": true
+    },
+    {
+      "kind": "history",
+      "startedAt": "2026-11-25T13:06:53.649Z",
+      "completedAt": "2026-11-25T13:06:55.017Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "history",
+        "status": "valid-candidate",
+        "rows": 251,
+        "firstDate": "2025-11-25",
+        "lastDate": "2026-11-24",
+        "hasMore": false,
+        "adjustmentReturned": "unadjusted",
+        "dateBasis": "America/New_York",
+        "finalityVerified": false,
+        "regularSessionCoverageVerified": false,
+        "calendarCompletenessVerified": false,
+        "upstreamHttpStatus": 200,
+        "observedAt": 1795612014035,
+        "selectedDataHash": "60ee6a7d8b08025ccab7f4aec00e70b51e87b17b695542854d1f1dbcb7765abe",
+        "realLedgerWrites": false
+      },
+      "sameAsLocalBaseline": true
+    },
+    {
+      "kind": "fx",
+      "startedAt": "2026-11-25T13:07:08.020Z",
+      "completedAt": "2026-11-25T13:07:10.785Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "fx",
+        "status": "valid-candidate",
+        "asOfDate": "2026-11-24",
+        "basis": "ECB_REFERENCE",
+        "isExecutionRate": false,
+        "currencies": [
+          "CNY",
+          "USD",
+          "HKD"
+        ],
+        "realLedgerWrites": false
+      }
+    },
+    {
+      "kind": "today-readiness",
+      "startedAt": "2026-11-25T13:07:23.788Z",
+      "completedAt": "2026-11-25T13:07:24.108Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "today-readiness",
+        "date": "2026-11-25",
+        "observedAt": 1795612044219,
+        "closeAt": 1795640400000,
+        "status": "pending",
+        "reason": "regular-session-not-closed",
+        "upstreamRequests": 0,
+        "finalityVerified": false
+      }
+    },
+    {
+      "kind": "unauthorized",
+      "startedAt": "2026-11-25T13:07:37.112Z",
+      "completedAt": "2026-11-25T13:07:37.475Z",
+      "httpStatus": 401,
+      "payload": {
+        "error": "Isolated validation authorization required"
+      }
+    }
+  ],
+  "completedAt": "2026-11-25T13:07:37.476Z",
+  "cpuMeasured": false,
+  "limitations": "Elapsed network/request time is not CPU. First request after secret deployment is not proof of cold start. Diagnostic DoH access is not ordinary mobile workers.dev availability. No production ledger activation."
+}

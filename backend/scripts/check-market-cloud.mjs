@@ -5,6 +5,7 @@ import {setTimeout as sleep} from 'node:timers/promises';
 
 try {
 const session = JSON.parse(readFileSync('.market-session.local.json', 'utf8'));
+const reportPrefix = session.withSourceKey ? 'market-massive-cloud' : 'market-cloud';
 const hostname = 'gaintrace-market-validation.aixing24-gaintrace.workers.dev';
 const baseline = JSON.parse(readFileSync('massive-free-probes-v0.3.5.json', 'utf8'));
 const response = await fetch('https://cloudflare-dns.com/dns-query?name=' + hostname + '&type=A', {headers: {accept: 'application/dns-json'}, redirect: 'error', signal: AbortSignal.timeout(20000)});
@@ -30,14 +31,14 @@ for (const kind of stages) {
   const stage = {kind, startedAt, completedAt: new Date().toISOString(), ...result};
   if (['summary', 'history'].includes(kind) && result.payload?.selectedDataHash) stage.sameAsLocalBaseline = result.payload.selectedDataHash === baseline.probes.find(probe => probe.kind === kind)?.selectedDataHash;
   report.stages.push(stage);
-  writeFileSync('market-cloud-checks-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
+  writeFileSync(reportPrefix + '-checks-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(stage));
   if (kind !== stages.at(-1)) await sleep(13000);
 }
 report.completedAt = new Date().toISOString();
 report.cpuMeasured = false;
 report.limitations = 'Elapsed network/request time is not CPU. First request after secret deployment is not proof of cold start. Diagnostic DoH access is not ordinary mobile workers.dev availability. No production ledger activation.';
-writeFileSync('market-cloud-checks-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
+writeFileSync(reportPrefix + '-checks-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
 } catch {
   console.error('Isolated cloud checks unavailable; raw credentials and responses withheld.');
   process.exitCode = 1;

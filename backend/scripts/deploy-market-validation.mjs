@@ -1,11 +1,12 @@
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {lstatSync, readFileSync, writeFileSync} from 'node:fs';
-import {randomBytes} from 'node:crypto';
+import {createHash, randomBytes} from 'node:crypto';
 
 const execute = promisify(execFile), name = 'gaintrace-market-validation';
 try {
   const withSourceKey = process.argv.includes('--with-massive-secret');
+  const reportPrefix = withSourceKey ? 'market-massive-cloud' : 'market-cloud';
   if (process.argv.slice(2).some(value => !['--mock-only', '--with-massive-secret'].includes(value)) || (withSourceKey && process.argv.includes('--mock-only'))) throw Error('Invalid isolation mode');
   const original = JSON.parse(readFileSync('wrangler.local.json', 'utf8'));
   const credentials = await execute('./node_modules/.bin/wrangler', ['auth', 'token', '--json', '--config', 'wrangler.local.json'], {maxBuffer: 100000});
@@ -22,21 +23,22 @@ try {
   }
   const startedClock = Date.now(), startedAt = new Date(startedClock).toISOString(), expiresAt = new Date(startedClock + 3600000).toISOString(), validationToken = randomBytes(32).toString('hex');
   const config = JSON.parse(readFileSync('wrangler.market.example.json', 'utf8'));
+  if (config.name !== name || config.d1_databases?.length || config.kv_namespaces?.length || config.triggers?.crons?.length) throw Error('Unexpected isolation configuration');
   config.account_id = original.account_id;
   config.vars.VALIDATION_STARTED_AT = startedAt;
   config.vars.VALIDATION_EXPIRES_AT = expiresAt;
   writeFileSync('wrangler.market.local.json', JSON.stringify(config, null, 2) + '\n', {flag: 'wx', mode: 0o600});
   writeFileSync('.market-session.local.json', JSON.stringify({name, startedAt, expiresAt, validationToken, withSourceKey}) + '\n', {flag: 'wx', mode: 0o600});
   await execute('./node_modules/.bin/wrangler', ['deploy', '--config', 'wrangler.market.local.json'], {maxBuffer: 1000000, timeout: 120000});
-  const report = {version: 'backend v0.3.6 candidate', name, startedAt, expiresAt, deployedAt: new Date().toISOString(), isolated: true, officialCliDeployment: true, sourceSecretStoredInCloudflare: false, noDatabaseBinding: true, noCron: true, realLedgerWrites: false, productionDeploymentChanged: false};
-  writeFileSync('market-cloud-deployment-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
+  const report = {version: 'backend v0.3.6 candidate', name, startedAt, expiresAt, deployedAt: new Date().toISOString(), isolated: true, officialCliDeployment: true, sourceSecretStoredInCloudflare: false, noDatabaseBinding: true, noCron: true, realLedgerWrites: false, productionDeploymentChanged: false, sourceModuleHash: createHash('sha256').update(readFileSync('market-validation.mjs')).digest('hex')};
+  writeFileSync(reportPrefix + '-deployment-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
   await new Promise((resolve, reject) => {
     const child = execFile('./node_modules/.bin/wrangler', ['secret', 'bulk', '--config', 'wrangler.market.local.json'], {maxBuffer: 100000, timeout: 120000}, error => error ? reject(Error('Isolated secret configuration failed')) : resolve());
     child.stdin.on('error', () => reject(Error('Secret input unavailable')));
     child.stdin.end(JSON.stringify({...(withSourceKey ? {MASSIVE_API_KEY: sourceKey} : {}), VALIDATION_TOKEN: validationToken}));
   });
   report.sourceSecretStoredInCloudflare = withSourceKey;
-  writeFileSync('market-cloud-deployment-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
+  writeFileSync(reportPrefix + '-deployment-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
 } catch {
   console.error('Isolated deployment unavailable; raw credentials and CLI output withheld. Inspect isolated resource status before retrying.');

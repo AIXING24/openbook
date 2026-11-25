@@ -5,7 +5,9 @@ import {lstatSync, readFileSync, writeFileSync, unlinkSync} from 'node:fs';
 try {
   const name = 'gaintrace-market-validation', execute = promisify(execFile);
   const config = JSON.parse(readFileSync('wrangler.market.local.json', 'utf8')), original = JSON.parse(readFileSync('wrangler.local.json', 'utf8'));
-  const deployment = JSON.parse(readFileSync('market-cloud-deployment-v0.3.6.json', 'utf8'));
+  const session = JSON.parse(readFileSync('.market-session.local.json', 'utf8'));
+  const reportPrefix = session.withSourceKey ? 'market-massive-cloud' : 'market-cloud';
+  const deployment = JSON.parse(readFileSync(reportPrefix + '-deployment-v0.3.6.json', 'utf8'));
   if (config.name !== name || deployment.name !== name || config.account_id !== original.account_id || config.d1_databases?.length || config.triggers?.crons?.length) throw Error('Isolated resource identity mismatch');
   await execute('./node_modules/.bin/wrangler', ['delete', '--force', '--config', 'wrangler.market.local.json'], {maxBuffer: 100000, timeout: 120000});
   const credentials = await execute('./node_modules/.bin/wrangler', ['auth', 'token', '--json', '--config', 'wrangler.local.json'], {maxBuffer: 100000});
@@ -21,7 +23,7 @@ try {
     if (!lstatSync(file).isFile()) throw Error('Unexpected local validation file');
     unlinkSync(file);
   }
-  writeFileSync('market-cloud-cleanup-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
+  writeFileSync(reportPrefix + '-cleanup-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
 } catch {
   console.error('Isolated cleanup not fully verified; raw credentials and CLI output withheld.');

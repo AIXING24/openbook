@@ -54,4 +54,6 @@ CLI连接最初失败的直接证据为Node报`UNABLE_TO_GET_ISSUER_CERT_LOCALLY
 
 2026-11-25 12:33:42.063UTC独立检查确认测试Worker已删除、其测试secret随资源移除；本机临时会话/部署配置已删除，Massive本机密钥保留。现有Worker仍存在、Cron仍为0，未写真实账本。见[清理证据](../../backend/market-cloud-cleanup-v0.3.6.json)。
 
-仍缺用户明确授权后的Cloudflare到Massive真实fetch/一年日线CPU、下一交易日实际收盘至北京时间07:00的数据就绪观察、多时段修订抽样、企业行动官方对账、A/H许可与日历、TARGET休市沿用规则、年度维护/备份回滚和正式迁移确认。本轮不启用后台真实日终或真实账本迁移，也不创建未来自动任务。
+本轮无源secret阶段结束时仍缺用户授权后的Massive真实云测。后续用户已明确授权，真实Cloudflare到Massive摘要/251条未复权日线读取与hash对照通过；7请求窗口最高桶16.749ms，免费CPU余量不能验收通过，独立测试Worker/secret已清理。该阶段另见[真实云测](massive-cloud-validation-v0.3.6.md)，不覆盖本报告的无源secret证据。
+
+仍缺下一交易日实际收盘至北京时间07:00的数据就绪观察、多时段修订抽样、企业行动官方对账、A/H许可与日历、TARGET休市沿用规则、年度维护/备份回滚和正式迁移确认。不启用后台真实日终或真实账本迁移，也不创建未来自动任务。
