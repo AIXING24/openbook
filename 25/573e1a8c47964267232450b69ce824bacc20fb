@@ -1,0 +1,49 @@
+backend/tests/market-validation-workerd.test.mjs
+  s_954afabfda404a::t_332e409ac8a46d 4,37-52
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_7c0aae3b01f07b 3-5
+backend/scripts/deploy-market-validation.mjs
+  s_954afabfda404a::t_6d6c149cd801e4 5,9-10,31
+backend/market-cpu-repeat-02-deployment-v0.3.6.json
+  s_954afabfda404a::t_a493db3c097952 1-15
+backend/scripts/check-market-cloud.mjs
+  s_954afabfda404a::t_6d6c149cd801e4 5,9-10
+docs/backend/cpu-repeat-validation-v0.3.6.md
+  s_954afabfda404a::t_7c0aae3b01f07b 31-45
+backend/scripts/cleanup-market-validation.mjs
+  s_954afabfda404a::t_6d6c149cd801e4 4,10
+backend/market-cpu-repeat-02-checks-v0.3.6.json
+  s_954afabfda404a::t_39386399294631 251-266
+  s_954afabfda404a::t_5e31eb25f0281f 267-419
+backend/scripts/capture-market-cpu.mjs
+  s_954afabfda404a::t_6d6c149cd801e4 5,11,22
+backend/scripts/repeat-market-cpu.mjs
+  s_954afabfda404a::t_6d6c149cd801e4 1-11,18-50
+  s_954afabfda404a::t_3daad273bb1304 12-17
+docs/backend/massive-cloud-validation-v0.3.6.md
+  s_954afabfda404a::t_7c0aae3b01f07b 45-46
+backend/tests/market-cpu-repeat.test.mjs
+  s_954afabfda404a::t_6d6c149cd801e4 1-52,56-61,63
+  s_954afabfda404a::t_f5f82142bb0f4c 53-55,62
+backend/market-cpu-repeat.mjs
+  s_954afabfda404a::t_6d6c149cd801e4 1-21,23-38
+  s_954afabfda404a::t_39386399294631 22
+backend/market-cpu-repeat-01-checks-v0.3.6.json
+  s_954afabfda404a::t_171f96644e95a6 1-415,420
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "25573e1a8c47964267232450b69ce824bacc20fb",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
