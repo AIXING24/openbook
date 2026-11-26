@@ -1,0 +1,70 @@
+docs/backend/call-telemetry-validation-v0.3.6.md
+  s_954afabfda404a::t_d621ac1169ced2 5-77
+  s_954afabfda404a::t_c2ad611543f464 3-4
+backend/tests/market-phases-workerd.test.mjs
+  s_954afabfda404a::t_a1d3141eef3c32 1-17
+backend/scripts/correlate-market-phases.mjs
+  s_954afabfda404a::t_c19f20a69270e9 1-13
+backend/market-phase-validation.mjs
+  s_954afabfda404a::t_a1d3141eef3c32 1
+backend/market-call-telemetry.mjs
+  s_954afabfda404a::t_7961494f0e15c5 1-35
+backend/tests/market-call-telemetry.test.mjs
+  s_954afabfda404a::t_2d48ceb1b18c03 12,15
+  s_954afabfda404a::t_7961494f0e15c5 1-11,13-14,16-62
+docs/backend/cpu-phases-validation-v0.3.6.md
+  s_954afabfda404a::t_c2ad611543f464 3-4
+  s_954afabfda404a::t_cadc2749f8aecf 1-2,5-24,26-30
+  s_954afabfda404a::t_d43dc54ec29cf0 25,31-56
+backend/market-cpu-tail-probe-02-cleanup-v0.3.6.json
+  s_954afabfda404a::t_db9506359c0ed4 1-9
+backend/market-cpu-tail-probe-02-calls-v0.3.6.json
+  s_954afabfda404a::t_db9506359c0ed4 9,14-20
+  s_954afabfda404a::t_3d36d52d95db57 8,13
+backend/market-cpu-phases-01-dashboard-v0.3.6.json
+  s_954afabfda404a::t_c19f20a69270e9 1-30
+backend/market-history-dashboard-v0.3.6.json
+  s_954afabfda404a::t_72ddf3697fbb80 1-79
+backend/tests/market-history-telemetry.test.mjs
+  s_954afabfda404a::t_32f4178469f2b2 30-31
+  s_954afabfda404a::t_72ddf3697fbb80 1-29,32-82
+backend/market-cpu-phases-01-correlation-v0.3.6.json
+  s_954afabfda404a::t_c19f20a69270e9 1-254
+docs/backend/implementation-plan.md
+  s_954afabfda404a::t_987afc1297cb79 80
+  s_954afabfda404a::t_d43dc54ec29cf0 83-84
+  s_954afabfda404a::t_d621ac1169ced2 81-82
+backend/README.md
+  s_954afabfda404a::t_c2ad611543f464 13-14
+  s_954afabfda404a::t_d621ac1169ced2 15-19
+  s_954afabfda404a::t_d43dc54ec29cf0 21
+backend/market-cpu-tail-probe-01-cleanup-v0.3.6.json
+  s_954afabfda404a::t_b4c1e37c902215 1-9
+backend/market-history-correlation-v0.3.6.json
+  s_954afabfda404a::t_32f4178469f2b2 1-832
+backend/market-history-telemetry.mjs
+  s_954afabfda404a::t_72ddf3697fbb80 4-7,9-13,15-39,43-46
+  s_954afabfda404a::t_32f4178469f2b2 40-42
+backend/scripts/probe-market-tail.mjs
+  s_954afabfda404a::t_2d48ceb1b18c03 17,21,25,33,35-36,39,49,54,59,82,85,88-94,108
+  s_954afabfda404a::t_7961494f0e15c5 1-16,18-20,22-24,26-32,34,37-38,40-48,50-53,55-58,60-81,83-84,86-87,95-107,109
+backend/tests/market-cpu-phases.test.mjs
+  s_954afabfda404a::t_a1d3141eef3c32 1-74
+  s_954afabfda404a::t_d43dc54ec29cf0 75-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.52-trip",
+  "base_commit_sha": "0e5eaa941461481bfb7bc26288c889e89aa37170",
+  "prompts": {},
+  "sessions": {
+    "s_954afabfda404a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1a9b2-b6e2-76c3-aab5-3b94b9edf2fc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "AIXING24 <58541267+AIXING24@users.noreply.github.com>"
+    }
+  }
+}
