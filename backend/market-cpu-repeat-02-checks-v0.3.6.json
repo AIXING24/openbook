@@ -1,0 +1,420 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "runId": "cpu-repeat-02",
+  "startedAt": "2026-11-26T03:26:55.173Z",
+  "synthetic": true,
+  "sourceSecretStoredInCloudflare": false,
+  "firstRequestColdStartProven": false,
+  "mobileBrowserAccessProven": false,
+  "intervalMs": 3000,
+  "productionWrites": false,
+  "stages": [
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:26:55.180Z",
+      "completedAt": "2026-11-26T03:26:55.439Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:26:58.442Z",
+      "completedAt": "2026-11-26T03:26:58.704Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:27:01.706Z",
+      "completedAt": "2026-11-26T03:27:01.990Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:27:04.992Z",
+      "completedAt": "2026-11-26T03:27:05.270Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:27:08.272Z",
+      "completedAt": "2026-11-26T03:27:08.532Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:27:11.534Z",
+      "completedAt": "2026-11-26T03:27:11.816Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:27:14.817Z",
+      "completedAt": "2026-11-26T03:27:15.115Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:27:18.117Z",
+      "completedAt": "2026-11-26T03:27:18.392Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:27:21.393Z",
+      "completedAt": "2026-11-26T03:27:22.018Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:27:25.020Z",
+      "completedAt": "2026-11-26T03:27:25.638Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:27:28.639Z",
+      "completedAt": "2026-11-26T03:27:28.907Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:27:31.909Z",
+      "completedAt": "2026-11-26T03:27:32.197Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:27:35.198Z",
+      "completedAt": "2026-11-26T03:27:35.462Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:27:38.464Z",
+      "completedAt": "2026-11-26T03:27:38.736Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:27:41.738Z",
+      "completedAt": "2026-11-26T03:27:42.019Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:27:45.022Z",
+      "completedAt": "2026-11-26T03:27:45.308Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:27:48.309Z",
+      "completedAt": "2026-11-26T03:27:48.569Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:27:51.572Z",
+      "completedAt": "2026-11-26T03:27:51.814Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:27:54.817Z",
+      "completedAt": "2026-11-26T03:27:55.085Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:27:58.087Z",
+      "completedAt": "2026-11-26T03:27:58.353Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:28:01.356Z",
+      "completedAt": "2026-11-26T03:28:01.771Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:28:04.773Z",
+      "completedAt": "2026-11-26T03:28:05.034Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T03:28:08.036Z",
+      "completedAt": "2026-11-26T03:28:08.306Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T03:28:11.308Z",
+      "completedAt": "2026-11-26T03:28:11.559Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "unauthorized",
+      "startedAt": "2026-11-26T03:28:14.564Z",
+      "completedAt": "2026-11-26T03:28:14.830Z",
+      "httpStatus": 401,
+      "payload": {
+        "error": "Isolated validation authorization required"
+      },
+      "passed": true
+    },
+    {
+      "kind": "source-secret-missing",
+      "startedAt": "2026-11-26T03:28:17.832Z",
+      "completedAt": "2026-11-26T03:28:18.093Z",
+      "httpStatus": 503,
+      "payload": {
+        "error": "Source secret unavailable"
+      },
+      "passed": true
+    }
+  ],
+  "completedAt": "2026-11-26T03:28:18.094Z",
+  "cpuMeasured": false,
+  "limitations": "Elapsed request time is not CPU; authoritative CPU is captured separately. Fresh deployment is not proof of cold start. Synthetic fixtures only; no real source or production ledger."
+}

@@ -1,0 +1,536 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "queriedAt": "2026-11-26T03:32:06.400Z",
+  "timeRange": {
+    "start": "2026-11-26T03:26:00.000Z",
+    "end": "2026-11-26T03:29:00.000Z"
+  },
+  "clientTimeRange": {
+    "start": "2026-11-26T03:26:55.173Z",
+    "end": "2026-11-26T03:28:18.094Z"
+  },
+  "scriptName": "gaintrace-market-validation",
+  "buckets": [
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:42Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1649
+      },
+      "quantiles": {
+        "cpuTimeP50": 1649,
+        "cpuTimeP99": 1649
+      },
+      "sum": {
+        "cpuTimeUs": 1649,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:11Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 4164
+      },
+      "quantiles": {
+        "cpuTimeP50": 4164,
+        "cpuTimeP99": 4164
+      },
+      "sum": {
+        "cpuTimeUs": 4164,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:26:58Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 3717
+      },
+      "quantiles": {
+        "cpuTimeP50": 3717,
+        "cpuTimeP99": 3717
+      },
+      "sum": {
+        "cpuTimeUs": 3717,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:35Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 3581
+      },
+      "quantiles": {
+        "cpuTimeP50": 3581,
+        "cpuTimeP99": 3581
+      },
+      "sum": {
+        "cpuTimeUs": 3581,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:15Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1615
+      },
+      "quantiles": {
+        "cpuTimeP50": 1615,
+        "cpuTimeP99": 1615
+      },
+      "sum": {
+        "cpuTimeUs": 1615,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:38Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1081
+      },
+      "quantiles": {
+        "cpuTimeP50": 1081,
+        "cpuTimeP99": 1081
+      },
+      "sum": {
+        "cpuTimeUs": 1081,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:28:14Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 756
+      },
+      "quantiles": {
+        "cpuTimeP50": 756,
+        "cpuTimeP99": 756
+      },
+      "sum": {
+        "cpuTimeUs": 756,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:48Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 4213
+      },
+      "quantiles": {
+        "cpuTimeP50": 4213,
+        "cpuTimeP99": 4213
+      },
+      "sum": {
+        "cpuTimeUs": 4213,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:58Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 3117
+      },
+      "quantiles": {
+        "cpuTimeP50": 3117,
+        "cpuTimeP99": 3117
+      },
+      "sum": {
+        "cpuTimeUs": 3117,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:02Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 7565
+      },
+      "quantiles": {
+        "cpuTimeP50": 7565,
+        "cpuTimeP99": 7565
+      },
+      "sum": {
+        "cpuTimeUs": 7565,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:28:05Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1083
+      },
+      "quantiles": {
+        "cpuTimeP50": 1083,
+        "cpuTimeP99": 1083
+      },
+      "sum": {
+        "cpuTimeUs": 1083,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:25Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 9606
+      },
+      "quantiles": {
+        "cpuTimeP50": 9606,
+        "cpuTimeP99": 9606
+      },
+      "sum": {
+        "cpuTimeUs": 9606,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:32Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 6086
+      },
+      "quantiles": {
+        "cpuTimeP50": 6086,
+        "cpuTimeP99": 6086
+      },
+      "sum": {
+        "cpuTimeUs": 6086,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:28:11Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1118
+      },
+      "quantiles": {
+        "cpuTimeP50": 1118,
+        "cpuTimeP99": 1118
+      },
+      "sum": {
+        "cpuTimeUs": 1118,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:28:01Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 4872
+      },
+      "quantiles": {
+        "cpuTimeP50": 4872,
+        "cpuTimeP99": 4872
+      },
+      "sum": {
+        "cpuTimeUs": 4872,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:45Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 9010
+      },
+      "quantiles": {
+        "cpuTimeP50": 9010,
+        "cpuTimeP99": 9010
+      },
+      "sum": {
+        "cpuTimeUs": 9010,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:51Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 832
+      },
+      "quantiles": {
+        "cpuTimeP50": 832,
+        "cpuTimeP99": 832
+      },
+      "sum": {
+        "cpuTimeUs": 832,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:22Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 7426
+      },
+      "quantiles": {
+        "cpuTimeP50": 7426,
+        "cpuTimeP99": 7426
+      },
+      "sum": {
+        "cpuTimeUs": 7426,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:18Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1279
+      },
+      "quantiles": {
+        "cpuTimeP50": 1279,
+        "cpuTimeP99": 1279
+      },
+      "sum": {
+        "cpuTimeUs": 1279,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:05Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 1092
+      },
+      "quantiles": {
+        "cpuTimeP50": 1092,
+        "cpuTimeP99": 1092
+      },
+      "sum": {
+        "cpuTimeUs": 1092,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:26:55Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 4380
+      },
+      "quantiles": {
+        "cpuTimeP50": 4380,
+        "cpuTimeP99": 4380
+      },
+      "sum": {
+        "cpuTimeUs": 4380,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:08Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 4868
+      },
+      "quantiles": {
+        "cpuTimeP50": 4868,
+        "cpuTimeP99": 4868
+      },
+      "sum": {
+        "cpuTimeUs": 4868,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:55Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 3552
+      },
+      "quantiles": {
+        "cpuTimeP50": 3552,
+        "cpuTimeP99": 3552
+      },
+      "sum": {
+        "cpuTimeUs": 3552,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:28:18Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 311
+      },
+      "quantiles": {
+        "cpuTimeP50": 311,
+        "cpuTimeP99": 311
+      },
+      "sum": {
+        "cpuTimeUs": 311,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    },
+    {
+      "dimensions": {
+        "datetime": "2026-11-26T03:27:29Z",
+        "scriptName": "gaintrace-market-validation",
+        "status": "success"
+      },
+      "max": {
+        "cpuTime": 3435
+      },
+      "quantiles": {
+        "cpuTimeP50": 3435,
+        "cpuTimeP99": 3435
+      },
+      "sum": {
+        "cpuTimeUs": 3435,
+        "errors": 0,
+        "requests": 1,
+        "subrequests": 0
+      }
+    }
+  ],
+  "observedRequests": 25,
+  "observedErrors": 0,
+  "maxObservedCpuMs": 9.606,
+  "expectedClientRequests": 26,
+  "reportedRequestCountMatchesClient": false,
+  "allInvocationsIndividuallyProven": false,
+  "units": "Official GraphQL CPU microseconds converted to milliseconds; bucket maximum, not network latency",
+  "universalFreeHeadroomProven": false,
+  "coldStartsProven": false,
+  "limitations": "Returned adaptive analytics buckets for a small isolated, minute-rounded window only. Matching request counts is not proof of individually complete samples. No route-specific attribution, universal cold-start guarantee or complete account billing verification.",
+  "observation": {
+    "status": "inconclusive",
+    "thresholdMs": 10,
+    "maxCpuMs": 9.606,
+    "observedRequests": 25,
+    "observedErrors": 0,
+    "observedSubrequests": 0,
+    "countsMatched": false,
+    "coldStartsProven": false,
+    "universalFreeHeadroomProven": false
+  }
+}

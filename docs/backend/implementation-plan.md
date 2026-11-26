@@ -1,6 +1,8 @@
 # 后端实施计划
 
-版本：backend v0.3.5候选（云端仍v0.3.4） / client v0.2.0，2026-11-25。前端当前发布 v1.16.0。
+版本：backend v0.3.6候选（云端仍v0.3.4） / client v0.2.0，2026-11-26。前端当前发布 v1.16.0。
+
+2026-11-26重复隔离：20fbe88已推送，main未变。两个独立mock-only窗口各26次请求，反转5/50标的首用顺序，均无D1/Cron/源secret。52次客户端全部通过；官方第一轮26次/0错误/最高9.822ms，第二轮经四次归集仍25次/0错误/最高9.606ms，对比客户端缺1，保留inconclusive。没有复现>10ms桶，不等于修复先前16.749ms或免费额度全面满足；计算代码与旧证据未改。60项纯检查+5项Workerd本轮通过，非全后端回归；两轮资源和随机secret均已独立清理。下一步补调用级CPU证据/采样缺口，再决定定位优化或分批预算，不启用真实日终。见[复测报告](cpu-repeat-validation-v0.3.6.md)。
 
 前后端在 AIXING24/openbook 仓库维护。当前工作分支 dev/gaintrace-backend；前端仍由 GitHub Pages 发布，后端在隔离 Cloudflare 环境验证。原型保留在 prototypes/cloudflare-migration，正式实现放 backend，实施和验收证据放 docs/backend。
 

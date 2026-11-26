@@ -2,10 +2,12 @@ import {execFile} from 'node:child_process';
 import {readFileSync, writeFileSync} from 'node:fs';
 import {isIP} from 'node:net';
 import {setTimeout as sleep} from 'node:timers/promises';
+import {validationReportPrefix} from '../market-cpu-repeat.mjs';
 
 try {
 const session = JSON.parse(readFileSync('.market-session.local.json', 'utf8'));
-const reportPrefix = session.withSourceKey ? 'market-massive-cloud' : 'market-cloud';
+const reportPrefix = validationReportPrefix(session);
+if (session.runId !== undefined) throw Error('Use the bounded repeated client for this run');
 const hostname = 'gaintrace-market-validation.aixing24-gaintrace.workers.dev';
 const baseline = JSON.parse(readFileSync('massive-free-probes-v0.3.5.json', 'utf8'));
 const response = await fetch('https://cloudflare-dns.com/dns-query?name=' + hostname + '&type=A', {headers: {accept: 'application/dns-json'}, redirect: 'error', signal: AbortSignal.timeout(20000)});

@@ -1,12 +1,13 @@
 import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {lstatSync, readFileSync, writeFileSync, unlinkSync} from 'node:fs';
+import {validationReportPrefix} from '../market-cpu-repeat.mjs';
 
 try {
   const name = 'gaintrace-market-validation', execute = promisify(execFile);
   const config = JSON.parse(readFileSync('wrangler.market.local.json', 'utf8')), original = JSON.parse(readFileSync('wrangler.local.json', 'utf8'));
   const session = JSON.parse(readFileSync('.market-session.local.json', 'utf8'));
-  const reportPrefix = session.withSourceKey ? 'market-massive-cloud' : 'market-cloud';
+  const reportPrefix = validationReportPrefix(session);
   const deployment = JSON.parse(readFileSync(reportPrefix + '-deployment-v0.3.6.json', 'utf8'));
   if (config.name !== name || deployment.name !== name || config.account_id !== original.account_id || config.d1_databases?.length || config.triggers?.crons?.length) throw Error('Isolated resource identity mismatch');
   await execute('./node_modules/.bin/wrangler', ['delete', '--force', '--config', 'wrangler.market.local.json'], {maxBuffer: 100000, timeout: 120000});

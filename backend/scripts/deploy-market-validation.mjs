@@ -2,12 +2,12 @@ import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {lstatSync, readFileSync, writeFileSync} from 'node:fs';
 import {createHash, randomBytes} from 'node:crypto';
+import {parseValidationRun, validationReportPrefix} from '../market-cpu-repeat.mjs';
 
 const execute = promisify(execFile), name = 'gaintrace-market-validation';
 try {
-  const withSourceKey = process.argv.includes('--with-massive-secret');
-  const reportPrefix = withSourceKey ? 'market-massive-cloud' : 'market-cloud';
-  if (process.argv.slice(2).some(value => !['--mock-only', '--with-massive-secret'].includes(value)) || (withSourceKey && process.argv.includes('--mock-only'))) throw Error('Invalid isolation mode');
+  const {withSourceKey, runId} = parseValidationRun(process.argv.slice(2));
+  const reportPrefix = validationReportPrefix({withSourceKey, runId});
   const original = JSON.parse(readFileSync('wrangler.local.json', 'utf8'));
   const credentials = await execute('./node_modules/.bin/wrangler', ['auth', 'token', '--json', '--config', 'wrangler.local.json'], {maxBuffer: 100000});
   const {token} = JSON.parse(credentials.stdout);
@@ -28,7 +28,7 @@ try {
   config.vars.VALIDATION_STARTED_AT = startedAt;
   config.vars.VALIDATION_EXPIRES_AT = expiresAt;
   writeFileSync('wrangler.market.local.json', JSON.stringify(config, null, 2) + '\n', {flag: 'wx', mode: 0o600});
-  writeFileSync('.market-session.local.json', JSON.stringify({name, startedAt, expiresAt, validationToken, withSourceKey}) + '\n', {flag: 'wx', mode: 0o600});
+  writeFileSync('.market-session.local.json', JSON.stringify({name, startedAt, expiresAt, validationToken, withSourceKey, runId}) + '\n', {flag: 'wx', mode: 0o600});
   await execute('./node_modules/.bin/wrangler', ['deploy', '--config', 'wrangler.market.local.json'], {maxBuffer: 1000000, timeout: 120000});
   const report = {version: 'backend v0.3.6 candidate', name, startedAt, expiresAt, deployedAt: new Date().toISOString(), isolated: true, officialCliDeployment: true, sourceSecretStoredInCloudflare: false, noDatabaseBinding: true, noCron: true, realLedgerWrites: false, productionDeploymentChanged: false, sourceModuleHash: createHash('sha256').update(readFileSync('market-validation.mjs')).digest('hex')};
   writeFileSync(reportPrefix + '-deployment-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');

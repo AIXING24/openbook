@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Miniflare, createFetchMock} from 'miniflare';
+import {repeatedMarketKinds} from '../market-cpu-repeat.mjs';
 
 test('isolated market candidate runs in native Workerd without D1 or real source secrets', async context => {
   const now = Date.now(), token = 'b'.repeat(64);
@@ -32,5 +33,22 @@ test('isolated market candidate runs in native Workerd without D1 or real source
     const result = await (await call('/validation/market?kind=fx')).json();
     assert.equal(result.status, 'valid-candidate', JSON.stringify(result));
     assert.equal(result.basis, 'ECB_REFERENCE');
+  });
+  await context.test('bounded reversed repeat plans preserve candidate results and source isolation', async () => {
+    for (const runId of ['cpu-repeat-01', 'cpu-repeat-02']) {
+      for (const kind of repeatedMarketKinds(runId)) {
+        if (kind === 'unauthorized') {
+          assert.equal((await runtime.dispatchFetch('https://isolated.invalid/validation/market?kind=summary')).status, 401);
+        } else if (kind === 'source-secret-missing') {
+          assert.equal((await call('/validation/market?kind=summary')).status, 503);
+        } else {
+          const result = await (await call('/validation/market?kind=' + kind)).json();
+          assert.equal(result.status, 'verified-candidate');
+          assert.equal(result.instruments, Number(kind.slice('evidence-'.length)));
+          assert.equal(result.synthetic, true);
+          assert.equal(result.realLedgerWrites, false);
+        }
+      }
+    }
   });
 });
