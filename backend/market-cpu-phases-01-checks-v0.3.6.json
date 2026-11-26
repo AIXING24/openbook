@@ -1,0 +1,287 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "runId": "cpu-phases-01",
+  "startedAt": "2026-11-26T06:59:30.485Z",
+  "synthetic": true,
+  "sourceSecretStoredInCloudflare": false,
+  "firstRequestColdStartProven": false,
+  "mobileBrowserAccessProven": false,
+  "intervalMs": 3000,
+  "productionWrites": false,
+  "stages": [
+    {
+      "kind": "control",
+      "startedAt": "2026-11-26T06:59:30.488Z",
+      "completedAt": "2026-11-26T06:59:30.774Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "control",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "control-only"
+      },
+      "passed": true
+    },
+    {
+      "kind": "fixture-5",
+      "startedAt": "2026-11-26T06:59:33.777Z",
+      "completedAt": "2026-11-26T06:59:34.053Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "fixture-5",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "fixture-built",
+        "instruments": 5,
+        "issues": 0
+      },
+      "passed": true
+    },
+    {
+      "kind": "fixture-50",
+      "startedAt": "2026-11-26T06:59:37.055Z",
+      "completedAt": "2026-11-26T06:59:37.333Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "fixture-50",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "fixture-built",
+        "instruments": 50,
+        "issues": 0
+      },
+      "passed": true
+    },
+    {
+      "kind": "close-four",
+      "startedAt": "2026-11-26T06:59:40.335Z",
+      "completedAt": "2026-11-26T06:59:40.621Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "close-four",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "four-closes-verified",
+        "uniqueCloseKeys": 4
+      },
+      "passed": true
+    },
+    {
+      "kind": "gate-5",
+      "startedAt": "2026-11-26T06:59:43.623Z",
+      "completedAt": "2026-11-26T06:59:43.921Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "gate-5",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0
+      },
+      "passed": true
+    },
+    {
+      "kind": "gate-50",
+      "startedAt": "2026-11-26T06:59:46.923Z",
+      "completedAt": "2026-11-26T06:59:47.218Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "gate-50",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T06:59:50.219Z",
+      "completedAt": "2026-11-26T06:59:50.501Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T06:59:53.506Z",
+      "completedAt": "2026-11-26T06:59:53.827Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-50",
+      "startedAt": "2026-11-26T06:59:56.829Z",
+      "completedAt": "2026-11-26T06:59:57.093Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-50",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "evidence-5",
+      "startedAt": "2026-11-26T07:00:00.095Z",
+      "completedAt": "2026-11-26T07:00:00.492Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-validation v0.3.6",
+        "kind": "evidence-5",
+        "synthetic": true,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0,
+        "realLedgerWrites": false
+      },
+      "passed": true
+    },
+    {
+      "kind": "gate-50",
+      "startedAt": "2026-11-26T07:00:03.494Z",
+      "completedAt": "2026-11-26T07:00:03.847Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "gate-50",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "verified-candidate",
+        "instruments": 50,
+        "issues": 0
+      },
+      "passed": true
+    },
+    {
+      "kind": "gate-5",
+      "startedAt": "2026-11-26T07:00:06.850Z",
+      "completedAt": "2026-11-26T07:00:07.133Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "gate-5",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "verified-candidate",
+        "instruments": 5,
+        "issues": 0
+      },
+      "passed": true
+    },
+    {
+      "kind": "close-four",
+      "startedAt": "2026-11-26T07:00:10.135Z",
+      "completedAt": "2026-11-26T07:00:10.416Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "close-four",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "four-closes-verified",
+        "uniqueCloseKeys": 4
+      },
+      "passed": true
+    },
+    {
+      "kind": "fixture-50",
+      "startedAt": "2026-11-26T07:00:13.419Z",
+      "completedAt": "2026-11-26T07:00:13.685Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "fixture-50",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "fixture-built",
+        "instruments": 50,
+        "issues": 0
+      },
+      "passed": true
+    },
+    {
+      "kind": "fixture-5",
+      "startedAt": "2026-11-26T07:00:16.685Z",
+      "completedAt": "2026-11-26T07:00:16.972Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "fixture-5",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "fixture-built",
+        "instruments": 5,
+        "issues": 0
+      },
+      "passed": true
+    },
+    {
+      "kind": "control",
+      "startedAt": "2026-11-26T07:00:19.975Z",
+      "completedAt": "2026-11-26T07:00:20.252Z",
+      "httpStatus": 200,
+      "payload": {
+        "version": "market-phases v0.3.6",
+        "kind": "control",
+        "synthetic": true,
+        "realLedgerWrites": false,
+        "status": "control-only"
+      },
+      "passed": true
+    },
+    {
+      "kind": "unauthorized",
+      "startedAt": "2026-11-26T07:00:23.254Z",
+      "completedAt": "2026-11-26T07:00:23.542Z",
+      "httpStatus": 401,
+      "payload": {
+        "error": "Isolated validation authorization required"
+      },
+      "passed": true
+    },
+    {
+      "kind": "blocked-source",
+      "startedAt": "2026-11-26T07:00:26.545Z",
+      "completedAt": "2026-11-26T07:00:26.830Z",
+      "httpStatus": 404,
+      "payload": {
+        "error": "Synthetic phase route only"
+      },
+      "passed": true
+    }
+  ],
+  "completedAt": "2026-11-26T07:00:26.831Z",
+  "cpuMeasured": false,
+  "limitations": "Elapsed request time is not CPU; authoritative CPU is captured separately. Fresh deployment is not proof of cold start. Synthetic fixtures only; no real source or production ledger.",
+  "phaseLimitations": "Both fixtures are prebuilt at module scope in this diagnostic entry. Control and split phases add a status authorization response; evidence routes delegate to the unchanged original handler. Only four unique market close keys, matching its per-request cache. First phase use is not a proven cold isolate. Request totals include shared initialization, authentication and response costs; differences cannot be treated as additive CPU components or a production speedup."
+}

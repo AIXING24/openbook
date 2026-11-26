@@ -24,6 +24,7 @@ try {
   const startedClock = Date.now(), startedAt = new Date(startedClock).toISOString(), expiresAt = new Date(startedClock + 3600000).toISOString(), validationToken = randomBytes(32).toString('hex');
   const config = JSON.parse(readFileSync('wrangler.market.example.json', 'utf8'));
   if (config.name !== name || config.d1_databases?.length || config.kv_namespaces?.length || config.triggers?.crons?.length) throw Error('Unexpected isolation configuration');
+  if (runId === 'cpu-phases-01') config.main = 'market-phase-validation.mjs';
   config.account_id = original.account_id;
   config.vars.VALIDATION_STARTED_AT = startedAt;
   config.vars.VALIDATION_EXPIRES_AT = expiresAt;
@@ -31,6 +32,7 @@ try {
   writeFileSync('.market-session.local.json', JSON.stringify({name, startedAt, expiresAt, validationToken, withSourceKey, runId}) + '\n', {flag: 'wx', mode: 0o600});
   await execute('./node_modules/.bin/wrangler', ['deploy', '--config', 'wrangler.market.local.json'], {maxBuffer: 1000000, timeout: 120000});
   const report = {version: 'backend v0.3.6 candidate', name, startedAt, expiresAt, deployedAt: new Date().toISOString(), isolated: true, officialCliDeployment: true, sourceSecretStoredInCloudflare: false, noDatabaseBinding: true, noCron: true, realLedgerWrites: false, productionDeploymentChanged: false, sourceModuleHash: createHash('sha256').update(readFileSync('market-validation.mjs')).digest('hex')};
+  if (runId === 'cpu-phases-01') Object.assign(report, {runId, entry: config.main, entryHash: createHash('sha256').update(readFileSync(config.main)).digest('hex'), prebuiltFixturesAtModuleScope: true, outboundSourceRoutesBlocked: true});
   writeFileSync(reportPrefix + '-deployment-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
   await new Promise((resolve, reject) => {
     const child = execFile('./node_modules/.bin/wrangler', ['secret', 'bulk', '--config', 'wrangler.market.local.json'], {maxBuffer: 100000, timeout: 120000}, error => error ? reject(Error('Isolated secret configuration failed')) : resolve());

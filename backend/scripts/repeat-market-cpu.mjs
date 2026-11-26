@@ -3,10 +3,12 @@ import {readFileSync, writeFileSync} from 'node:fs';
 import {isIP} from 'node:net';
 import {setTimeout as sleep} from 'node:timers/promises';
 import {validationReportPrefix, repeatedMarketKinds} from '../market-cpu-repeat.mjs';
+import {phasedMarketKinds, phaseResultPassed} from '../market-cpu-phases.mjs';
 
 try {
   const session = JSON.parse(readFileSync('.market-session.local.json', 'utf8'));
-  const prefix = validationReportPrefix(session), kinds = repeatedMarketKinds(session.runId);
+  const phaseRun = session.runId === 'cpu-phases-01';
+  const prefix = validationReportPrefix(session), kinds = phaseRun ? phasedMarketKinds(session.runId) : repeatedMarketKinds(session.runId);
   const hostname = 'gaintrace-market-validation.aixing24-gaintrace.workers.dev';
   if (session.name !== 'gaintrace-market-validation' || session.withSourceKey !== false || !/^[a-f0-9]{64}$/.test(session.validationToken) || !Number.isFinite(Date.parse(session.expiresAt)) || Date.now() >= Date.parse(session.expiresAt)) throw Error('Repeated isolation unavailable');
   if (session.runId === 'cpu-repeat-02') {
@@ -22,7 +24,7 @@ try {
   const report = {version: 'backend v0.3.6 candidate', runId: session.runId, startedAt: new Date().toISOString(), synthetic: true, sourceSecretStoredInCloudflare: false, firstRequestColdStartProven: false, mobileBrowserAccessProven: false, intervalMs: 3000, productionWrites: false, stages: []};
   for (const [index, kind] of kinds.entries()) {
     const startedAt = new Date().toISOString();
-    const target = ['unauthorized', 'source-secret-missing'].includes(kind) ? 'summary' : kind;
+    const target = kind === 'unauthorized' && phaseRun ? 'evidence-5' : ['unauthorized', 'source-secret-missing', 'blocked-source'].includes(kind) ? 'summary' : kind;
     const configuration = 'url = "https://' + hostname + '/validation/market?kind=' + target + '"\n' + (kind === 'unauthorized' ? '' : 'header = "Authorization: Bearer ' + session.validationToken + '"\n');
     const result = await new Promise(resolve => {
       const child = execFile('/usr/bin/curl', ['--disable', '--config', '-', '--resolve', hostname + ':443:' + address, '--silent', '--show-error', '--max-time', '35', '--proto', '=https', '--max-redirs', '0', '--write-out', '\n%{http_code}'], {maxBuffer: 100000, timeout: 40000}, (error, stdout) => {
@@ -33,7 +35,7 @@ try {
       child.stdin.on('error', () => resolve({status: 'unavailable', rawOutputWithheld: true}));
       child.stdin.end(configuration);
     });
-    const passed = kind === 'unauthorized' ? result.httpStatus === 401 : kind === 'source-secret-missing' ? result.httpStatus === 503 : result.httpStatus === 200 && result.payload?.status === 'verified-candidate' && result.payload.synthetic === true && result.payload.instruments === Number(kind.slice('evidence-'.length)) && result.payload.realLedgerWrites === false;
+    const passed = phaseRun ? phaseResultPassed(kind, result) : kind === 'unauthorized' ? result.httpStatus === 401 : kind === 'source-secret-missing' ? result.httpStatus === 503 : result.httpStatus === 200 && result.payload?.status === 'verified-candidate' && result.payload.synthetic === true && result.payload.instruments === Number(kind.slice('evidence-'.length)) && result.payload.realLedgerWrites === false;
     report.stages.push({kind, startedAt, completedAt: new Date().toISOString(), ...result, passed});
     writeFileSync(prefix + '-checks-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
     if (!passed) throw Error('Repeated stage failed; partial evidence preserved');
@@ -43,6 +45,7 @@ try {
   report.completedAt = new Date().toISOString();
   report.cpuMeasured = false;
   report.limitations = 'Elapsed request time is not CPU; authoritative CPU is captured separately. Fresh deployment is not proof of cold start. Synthetic fixtures only; no real source or production ledger.';
+  if (phaseRun) report.phaseLimitations = 'Both fixtures are prebuilt at module scope in this diagnostic entry. Control and split phases add a status authorization response; evidence routes delegate to the unchanged original handler. Only four unique market close keys, matching its per-request cache. First phase use is not a proven cold isolate. Request totals include shared initialization, authentication and response costs; differences cannot be treated as additive CPU components or a production speedup.';
   writeFileSync(prefix + '-checks-v0.3.6.json', JSON.stringify(report, null, 2) + '\n');
 } catch {
   console.error('Repeated isolated checks unavailable; raw credentials and responses withheld. Clean up the isolated resource before retrying.');

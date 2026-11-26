@@ -1,0 +1,16 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "runId": "cpu-tail-probe-01",
+  "startedAt": "2026-11-26T05:48:40.008Z",
+  "syntheticOnly": true,
+  "sourceSecretStoredInCloudflare": false,
+  "realLedgerWrites": false,
+  "tailSessionCreated": true,
+  "tailSessionDeleted": true,
+  "requests": [],
+  "calls": [],
+  "rawMessagesPersisted": false,
+  "signedWebSocketUrlPersisted": false,
+  "registrationHttpStatus": 200,
+  "probeFailed": true
+}

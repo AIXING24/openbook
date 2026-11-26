@@ -1,4 +1,4 @@
-# GainTrace 后端 v0.3.5候选（云端仍v0.3.4）
+# GainTrace 后端 v0.3.6候选（账本云端仍v0.3.4）
 
 开发分支上的分批存储与计算实现，当前只接受合成账户和 Mock HSBC 账本。Pages 已接入独立邮箱认证及模拟账本接口，真实行情日期与正式前端迁移尚未接入。前端 v1.16.0 继续使用原本地存储。
 
@@ -6,7 +6,19 @@
 
 `market-evidence.mjs`处理IANA收盘时间转换与候选输入校验：未复权、常规市场、明确日期、个人来源审批、历史参考FX、已核对企业行动及旧美股日期口径。完整仅返回verified-candidate，不写数据库/调用网络/批准provider或启用生产。`ecb-fx.mjs`逐日有界解析官方参考汇率并标明EUR交叉换算，不冒称成交或精确市场收盘汇率。
 
-公开样例行情和一年ECB参考FX已只读核验，Massive Stocks Basic是个人美股下一免费验收候选，未注册/使用key或审批生产；A/H许可、全部日历和企业行动仍未核定。来源评估、旧日期边界及许可要求见[真实日终输入核查](../docs/backend/market-input-readiness-v0.3.5.md)。本轮不部署，原模拟调度与真实App不变。
+公开样例行情和一年ECB参考FX已只读核验。用户已注册Massive Stocks Basic，个人NVDA摘要及一年未复权日线已完成隔离云测；未审批生产，A/H许可、全部日历和企业行动仍未核定。来源评估、旧日期边界及许可要求见[真实日终输入核查](../docs/backend/market-input-readiness-v0.3.5.md)和[真实云测](../docs/backend/massive-cloud-validation-v0.3.6.md)。原模拟账本部署与真实App不变，临时行情Worker及云端源密钥已清理。
+
+## CPU采集诊断
+
+调用级补验与分阶段诊断的脱敏记录、复现代码已获用户授权归档到既有`dev/gaintrace-backend`；各报告保留测试完成时的本机状态。不得将原始日志、账户配置或密钥加入归档，也不以开发分支上传替代生产验收。
+
+历史官方桶CPU曾为16.749ms；两次合成复测分别9.822ms、9.606ms，第二次官方25/26缺样，不能宣称免费CPU验收通过。调用级Workers Logs API返回403、两次免费实时日志采集未连通，资源已清理。用户登录控制台后只读取得59条历史调用的可见整数CPU，并与客户端唯一关联；原峰值由5标的日志可见16ms支持。第二轮缺失的50标的调用日志已找到（可见1ms），但精确CPU桶仍未补，旧结论不覆盖。详见[重复隔离验证](../docs/backend/cpu-repeat-validation-v0.3.6.md)与[采集链路核查](../docs/backend/call-telemetry-validation-v0.3.6.md)。
+
+`market-call-telemetry.mjs`只保留固定探测的脱敏调用字段，明确CPU毫秒才可计入门槛；没有CPU、缺样、重复或错误不能通过。`scripts/probe-market-tail.mjs`仅用于已经授权的限时mock-only隔离探测，最多三次合成请求、90秒截止、退出删除实时日志会话；外层仍必须运行独立Worker清理脚本。不直接运行未清洗的`wrangler tail --format=json`，其原始输出可能包含请求头中的鉴权口令。不要使用付费Tail Worker或为排查自行扩展日志权限。
+
+`market-history-telemetry.mjs`离线关联已脱敏的历史显示行、既有客户端阶段和唯一的单请求CPU桶，不读取浏览器会话或访问云端。显示整数与原微秒桶分开保留，歧义/重复/缺桶不冒称完整精确CPU。历史重放可用`node --test tests/market-history-telemetry.test.mjs`，其中16.749ms峰值必须继续亮红，不能用新低样本覆盖。
+
+2026-11-26获准新增`cpu-phases-01`纯合成18请求：拆分control、5/50样本构造、四个独立市场收盘键、预构造样本门禁与原完整路径。官方18单请求桶和18条可见日志均唯一关联，0运行时错误，第二次5标的门禁仍测到10.754ms；单独时区路径为1.534/0.794ms，不能只凭首次初始化或50标的规模解释全部峰值，亦不证明具体慢函数。诊断入口预构造样本及额外状态鉴权改变共同开销，不得相减冒称纯阶段CPU或提速。原算法未改；临时Worker/secret/会话已独立清理、原Cron0。离线复核`node scripts/correlate-market-phases.mjs`；见[分阶段诊断](../docs/backend/cpu-phases-validation-v0.3.6.md)。本批仍只在本机，未提交/推送。
 
 ## 邮箱与模拟账本联动
 

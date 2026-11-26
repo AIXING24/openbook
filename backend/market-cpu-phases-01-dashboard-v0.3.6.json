@@ -1,0 +1,30 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "runId": "cpu-phases-01",
+  "timeRange": {"start": "2026-11-26T06:59:00.000Z", "end": "2026-11-26T07:01:00.000Z"},
+  "source": "Cloudflare Observability Workers Logs visible table, read-only",
+  "columns": ["loggedAtUtc", "requestKind", "displayedCpuMs", "logLevel", "outcome"],
+  "displayedCpuRoundingKnown": false,
+  "requestHeadersRetained": false,
+  "requestIdentifiersRetained": false,
+  "rows": [
+    ["2026-11-26T06:59:30.794Z", "control", 1, "info", "ok"],
+    ["2026-11-26T06:59:34.076Z", "fixture-5", 1, "info", "ok"],
+    ["2026-11-26T06:59:37.350Z", "fixture-50", 1, "info", "ok"],
+    ["2026-11-26T06:59:40.640Z", "close-four", 1, "info", "ok"],
+    ["2026-11-26T06:59:43.939Z", "gate-5", 4, "info", "ok"],
+    ["2026-11-26T06:59:47.231Z", "gate-50", 7, "info", "ok"],
+    ["2026-11-26T06:59:50.512Z", "evidence-5", 5, "info", "ok"],
+    ["2026-11-26T06:59:53.844Z", "evidence-50", 3, "info", "ok"],
+    ["2026-11-26T06:59:57.111Z", "evidence-50", 3, "info", "ok"],
+    ["2026-11-26T07:00:00.508Z", "evidence-5", 4, "info", "ok"],
+    ["2026-11-26T07:00:03.793Z", "gate-50", 5, "info", "ok"],
+    ["2026-11-26T07:00:07.144Z", "gate-5", 10, "info", "ok"],
+    ["2026-11-26T07:00:10.437Z", "close-four", 0, "info", "ok"],
+    ["2026-11-26T07:00:13.708Z", "fixture-50", 0, "info", "ok"],
+    ["2026-11-26T07:00:16.978Z", "fixture-5", 1, "info", "ok"],
+    ["2026-11-26T07:00:20.276Z", "control", 1, "info", "ok"],
+    ["2026-11-26T07:00:23.559Z", "evidence-5", 0, "info", "ok"],
+    ["2026-11-26T07:00:26.845Z", "summary", 1, "info", "ok"]
+  ]
+}

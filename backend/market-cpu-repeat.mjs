@@ -3,7 +3,7 @@ const runIds = ['cpu-repeat-01', 'cpu-repeat-02'];
 export function validationReportPrefix({withSourceKey, runId}) {
   if (typeof withSourceKey !== 'boolean') throw Error('Invalid source mode');
   if (runId === undefined) return withSourceKey ? 'market-massive-cloud' : 'market-cloud';
-  if (withSourceKey || !runIds.includes(runId)) throw Error('Invalid repeated isolation run');
+  if (withSourceKey || ![...runIds, 'cpu-tail-probe-01', 'cpu-tail-probe-02', 'cpu-phases-01'].includes(runId)) throw Error('Invalid repeated isolation run');
   return 'market-' + runId;
 }
 

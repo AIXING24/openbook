@@ -1,0 +1,9 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "checkedAt": "2026-11-26T07:02:05.410Z",
+  "isolatedWorkerRemoved": true,
+  "isolatedSecretsRemovedWithWorker": true,
+  "originalWorkerStillExists": true,
+  "originalCronCount": 0,
+  "realLedgerWrites": false
+}

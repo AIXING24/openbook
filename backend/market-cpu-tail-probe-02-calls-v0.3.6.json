@@ -1,0 +1,21 @@
+{
+  "version": "backend v0.3.6 candidate",
+  "runId": "cpu-tail-probe-02",
+  "startedAt": "2026-11-26T05:50:47.882Z",
+  "syntheticOnly": true,
+  "sourceSecretStoredInCloudflare": false,
+  "realLedgerWrites": false,
+  "tailSessionCreated": true,
+  "tailSessionDeleted": true,
+  "requests": [],
+  "calls": [],
+  "rawMessagesPersisted": false,
+  "signedWebSocketUrlPersisted": false,
+  "phase": "websocket-connection",
+  "registrationHttpStatus": 200,
+  "endpointUsesWss": true,
+  "endpointHostSupported": true,
+  "probeFailed": true,
+  "failedAt": "2026-11-26T05:51:00.703Z",
+  "failureCode": "details-withheld"
+}
